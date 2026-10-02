@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>AMCF - Projektverwaltung</title>
+	<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css?family=Oswald:400,700|Open+Sans:400,300" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+	<style>
+		.admin-page{background:#101010;color:#e0e0e0;min-height:100vh;font-family:'Open Sans',sans-serif;}
+		.admin-wrap{max-width:860px;margin:0 auto;padding:40px 20px 60px;}
+		.admin-head{text-align:center;margin-bottom:30px;}
+		.admin-head h1{font-family:'Oswald',sans-serif;font-size:30px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px;}
+		.admin-head p{font-size:14px;color:#8f8f8f;margin:0;}
+		.admin-login{max-width:380px;margin:40px auto;background:#141414;border:1px solid #2a2a2b;padding:30px;}
+		.admin-login h2{font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;}
+		.admin-field{margin-bottom:16px;}
+		.admin-field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#8f8f8f;margin-bottom:6px;}
+		.admin-field input[type=password],.admin-field input[type=text],.admin-field input[type=url],.admin-field input[type=date],.admin-field select,.admin-field textarea{
+			width:100%;box-sizing:border-box;background:#1c1c1d;border:1px solid #2a2a2b;color:#fff;padding:10px 12px;font-size:14px;font-family:'Open Sans',sans-serif;}
+		.admin-field textarea{min-height:110px;resize:vertical;}
+		.admin-btn{display:inline-block;background:#f54f36;color:#fff;border:none;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:11px 22px;cursor:pointer;}
+		.admin-btn:hover{background:#d83e26;}
+		.admin-btn.ghost{background:#2a2a2b;color:#fff;}
+		.admin-btn.ghost:hover{background:#3a3a3b;}
+		.admin-error{display:none;background:#5c1f17;color:#ffc6bd;border:1px solid #8a2f22;padding:10px 14px;font-size:13px;margin-bottom:16px;}
+		.admin-hidden{display:none;}
+		.admin-export{margin-top:26px;background:#141414;border:1px solid #2a2a2b;padding:20px;}
+		.admin-export h3{font-family:'Oswald',sans-serif;font-size:15px;color:#fff;text-transform:uppercase;margin:0 0 8px;}
+		.admin-export pre{background:#1c1c1d;color:#9bd0a5;border:1px solid #2a2a2b;padding:12px;font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-all;max-height:280px;overflow:auto;}
+		.admin-list{margin-top:16px;}
+		.admin-list-item{display:flex;align-items:center;justify-content:space-between;background:#141414;border:1px solid #2a2a2b;padding:10px 14px;margin-bottom:8px;font-size:14px;}
+		.admin-list-item span{color:#fff;}
+		.admin-list-item .del{cursor:pointer;color:#f54f36;font-size:13px;border:none;background:none;font-family:'Oswald',sans-serif;text-transform:uppercase;margin-left:10px;}
+		.admin-list-item .del:hover{color:#ff6a52;}
+		.admin-list-item .edit{cursor:pointer;color:#c9a84b;font-size:13px;border:none;background:none;font-family:'Oswald',sans-serif;text-transform:uppercase;}
+		.admin-list-item .edit:hover{color:#e6c66a;}
+		.admin-list-item .hidden-tag{color:#5f6b5f;font-size:12px;font-style:italic;margin-left:10px;}
+		.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+		.admin-grid .full{grid-column:1 / -1;}
+		.admin-subhead{font-family:'Oswald',sans-serif;font-size:15px;color:#fff;text-transform:uppercase;margin:26px 0 10px;}
+		.admin-job-box{background:#141414;border:1px solid #2a2a2b;padding:14px;margin-bottom:14px;}
+		.admin-back{display:inline-block;margin:0 0 20px;color:#8f8f8f;font-size:13px;text-decoration:none;}
+		.admin-back:hover{color:#fff;}
+		.jmx{position:relative;display:inline-block;margin:0 8px 8px 0;}
+		.jmx img{display:block;width:120px;height:80px;object-fit:cover;border:1px solid #2a2a2b;background:#1c1c1d;}
+		.jmx-del{position:absolute;top:2px;right:2px;width:22px;height:22px;border:none;background:#f54f36;color:#fff;cursor:pointer;font-size:14px;line-height:1;border-radius:2px;}
+		.jmx-del:hover{background:#d83e26;}
+	</style>
+</head>
+<body class="admin-page">
+	<div class="admin-wrap">
+		<a href="index.html" class="admin-back">&larr; Zur&uuml;ck zur Website</a>
+
+		<div class="admin-head">
+			<h1>Projektverwaltung</h1>
+			<p>Passwortgesch&uuml;tzter Bereich zum Hinzuf&uuml;gen neuer Portfolio-Projekte</p>
+		</div>
+
+		<!-- Login -->
+		<div id="adminLogin" class="admin-login">
+			<h2>Anmeldung</h2>
+			<div id="adminError" class="admin-error"></div>
+			<div class="admin-field">
+				<label for="pw">Passwort</label>
+				<input type="password" id="pw" autocomplete="current-password">
+			</div>
+			<button type="button" class="admin-btn" id="loginBtn">Anmelden</button>
+		</div>
+
+		<!-- Form -->
+		<div id="adminApp" class="admin-hidden">
+			<div id="saveMsg" class="admin-error" style="background:#1c3a20;color:#b7e6c0;border-color:#2a5c35;"></div>
+
+			<h2 id="formTitle" style="font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;">Neues Projekt</h2>
+			<input type="hidden" id="editIndex" value="">
+
+			<div class="admin-field">
+				<label for="pName">Projektname</label>
+				<input type="text" id="pName" placeholder="z.B. Meine Webseite GmbH">
+			</div>
+
+			<div class="admin-field">
+				<label for="pCategory">Kategorie (Filter)</label>
+				<select id="pCategory">
+					<option value="category_1">Web</option>
+					<option value="category_2">eCommerce</option>
+					<option value="category_3">Branding</option>
+					<option value="category_4">Video</option>
+					<option value="category_1">Andere (Web)</option>
+				</select>
+			</div>
+
+			<div class="admin-field">
+				<label for="pTags">Tags (durch / getrennt)</label>
+				<input type="text" id="pTags" placeholder="z.B. web / design">
+			</div>
+
+			<div class="admin-field">
+				<label for="pImageUrl">Bild-URL (alternativ zu Upload)</label>
+				<input type="url" id="pImageUrl" placeholder="https://…/image.png">
+			</div>
+
+			<div class="admin-field">
+				<label for="pImageFile">Oder Bild hochladen</label>
+				<input type="file" id="pImageFile" accept="image/*">
+			</div>
+
+			<div class="admin-field">
+				<label for="pDesc">Beschreibung</label>
+				<textarea id="pDesc" placeholder="Kurzbeschreibung des Projekts"></textarea>
+			</div>
+
+			<div class="admin-field">
+				<label for="pClient">Kunde</label>
+				<input type="text" id="pClient" placeholder="z.B. Muster GmbH">
+			</div>
+
+			<div class="admin-field">
+				<label for="pDate">Jahr</label>
+				<input type="text" id="pDate" placeholder="z.B. 2024">
+			</div>
+
+			<div class="admin-field">
+				<label for="pUrl">Projekt-Link</label>
+				<input type="url" id="pUrl" placeholder="https://projekt-seite.ch">
+			</div>
+
+			<div>
+				<button type="button" class="admin-btn" id="addBtn">Projekt hinzuf&uuml;gen</button>
+				<button type="button" class="admin-btn ghost admin-hidden" id="cancelEditBtn">Abbrechen</button>
+			</div>
+
+			<!-- existing projects -->
+			<div class="admin-list" id="existingList"></div>
+
+			<!-- existing local projects -->
+			<div class="admin-list" id="localList"></div>
+
+			<!-- ===== Lebenslauf ===== -->
+			<div id="resumeApp">
+				<h2 class="admin-subhead" style="font-size:18px;margin-top:36px;">Lebenslauf</h2>
+
+				<div id="resumeFacts">
+					<h3 class="admin-subhead">Fakten (über mich)</h3>
+					<div class="admin-grid">
+						<div class="admin-field"><label for="rf-name">Name</label><input type="text" id="rf-name"></div>
+						<div class="admin-field"><label for="rf-street">Strasse / Hausnr.</label><input type="text" id="rf-street"></div>
+						<div class="admin-field"><label for="rf-address2">PLZ / Ort</label><input type="text" id="rf-address2"></div>
+						<div class="admin-field"><label for="rf-web">Web</label><input type="text" id="rf-web"></div>
+						<div class="admin-field"><label for="rf-email">Email</label><input type="text" id="rf-email"></div>
+						<div class="admin-field"><label for="rf-tel">Telefon</label><input type="text" id="rf-tel"></div>
+						<div class="admin-field"><label for="rf-nationV">Nationalit&auml;t</label><input type="text" id="rf-nationV"></div>
+						<div class="admin-field"><label for="rf-birthV">Geburtsdatum</label><input type="text" id="rf-birthV"></div>
+						<div class="admin-field"><label for="rf-licenseV">F&uuml;hrerschein</label><input type="text" id="rf-licenseV"></div>
+						<div class="admin-field"><label for="rf-civilV">Zivilstand</label><input type="text" id="rf-civilV"></div>
+						<div class="admin-field"><label for="rf-permitV">Ausl&auml;nderausweiss</label><input type="text" id="rf-permitV"></div>
+						<div class="admin-field"><label>&nbsp;</label><button type="button" class="admin-btn" id="saveFactsBtn">Fakten speichern</button>
+							<button type="button" class="admin-btn ghost" id="resetFactsBtn">Fakten zur&uuml;cksetzen</button></div>
+					</div>
+				</div>
+
+				<h3 class="admin-subhead">Lebenslauf-Eintr&auml;ge</h3>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 12px;">Hier kannst du Titel, Zeitraum und Beschreibungstexte der 10 Eintr&auml;ge &auml;ndern und neue Eintr&auml;ge hinzuf&uuml;gen. Neue Eintr&auml;ge erscheinen oben.</p>
+				<div class="admin-field"><button type="button" class="admin-btn" id="addJobBtn">Neuer Eintrag (oben)</button></div>
+				<div id="resumeJobList"></div>
+
+				<div id="resumeJobEdit" class="admin-job-box admin-hidden">
+					<h3 class="admin-subhead" id="jobEditTitle">Eintrag bearbeiten</h3>
+					<div class="admin-field"><label for="rj-date">Zeitraum</label><input type="text" id="rj-date"></div>
+					<div class="admin-field"><label for="rj-title">Titel</label><input type="text" id="rj-title"></div>
+					<div class="admin-field"><label for="rj-text">Beschreibung (HTML erlaubt)</label><textarea id="rj-text"></textarea></div>
+					<div class="admin-field">
+						<label for="rj-imgs">Bilder (URL, dann &plus; klicken &ndash; oder weiter unten hochladen)</label>
+						<div style="display:flex;gap:8px;">
+							<input type="text" id="rj-imgs" placeholder="https://…/bild.jpg">
+							<button type="button" class="admin-btn" id="rj-imgs-add" style="white-space:nowrap;flex:0 0 auto;">+ Hinzuf&uuml;gen</button>
+						</div>
+					</div>
+					<div class="admin-field"><label for="rj-imgfiles">Bilder hochladen (mehrfach m&ouml;glich)</label><input type="file" id="rj-imgfiles" accept="image/*" multiple></div>
+					<div id="rj-preview"></div>
+					<div class="admin-field"><label for="rj-l1">Aufz&auml;hlung Punkt 1</label><input type="text" id="rj-l1"></div>
+					<div class="admin-field"><label for="rj-l2">Aufz&auml;hlung Punkt 2</label><input type="text" id="rj-l2"></div>
+					<div class="admin-field"><label for="rj-l3">Aufz&auml;hlung Punkt 3</label><input type="text" id="rj-l3"></div>
+					<div class="admin-field"><label for="rj-l4">Aufz&auml;hlung Punkt 4</label><input type="text" id="rj-l4"></div>
+					<div class="admin-field"><label for="rj-l5">Aufz&auml;hlung Punkt 5</label><input type="text" id="rj-l5"></div>
+					<div class="admin-field"><label for="rj-l6">Aufz&auml;hlung Punkt 6</label><input type="text" id="rj-l6"></div>
+					<div class="admin-field"><label for="rj-l7">Aufz&auml;hlung Punkt 7</label><input type="text" id="rj-l7"></div>
+					<div>
+						<button type="button" class="admin-btn" id="saveJobBtn">Eintrag speichern</button>
+						<button type="button" class="admin-btn ghost" id="cancelJobBtn">Abbrechen</button>
+					</div>
+				</div>
+			</div>
+			<!-- ===== Ende Lebenslauf ===== -->
+
+			<!-- export -->
+			<div class="admin-export">
+				<h3>Ver&ouml;ffentlichen (f&uuml;r alle Besucher)</h3>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;">Jede gespeicherte &Auml;nderung wird automatisch &uuml;ber <code>save.php</code> in <code>data/projects.js</code> auf dem Server geschrieben &ndash; alle Besucher sehen sie beim n&auml;chsten Seitenaufruf. (Voraussetzung: PHP-Hosting, z. B. Apache/XAMPP. Funktioniert nicht auf rein statischen Hosts wie GitHub Pages.)</p>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;">Falls die automatische Speicherung fehlschl&auml;gt (Meldung im Admin), lade die Datei manuell herunter und ersetze <code>2026/data/projects.js</code>.</p>
+				<button type="button" class="admin-btn" id="dlDataBtn">Datei data/projects.js herunterladen (Fallback)</button>
+				<h3 style="margin-top:24px;">Export-Code (f&uuml;r die W&ouml;rterb&uuml;cher)</h3>
+				<button type="button" class="admin-btn ghost" id="genCodeBtn">Code erzeugen</button>
+				<pre id="exportCode" class="dis-block" style="margin-top:12px;display:none;"></pre>
+				<p style="font-size:12px;color:#8f8f8f;margin:10px 0 0;">Alternativ: Kopiere diesen Code in jedes <code>js/i18n.*.js</code> in das <code>port.items</code>-Array, damit das Projekt dauerhaft f&uuml;r alle Besucher erscheint (siehe Kommentar im Code).</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// index.html portfolio integration reads localStorage key: amcf_local_projects
+	</script>
+	<script src="js/admin.js"></script>
+	<script src="js/i18n.de.js"></script>
+</body>
+</html>
