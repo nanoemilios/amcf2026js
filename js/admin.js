@@ -818,4 +818,68 @@ if (loc.jobs) {
 		});
 	}
 	});
+
+	// Admin translations
+	function renderAdminI18n() {
+		var lang = localStorage.getItem('amcf_lang') || 'de';
+		var dict = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang] && window.AMCF_I18N_LANGS[lang].admin;
+		if (!dict) { return; }
+		
+		// Elements with data-i18n
+		document.querySelectorAll('[data-i18n]').forEach(function (el) {
+			var key = el.getAttribute('data-i18n');
+			var val = dict[key];
+			if (val !== undefined) {
+				if (el.hasAttribute('data-i18n-html')) {
+					el.innerHTML = val;
+				} else {
+					el.textContent = val;
+				}
+			}
+		});
+		
+		// Elements with data-i18n-placeholder
+		document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+			var key = el.getAttribute('data-i18n-placeholder');
+			var val = dict[key];
+			if (val !== undefined) {
+				el.placeholder = val;
+			}
+		});
+		
+		// Update select options with data-i18n
+		document.querySelectorAll('option[data-i18n]').forEach(function (opt) {
+			var key = opt.getAttribute('data-i18n');
+			var val = dict[key];
+			if (val !== undefined) {
+				opt.textContent = val;
+			}
+		});
+		
+		// Update admin language selector
+		var langSelect = document.getElementById('adminLang');
+		if (langSelect) {
+			langSelect.value = localStorage.getItem('amcf_lang') || 'de';
+		}
+	}
+
+	// Listen for language changes
+	document.addEventListener('AMCF_I18N_RENDER', function () {
+		renderAdminI18n();
+	});
+
+	// Initial render
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', renderAdminI18n);
+	} else {
+		renderAdminI18n();
+	}
+
+	// Listen for language changes from i18n.js
+	window.addEventListener('storage', function (e) {
+		if (e.key === 'amcf_lang') {
+			renderAdminI18n();
+		}
+	});
+
 })();

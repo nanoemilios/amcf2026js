@@ -7,7 +7,7 @@
 		flag: 'de.svg'
 	};
 
-	var LANGS = {
+var LANGS = {
 		de:   { flag: 'de.svg',  name: 'Deutsch' },
 		'de-ch': { flag: 'ch.svg', name: 'Schwiizerd\u00fctsch' },
 		en:   { flag: 'gb.svg',  name: 'English' },
@@ -150,5 +150,4 @@
 				});
 			}
 		}
-	});
 })();
