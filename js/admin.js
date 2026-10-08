@@ -538,6 +538,20 @@ if (loc.jobs) {
 		loginBtn.addEventListener('click', attemptLogin);
 		pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') { attemptLogin(); } });
 
+		// New Project form show/hide (attached on page load, not after login)
+		document.getElementById('newProjectBtn').addEventListener('click', function () {
+			document.getElementById('projectForm').classList.remove('admin-hidden');
+			document.getElementById('newProjectBtn').classList.add('admin-hidden');
+			document.getElementById('formTitle').textContent = 'Neues Projekt';
+			clearForm();
+		});
+
+		document.getElementById('closeProjectFormBtn').addEventListener('click', function () {
+			document.getElementById('projectForm').classList.add('admin-hidden');
+			document.getElementById('newProjectBtn').classList.remove('admin-hidden');
+			clearForm();
+		});
+
 		resumeAppReady();
 
 		document.getElementById('addBtn').addEventListener('click', function () {
@@ -606,20 +620,6 @@ if (loc.jobs) {
 		});
 
 		document.getElementById('cancelEditBtn').addEventListener('click', function () {
-			clearForm();
-		});
-
-		// New Project form show/hide
-		document.getElementById('newProjectBtn').addEventListener('click', function () {
-			document.getElementById('projectForm').classList.remove('admin-hidden');
-			document.getElementById('newProjectBtn').classList.add('admin-hidden');
-			document.getElementById('formTitle').textContent = 'Neues Projekt';
-			clearForm();
-		});
-
-		document.getElementById('closeProjectFormBtn').addEventListener('click', function () {
-			document.getElementById('projectForm').classList.add('admin-hidden');
-			document.getElementById('newProjectBtn').classList.remove('admin-hidden');
 			clearForm();
 		});
 
