@@ -31,7 +31,7 @@
 	var editIndex = null;
 	var localEditIndex = null;
 	var resumeJobImgs = [];
-	var currentPwHash = null;
+	var currentPassword = null;
 
 	function sha256(str) {
 		if (window.crypto && crypto.subtle && crypto.subtle.digest) {
@@ -46,49 +46,28 @@
 	}
 
 	function getProjects() {
-		try {
-			var raw = localStorage.getItem(LS_KEY);
-			return raw ? JSON.parse(raw) : [];
-		} catch (e) { return []; }
-	}
+	return AMCFStorage.getProjects();
+}
 
-	function saveProjects(list) {
-		try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch (e) {
-			alert('Speichern fehlgeschlagen (localStorage voll?).');
-			return false;
-		}
-		return true;
-	}
+function saveProjects(list) {
+	return AMCFStorage.saveProjects(list);
+}
 
-	function getEdits() {
-		try {
-			var raw = localStorage.getItem(LS_EDITS);
-			return raw ? JSON.parse(raw) : {};
-		} catch (e) { return {}; }
-	}
+function getEdits() {
+	return AMCFStorage.getEdits();
+}
 
-	function saveEdits(obj) {
-		try { localStorage.setItem(LS_EDITS, JSON.stringify(obj)); } catch (e) {
-			alert('Speichern fehlgeschlagen (localStorage voll?).');
-			return false;
-		}
-		return true;
-	}
+function saveEdits(obj) {
+	return AMCFStorage.saveEdits(obj);
+}
 
-	function getResume() {
-		try {
-			var raw = localStorage.getItem(LS_RESUME);
-			return raw ? JSON.parse(raw) : { facts: {}, jobs: {}, newJobs: [] };
-		} catch (e) { return { facts: {}, jobs: {}, newJobs: [] }; }
-	}
+function getResume() {
+	return AMCFStorage.getResume();
+}
 
-	function saveResume(obj) {
-		try { localStorage.setItem(LS_RESUME, JSON.stringify(obj)); } catch (e) {
-			alert('Speichern fehlgeschlagen (localStorage voll?).');
-			return false;
-		}
-		return true;
-	}
+function saveResume(obj) {
+	return AMCFStorage.saveResume(obj);
+}
 
 	// German dict is the base/fallback for pre-filling the resume forms.
 	function resumeBase() {
@@ -480,24 +459,31 @@ if (loc.jobs) {
 	}
 
 	// sendet den Stand an save.php (schreibt data/projects.js auf dem Server)
+	// oder speichert lokal wenn kein Server verfügbar
 	function pushToServer() {
-		if (!currentPwHash) { return Promise.resolve(false); }
+		if (!currentPassword) { return Promise.resolve(false); }
+		// Server expects the SHA256 hash of the password
 		return fetch('save.php', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ pwHash: currentPwHash, data: buildPayload() })
+			body: JSON.stringify({ pwHash: currentPassword, data: buildPayload() })
 		}).then(function (r) {
 			return r.json();
 		}).then(function (j) {
-			return !!(j && j.ok);
+			if (j && j.ok) return true;
+			// Fallback to local storage if server fails
+			AMCFStorage.downloadJSON();
+			return false;
 		}).catch(function () {
+			// Fallback to local storage
+			AMCFStorage.downloadJSON();
 			return false;
 		});
 	}
 
 	// speichert lokal + überträgt an den Server, dann Rückmeldung zeigen
 	function syncNow(successText) {
-		if (!currentPwHash) { showMsg(successText); return; }
+		if (!currentPassword) { showMsg(successText); return; }
 		pushToServer().then(function (ok) {
 			if (ok) { showMsg(successText + ' – für alle Besucher sofort verfügbar.'); }
 			else { showMsg(successText + '. ACHTUNG: Server-Speicherung fehlgeschlagen – bitte „Datei data/projects.js herunterladen" und manuell hochladen.'); }
@@ -515,7 +501,7 @@ if (loc.jobs) {
 			if (!val) { showErr('Bitte Passwort eingeben.'); return; }
 			sha256(val).then(function (h) {
 				if (h === PW_HASH) {
-					currentPwHash = h;
+					currentPassword = h;
 					loginBox.style.display = 'none';
 					app.classList.remove('admin-hidden');
 					renderAll();

@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="css/magnific-popup.css" media="all">
 	<link rel="stylesheet" href="css/superslides.css" type="text/css" media="screen">
-	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="css/style.css?v=16" type="text/css" media="screen">
 	
 <!--=============== fonts  ===============-->
 
@@ -77,6 +77,15 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 			</div>
 		</div>
 		
+		<div class="dm-toggle">
+			<label class="dm-switch" aria-label="Dark mode">
+				<i class="fa fa-sun-o dm-icon-left" aria-hidden="true"></i>
+				<input type="checkbox" id="dmSwitch" role="switch">
+				<span class="dm-track"></span>
+				<i class="fa fa-moon-o dm-icon-right" aria-hidden="true"></i>
+			</label>
+		</div>
+		
 		<div class="inner">
 			<img src="images/logo.png" class="logo" alt="AMCF" title="AMCF">
 			
@@ -90,15 +99,6 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					<li><a href="admin.html">Admin</a></li>
 				</ul>
 			</div>
-
-			<div class="dm-toggle">
-				<span class="dm-label" data-i18n="nav.dark">Dunkelmodus</span>
-				<label class="dm-switch">
-					<input type="checkbox" id="dmSwitch" role="switch" aria-label="Dunkelmodus">
-					<span class="dm-track"></span>
-				</label>
-			</div>
-			
 		</div>
 	
 		<div class="social-list">
@@ -599,7 +599,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 		
 <!--=============== section subscribe ===============-->
 
-	<div id="subscribe" class="sections">
+	<div id="subscribe" class="sections hidden-section">
 		<div class="content">
 		<div class="quote-icon"><i class="fa fa-rss"></i></div>
 			<div class="rester"></div>
@@ -639,34 +639,59 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 				<div class="small-separator"></div>
 				
-				<ul  style="text-align:left;">
+<ul  style="text-align:left;">
 				  <li style="float:left;width:40%;" data-i18n="resume.facts.name">Name:</li><li data-fv="name">Alberto Manuel Costa Ferreiro</li>
-				  <li style="float:left;width:40%;" data-i18n="resume.facts.address">Adresse:</li><li data-i18n="resume.facts.street" data-fv="street">Auenstrasse 7a</li>
-				  <li style="float:left;width:40%;">&nbsp;</li><li data-i18n="resume.facts.address2" data-fv="address2">8500 Frauenfeld - Schweiz</li>			  
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.address">Wohnort:</li><li data-fv="address2">8500 Frauenfeld</li>
 				  <li style="float:left;width:40%;" data-i18n="resume.facts.web">Web:</li><li data-fv="web">www.albertocosta.info</li>						  
 				  <li style="float:left;width:40%;" data-i18n="resume.facts.email">Email:</li><li data-fv="email">info@albertocosta.info</li>			  
 				  <li style="float:left;width:40%;" data-i18n="resume.facts.tel">Tel:</li><li data-fv="tel">+41 (0) 76 537 29 19</li>				  
-				  <li style="float:left;width:40%;" data-i18n="resume.facts.nation">Nationalität:</li><li data-i18n="resume.facts.nationV" data-fv="nationV">Spanier</li>
-                  <li style="float:left;width:40%;" data-i18n="resume.facts.birth">Geburtsdatum:</li><li data-i18n="resume.facts.birthV" data-fv="birthV">2. April 1980</li>
-                  <li style="float:left;width:40%;" data-i18n="resume.facts.license">Führerschein:</li><li data-i18n="resume.facts.licenseV" data-fv="licenseV">Kat. B</li>
-                  <li style="float:left;width:40%;" data-i18n="resume.facts.civil">Zivilstand:</li><li data-i18n="resume.facts.civilV" data-fv="civilV">Verheiratet</li>
-                  <li style="float:left;width:40%;" data-i18n="resume.facts.permit">Ausländerausweiss:</li><li data-i18n="resume.facts.permitV" data-fv="permitV">C</li>
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.nation">Nationalität:</li><li data-fv="nationV">Spanier</li>
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.birth">Geburtsdatum:</li><li data-fv="birthV">2. April 1980</li>
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.license">Führerschein:</li><li data-fv="licenseV">Kat. B</li>
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.civil">Zivilstand:</li><li data-fv="civilV">Verheiratet</li>
+				  <li style="float:left;width:40%;" data-i18n="resume.facts.permit">Ausländerausweiss:</li><li data-fv="permitV">C</li>
               </ul>
               <p>&nbsp;</p>
 				<div class="resume-holder">
 				  <div class="resume-line animaper"></div>
-							<!-- block - right -->
+				  <!-- block - left -->
+					
+					<div class="resume-holder" data-rvnum="2">
+						<div class="resume-box animaper">
+							<div class="resume-circle-holder right-circle">
+								<div class="resume-circle">
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job11.date">09.2020 - Heute</span></div>
+								</div>
+							</div>
+							<div class="grid-full transition resume left-arrow">
+								<div class="resume-head right-head-arrow">
+									<h3><span data-i18n="resume.job11.title">AS Aufzüge AG</span></h3>
+									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+								</div>
+								<div class="clear"></div>
+								<div class="resume-slider">
+									<ul class="slides">
+										<li><img src="images/resume/AS.jpg" class="respimg" alt=""></li>
+									</ul>
+								  </div>
+								
+							  <p data-i18n-html="resume.job11.text">Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Aufzüge AG</a> habe ich mich als Servicetechniker Lift weiter entwickelt. Als Feldtrainer konnte ich zum Troubelshooter aufsteigen und neue Mittarbeiter einarbeiten.</p>
+							
+							</div>
+						</div>
+					</div>
+					<!-- block - right -->
 					
 					<div class="resume-holder" data-rvnum="1">
 						<div class="resume-box right right-box animaper">
 							<div class="resume-circle-holder left-circle">
 								<div class="resume-circle">
-									<div class="resume-date left-date"><span></span><span data-i18n="resume.job1.date">04.2019 - Heute</span></div>
+									<div class="resume-date left-date"><span></span><span data-i18n="resume.job10.date">04.2019 - 09.2020</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
-									<h3><span data-i18n="resume.job1.title">Garaventa Lift AG</span></h3>
+									<h3><span data-i18n="resume.job10.title">Garaventa Lift AG</span></h3>
 									<div class="resume-icon"><i class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -680,25 +705,25 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job1.text">Bei der Garaventa Lift AG  (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) 
+								<p data-i18n-html="resume.job10.text">Bei der Garaventa Lift AG  (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) 
 								bin ich für den Unterhalt und Reparaturen an Homelifte und Hebebühnen zuständig. 
 								Eine Abwechlungreiche T&auml;tigkeit die viele herausförderungen mit sich bringt.</p>
 							
 							</div>
 						</div>
 					</div>	
-					<!-- 1 block - left -->
+					<!-- block - left -->
 					
 					<div class="resume-holder" data-rvnum="2">
 						<div class="resume-box animaper">
 							<div class="resume-circle-holder right-circle">
 								<div class="resume-circle">
-									<div class="resume-date right-date"><span></span><span data-i18n="resume.job2.date">07.2015 - Heute</span></div>
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job9.date">07.2015 - 04.2019</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
-									<h3><span data-i18n="resume.job2.title">Schindler Aufzüge AG</span></h3>
+									<h3><span data-i18n="resume.job9.title">Schindler Aufzüge AG</span></h3>
 									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -711,24 +736,24 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>
 								
-							  <p data-i18n-html="resume.job2.text">Bei der <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und auch in den Letzten Jahre diese Arbeit ausgeübt</p>
+							  <p data-i18n-html="resume.job9.text">Bei der <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und auch in den Letzten Jahre diese Arbeit ausgeübt</p>
 							
 							</div>
 						</div>
 					</div>
 					
-					<!-- 2 block - right -->
+					<!-- block - right -->
 					
 					<div class="resume-holder" data-rvnum="3">
 						<div class="resume-box right right-box animaper">
 							<div class="resume-circle-holder left-circle">
 								<div class="resume-circle">
-									<div class="resume-date left-date"><span></span><span data-i18n="resume.job3.date">07.2014 - 12.2014</span></div>
+									<div class="resume-date left-date"><span></span><span data-i18n="resume.job8.date">07.2014 - 12.2014</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
-									<h3><span data-i18n="resume.job3.title">Die Schweizerische Post</span></h3>
+									<h3><span data-i18n="resume.job8.title">Die Schweizerische Post</span></h3>
 									<div class="resume-icon"><i class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -742,23 +767,23 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job3.text">Bei der Schweizerische Post im Paketzentrum Frauenfeld  (<a href="https://www.post.ch" target="_blank" class="company-color">Post</a>) war ich für das Codieren der Pakete und das Sortiren von Sperrgut zuständig.</p>
+								<p data-i18n-html="resume.job8.text">Bei der Schweizerische Post im Paketzentrum Frauenfeld  (<a href="https://www.post.ch" target="_blank" class="company-color">Post</a>) war ich für das Codieren der Pakete und das Sortiren von Sperrgut zuständig.</p>
 							
 							</div>
 						</div>
 					</div>	
-					<!-- 3 block - left -->
+					<!-- block - left -->
 					
 					<div class="resume-holder" data-rvnum="4">
 						<div class="resume-box animaper">
 							<div class="resume-circle-holder right-circle">
 								<div class="resume-circle">
-									<div class="resume-date right-date"><span></span><span data-i18n="resume.job4.date">06.2013 - 06.2014</span></div>
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job7.date">06.2013 - 06.2014</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
-									<h3><span data-i18n="resume.job4.title">Hug Engineering AG</span></h3>
+									<h3><span data-i18n="resume.job7.title">Hug Engineering AG</span></h3>
 									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -771,24 +796,24 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>
 							
-							  <p data-i18n-html="resume.job4.text">Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter wieder die körperliche Stärke, und der sehlenfrieden geholt die ich brauche um meine aufgaben zu meistern.</p>
+							  <p data-i18n-html="resume.job7.text">Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter wieder die körperliche Stärke, und der sehlenfrieden geholt die ich brauche um meine aufgaben zu meistern.</p>
 							
 							</div>
 						</div>
 					</div>
 									
-					<!-- 4 block - right -->
+					<!-- block - right -->
 					
 					<div class="resume-holder" data-rvnum="5">
 						<div class="resume-box right right-box animaper">
 							<div class="resume-circle-holder left-circle">
 								<div class="resume-circle">
-									<div class="resume-date left-date"><span></span><span data-i18n="resume.job5.date">08.2008 - Jetzt</span></div>
+									<div class="resume-date left-date"><span></span><span data-i18n="resume.job6.date">08.2008 - 12.2013</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
-									<h3><span data-i18n="resume.job5.title">Bipresent.com</span></h3>
+									<h3><span data-i18n="resume.job6.title">Bipresent.com</span></h3>
 									<div class="resume-icon"><i class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -801,85 +826,84 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job5.text">Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> habe ich sehr viele erfahrungen und kentnisse gesammelt in alle diese Bereichen:</p>
+								<p data-i18n-html="resume.job6.text">Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> habe ich sehr viele erfahrungen und kentnisse gesammelt in alle diese Bereichen:</p>
 								<ul style="text-align:left; padding-left:2em; list-style:inside circle;">
-								  <li data-i18n="resume.job5.l1">Webdesign</li>
-								  <li data-i18n="resume.job5.l2">IT-Beratung</li>
-								  <li data-i18n="resume.job5.l3">Kassensysteme</li>
-								  <li data-i18n="resume.job5.l4">eCommerce</li>
-								  <li data-i18n="resume.job5.l5">Branding</li>
-								  <li data-i18n="resume.job5.l6">PC-Support</li>
-								  <li data-i18n="resume.job5.l7">...</li>
+								  <li data-i18n="resume.job6.l1">Webdesign</li>
+								  <li data-i18n="resume.job6.l2">IT-Beratung</li>
+								  <li data-i18n="resume.job6.l3">Kassensysteme</li>
+								  <li data-i18n="resume.job6.l4">eCommerce</li>
+								  <li data-i18n="resume.job6.l5">Branding</li>
+								  <li data-i18n="resume.job6.l6">PC-Support</li>
+								  <li data-i18n="resume.job6.l7">...</li>
 					          </ul>
 							
 							</div>
 						</div>
 					</div>
-					<!-- 7 block - left -->
-					
+					<!-- block - left -->
 					<div class="resume-holder" data-rvnum="8">
 						<div class="resume-box animaper">
 							<div class="resume-circle-holder right-circle">
 								<div class="resume-circle">
-									<div class="resume-date right-date"><span></span><span data-i18n="resume.job8.date">2005</span></div>
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job5.date">2005</span></div>
 								</div>
 							</div>
 						  <div class="grid-full transition resume left-arrow">
 							<div class="resume-head right-head-arrow">
-									<h3><span data-i18n="resume.job8.title">Diplomierter Webdesigner (EU Norm)</span></h3>
+									<h3><span data-i18n="resume.job5.title">Diplomierter Webdesigner (EU Norm)</span></h3>
 									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
 							  </div>
 							  <a class="image-popup" href="images/resume/cfcambre.jpg" title="">
 								  <span></span>
        							  <img src="images/resume/cfcambre.jpg" class="respimg" alt="">
     							  </a>
-						    <p data-i18n-html="resume.job8.text">Centro Municipal de Formación, Cambre, A Coruña. Da habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a>   A Coruña - Spanien.</p>
+						    <p data-i18n-html="resume.job5.text">Centro Municipal de Formación, Cambre, A Coruña. Da habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a>   A Coruña - Spanien.</p>
 							  <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
-							    <li data-i18n="resume.job8.l1">Webdesign und Multimedia</li>
-							    <li data-i18n="resume.job8.l2">HTML – CSS – JS – PHP - SQL</li>
+							    <li data-i18n="resume.job5.l1">Webdesign und Multimedia</li>
+							    <li data-i18n="resume.job5.l2">HTML – CSS – JS – PHP - SQL</li>
 					        </ul>
 							
 							</div>
 						</div>
-					</div>
-									
-					<!-- 8 block - right -->
-					
+					</div>		
+					<!-- block - right -->
 					<div class="resume-holder" data-rvnum="9">
 						<div class="resume-box right right-box animaper">
 							<div class="resume-circle-holder left-circle">
 								<div class="resume-circle">
-									<div class="resume-date left-date"><span></span><span data-i18n="resume.job9.date">2003 - 2005</span></div>
+									<div class="resume-date left-date"><span></span><span data-i18n="resume.job4.date">2003 - 2005</span></div>
 								</div>
 							</div>
 						  <div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
-									<h3><span data-i18n="resume.job9.title">BVS Winterthur (PC Master)</span></h3>
+									<h3><span data-i18n="resume.job4.title">BVS Winterthur (PC Master)</span></h3>
 									<div class="resume-icon"><i class="fa fa-book"></i></div>
 								</div>
-								
+								 <a class="image-popup" href="images/resume/ECDL.jpg" title="">
+								  <span></span>
+       							  <img src="images/resume/ECDL.jpg" class="respimg" alt="">
+    							  </a>
                                 <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
-                                	<li data-i18n="resume.job9.l1">Installieren und reparieren von Hardware und Software</li>
-                                    <li data-i18n="resume.job9.l2">Installation und Verwaltung von Netzwerke</li>
-                                    <li data-i18n="resume.job9.l3">Einführung ins Webdesign HTML – CSS – JS</li>
-                                    <li data-i18n="resume.job9.l4">ECDL – European Computer Driver’s License</li>
+                                	<li data-i18n="resume.job4.l1">Installieren und reparieren von Hardware und Software</li>
+                                    <li data-i18n="resume.job4.l2">Installation und Verwaltung von Netzwerke</li>
+                                    <li data-i18n="resume.job4.l3">Einführung ins Webdesign HTML – CSS – JS</li>
+                                    <li data-i18n="resume.job4.l4">ECDL – European Computer Driver’s License</li>
 								</ul>
 							
 						  </div>
 						</div>
 					</div>	
-					<!-- 5 block - left -->
-						
+					<!-- block - left -->
 					<div class="resume-holder" data-rvnum="6">
 						<div class="resume-box animaper">
 							<div class="resume-circle-holder right-circle ">
 								<div class="resume-circle">
-									<div class="resume-date right-date"><span></span><span data-i18n="resume.job6.date">06.2002 - 05.2007</span></div>
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job3.date">06.2002 - 05.2007</span></div>
 								</div>
 							</div>
 						  <div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
-									<h3><span data-i18n="resume.job6.title">Hug Engineering AG (Gruppenleiter)</span></h3>
+									<h3><span data-i18n="resume.job3.title">Hug Engineering AG (Gruppenleiter)</span></h3>
 									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>								
@@ -892,28 +916,27 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 							    </div>
 							  <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
-								  <li data-i18n-html="resume.job6.l1">
+								  <li data-i18n-html="resume.job3.l1">
 							    Fabrikation, Instandsetzung und Service von Katalysatoren und Russpartikel Filter.</li>
-								  <li data-i18n="resume.job6.l2">Qualitätskontrolle</li>
-								  <li data-i18n="resume.job6.l3">Wahrenein-Ausgang Verwaltung</li>
+								  <li data-i18n="resume.job3.l2">Qualitätskontrolle</li>
+								  <li data-i18n="resume.job3.l3">Wahrenein-Ausgang Verwaltung</li>
 				            </ul>
 								
 							
 							</div>
 						</div>
 					</div>				
-<!-- 6 block - right -->
-					
+					<!-- block - right -->
 					<div class="resume-holder" data-rvnum="7">
 						<div class="resume-box right right-box animaper">
 							<div class="resume-circle-holder left-circle">
 								<div class="resume-circle">
-									<div class="resume-date left-date"><span></span><span data-i18n="resume.job7.date">1999-2002</span></div>
+									<div class="resume-date left-date"><span></span><span data-i18n="resume.job2.date">1999-2002</span></div>
 								</div>
 							</div>
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
-									<h3><span data-i18n="resume.job7.title">Coop – Suisse (Verkäufer)</span></h3>
+									<h3><span data-i18n="resume.job2.title">Coop – Suisse (Verkäufer)</span></h3>
 									<div class="resume-icon"><i class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
@@ -925,27 +948,27 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job7.text">Bei <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schweiz</a> habe ich eine sehr leerreiche zeit erlebt und vieles über den alltag im Arbeitsleben gelertn.</p>							
+								<p data-i18n-html="resume.job2.text">Bei <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schweiz</a> habe ich eine sehr leerreiche zeit erlebt und vieles über den alltag im Arbeitsleben gelertn.</p>							
 							</div>
 						</div>
 					</div>	
-					<!-- 9 block - left -->
+					<!-- block - left -->
 					
 					<div class="resume-holder" data-rvnum="10">
 						<div class="resume-box animaper">
 							<div class="resume-circle-holder right-circle">
 								<div class="resume-circle">
-									<div class="resume-date right-date"><span></span><span data-i18n="resume.job10.date">1997 - 1999</span></div>
+									<div class="resume-date right-date"><span></span><span data-i18n="resume.job1.date">1997 - 1999</span></div>
 								</div>
 							</div>
 						  <div class="grid-full transition resume left-arrow">
 							<div class="resume-head right-head-arrow">
-									<h3><span data-i18n="resume.job10.title">Migros - Schweiz (Lageristen Lehre)</span></h3>
+									<h3><span data-i18n="resume.job1.title">Migros - Schweiz (Lageristen Lehre)</span></h3>
 									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
 							  </div>
 							  <a class="image-popup" href="images/resume/migros.jpg" title="">
 							  <span></span></a>
-						    <p data-i18n-html="resume.job10.text">Bei der <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a>  habe ich meien Lehre al Lageristen angefangen und während 2 Jahren erfolgreich absolviert.</p>
+						    <p data-i18n-html="resume.job1.text">Bei der <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a>  habe ich meien Lehre al Lageristen angefangen und während 2 Jahren erfolgreich absolviert.</p>
 					        <a class="image-popup" href="images/resume/migros.jpg" title=""><img src="images/resume/migros.jpg" class="respimg" alt=""></a>
 							 
 							
@@ -957,7 +980,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 				
 				<div class="clear"></div>
-				<a href="http://www.albertocosta.info/CV_AMCF-de.pdf" class="download-resume"><span class="transition" data-i18n="resume.download">CV Runterladen</span></a>
+				<a href="/CV_AMCF-de.pdf" class="download-resume"><span class="transition" data-i18n="resume.download">CV Runterladen</span></a>
 				
 			</div>
 		</div>				
@@ -1012,50 +1035,21 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 			<a href="#topSlide" class="quote-icon to-top" title="Nach oben"><i class="fa fa-angle-up"></i></a>
 			<div class="container">
 			
-				<!--contact form -->
-									
-				<div class="contactForm clear">
-					<fieldset id="contact_form">											
-								
-						<div class="grid-half">
-							<label for="name" data-i18n="contacts.name">Name</label>
-							<input type="text" name="name" id="name" />
-						</div>
-								
-						<div class="grid-half">
-							<label for="email" class="em" data-i18n="contacts.email">Email</label>
-							<input type="text" name="email" id="email"  class="right" />
-						</div>
-								
-						<label for="message" class="m-top" data-i18n="contacts.msg">Nachricht</label>
-						<textarea name="message"  id="message" ></textarea>
-								
-						<div class="clear"></div>
-															
-						<label>
-							<button class="submit_btn transition" id="submit_btn"><span data-i18n="contacts.send">SENDEN</span></button>
-						</label>
-						<div id="result"></div>
-						
-					</fieldset>
-						
-				</div>
-		
 				<div class="contact-details">
-	
+		
 					<div class="grid-2">
 						<div class="smallicon animaper"><i class="fa fa-mobile fa-2x"></i></div>
 						<span>+41 (0) 76 537 29 19</span>
 					</div>
 						
-					<div class="grid-2 showform">
-						<div class="smallicon actform  animaper"><i class="fa fa-envelope-o fa-2x"></i></div>
-						<span>info@albertocosta.info</span>
+					<div class="grid-2">
+						<div class="smallicon animaper"><i class="fa fa-envelope-o fa-2x"></i></div>
+						<a href="mailto:info@albertocosta.info">info@albertocosta.info</a>
 					</div>
 						
 					<div class="grid-2">
 						<div class="smallicon animaper"><i class="fa fa-home fa-2x"></i></div>
-						<span data-i18n-html="contacts.address">Auenstrasse 7a<br>8500 Frauenfeld, Schweiz</span>
+						<span data-i18n-html="contacts.address">8500 Frauenfeld</span>
 					</div>
 						
 				</div>						
@@ -1064,12 +1058,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 			
 			<!-- footer -->
 		
-			<div class="footer clear">
+		<div class="footer clear">
+		
+			<p id="footerCopyright" data-i18n-html="footer"> &copy; 2008 albertocosta.info  All rights reserved.</p>
+			<div class="small-separator ws"></div>
 			
-				<p data-i18n-html="footer"> &copy;2014 albertocosta.info  All rights reserved.</p>
-				<div class="small-separator ws"></div>
-				
-			</div> <!--footer end-->
+		</div> <!--footer end-->
 			
 		</div>
 	</div><!--===============  section contacts end ===============-->
@@ -1128,11 +1122,10 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 <!--=============== javascript ===============-->
 
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/jpreloader.min.js"></script>
 	<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="js/superslides.js"></script>
 	<script type="text/javascript" src="js/mixitup.js"></script>
-	<script type="text/javascript" defer src="js/jquery.flexslider.js"></script>
+	<script type="text/javascript" src="js/jquery.flexslider.js"></script>
 	<script type="text/javascript" src="js/jquery.parallax-1.1.3.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo-1.4.2-min.js"></script>
 	<script type="text/javascript" src="js/hoverdir.js"></script>
@@ -1144,7 +1137,6 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 	<script type="text/javascript" src="js/jquery.hammer.min.js"></script>
 	<script type="text/javascript" src="js/jquery.magnific-popup.min.js"></script>
 	<script type="text/javascript">document.write('<script src="data/projects.js?v=' + Date.now() + '"><\/script>');</script>
-	<script type="text/javascript" src="js/scripts.js"></script>
 	<script type="text/javascript" src="js/i18n.de.js"></script>
 	<script type="text/javascript" src="js/i18n.de-ch.js"></script>
 	<script type="text/javascript" src="js/i18n.gl.js"></script>
@@ -1152,6 +1144,9 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 	<script type="text/javascript" src="js/i18n.pt.js"></script>
 	<script type="text/javascript" src="js/i18n.en.js"></script>
 	<script type="text/javascript" src="js/i18n.js"></script>
+	<script type="text/javascript" src="js/storage.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	<script type="text/javascript">initAmcf();</script>
 </body>
 </html>
 	

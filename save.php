@@ -56,7 +56,12 @@ $js = $header . "\n" . 'window.AMCF_SITE_DATA = ' . $json . ';' . "\n";
 
 $dir = __DIR__ . '/data';
 if (!is_dir($dir)) { @mkdir($dir, 0755, true); }
-if (!is_dir($dir) || !is_writable($dir)) {
+// On Windows, is_writable() can return false even when writing works.
+// Test actual write capability instead.
+$testFile = $dir . '/.write_test';
+$canWrite = @file_put_contents($testFile, 'test') !== false;
+@unlink($testFile);
+if (!is_dir($dir) || !$canWrite) {
 	respondError('Ordner data/ nicht beschreibbar. Bitte Schreibrechte setzen (z. B. CHMOD 775/777).');
 }
 

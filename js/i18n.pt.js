@@ -97,60 +97,30 @@
 			error: 'Por favor escreve um endereço de email válido'
 		},
 		resume: {
-			head: 'Dados sobre mim',
-			title: 'Currículo',
-			facts: {
-				name: 'Nome:', address: 'Morada:', street: 'Auenstrasse 7a', address2: '8500 Frauenfeld - Suíça',
-				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nacionalidade:',
-				birth: 'Data de nascimento:', license: 'Carta de condução:', civil: 'Estado civil:', permit: 'Permissão de residência:',
-				nationV: 'Espanhol', civilV: 'Casado', birthV: '2 de abril de 1980', licenseV: 'cat. B', permitV: 'C'
+            job1: {
+				date: '1997 - 1999',
+				title: 'Migros - Suíça (Aprendiz de Armazém)',
+            facts: {
+                name: 'Nome:', address: 'Morada:', address2: '8500 Frauenfeld',
+                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nacionalidade:',
+                birth: 'Data de nascimento:', license: 'Carta de condução:', civil: 'Estado civil:', permit: 'Permissão de residência:',
+                nationV: 'Espanhol', civilV: 'Casado', birthV: '2 de abril de 1980', licenseV: 'cat. B', permitV: 'C'
+            },
+				text: 'Na <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> comecei a minha aprendizagem como armazenista e concluí-la com sucesso em 2 anos.'
 			},
-			job1: {
-				date: '04.2019 - Atualidade',
-				title: 'Garaventa Lift AG',
-				text: 'Na Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) sou responsável pela manutenção e reparação de elevadores domésticos e plataformas elevatórias. Um trabalho variado que traz muitos desafios.'
+            job2: {
+				date: '1999-2002',
+				title: 'Coop - Suisse (Vendedor)',
+				text: 'Na <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Suíça</a> vivi uma época muito enriquecedora e aprendi muito sobre o quotidiano da vida profissional.'
 			},
-			job2: {
-				date: '07.2015 - Atualidade',
-				title: 'Schindler Elevadores AG',
-				text: 'Na <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Elevadores AG</a> formei-me como técnico de serviço de elevadores e exerci este trabalho nos últimos anos.'
-			},
-			job3: {
-				date: '07.2014 - 12.2014',
-				title: 'Correios Suíços',
-				text: 'Nos <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> fui responsável pela codificação dos pacotes e pela separação de mercadorias volumosas no centro de encomendas de Frauenfeld.'
-			},
-			job4: {
-				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'Na <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> recuperei como operário de produção a força física e a paz interior que preciso para dominar as minhas tarefas.'
-			},
-			job5: {
-				date: '08.2008 - Atualidade',
-				title: 'Bipresent.com',
-				text: 'A minha atividade independente como web designer e informático. Na <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> acumulei muita experiência e conhecimento em todas estas áreas:',
-				l1: 'Web design', l2: 'Consultoria IT', l3: 'Sistemas de caixa', l4: 'eCommerce', l5: 'Branding', l6: 'Suporte PC', l7: '...'
-			},
-			job6: {
+            job3: {
 				date: '06.2002 - 05.2007',
-				title: 'Hug Engineering AG (Chefe de equipa)',
+				title: 'Hug Engineering AG (Chefe de Equipa)',
 				l1: 'Fabrico, reparação e serviço de catalisadores e filtros de partículas.',
 				l2: 'Controlo de qualidade',
 				l3: 'Administração de entrada/saída de mercadorias'
 			},
-			job7: {
-				date: '1999-2002',
-				title: 'Coop – Suisse (Vendedor)',
-				text: 'Na <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Suíça</a> vivi uma época muito enriquecedora e aprendi muito sobre o quotidiano da vida profissional.'
-			},
-			job8: {
-				date: '2005',
-				title: 'Web Designer Diplomado (Norma UE)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. Aí obtive com mais de 300 horas o meu diploma como web designer e multimédia. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Espanha.',
-				l1: 'Web design e multimédia',
-				l2: 'HTML – CSS – JS – PHP - SQL'
-			},
-			job9: {
+            job4: {
 				date: '2003 - 2005',
 				title: 'BVS Winterthur (PC Master)',
 				l1: 'Instalação e reparação de hardware e software',
@@ -158,12 +128,45 @@
 				l3: 'Introdução ao web design HTML – CSS – JS',
 				l4: 'ECDL – European Computer Driver\u0027s License'
 			},
-			job10: {
-				date: '1997 - 1999',
-				title: 'Migros - Suíça (Aprendiz de armazenista)',
-				text: 'Na <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> comecei a minha aprendizagem como armazenista e concluí-la com sucesso em 2 anos.'
+            job5: {
+				date: '2005',
+				title: 'Designer Web Certificado (Padrão UE)',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. Aí obtive com mais de 300 horas o meu diploma como web designer e multimédia. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Espanha.',
+				l1: 'Web design e multimédia',
+				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
-			download: 'Descarregar CV'
+            job6: {
+				date: '08.2008 - 12.2013',
+				title: 'Bipresent.com',
+				text: 'A minha atividade independente como web designer e informático. Na <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> acumulei muita experiência e conhecimento em todas estas áreas:',
+				l1: 'Web design', l2: 'Consultoria IT', l3: 'Sistemas de caixa', l4: 'eCommerce', l5: 'Branding', l6: 'Suporte PC', l7: '...'
+			},
+            job7: {
+				date: '06.2013 - 06.2014',
+				title: 'Hug Engineering AG',
+				text: 'Na <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> recuperei como operário de produção a força física e a paz interior que preciso para dominar as minhas tarefas.'
+			},
+            job8: {
+				date: '07.2014 - 12.2014',
+				title: 'Correios Suíços',
+				text: 'Nos <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> fui responsável pela codificação dos pacotes e pela separação de mercadorias volumosas no centro de encomendas de Frauenfeld.'
+			},
+            job9: {
+				date: '07.2015 - 04.2019',
+				title: 'Schindler Elevadores AG',
+				text: 'Na <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Elevadores AG</a> formei-me como técnico de serviço de elevadores e exerci este trabalho nos últimos anos.'
+			},
+            job10: {
+				date: '04.2019 - 09.2020',
+				title: 'Garaventa Lift AG',
+				text: 'Na Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) sou responsável pela manutenção e reparação de elevadores domésticos e plataformas elevatórias. Um trabalho variado que traz muitos desafios.'
+			},
+            job11: {
+				date: '09.2020 - Atualidade',
+				title: 'AS Elevadores AG',
+				text: 'Na <a href="https://www.lift.ch" target="_blank" class="company-color">AS Elevadores AG</a> desenvolvi-me mais como técnico de elevadores. Como formador de campo pude ascender a resolvedor de problemas e treinar novos funcionários.'
+			},
+download: 'Descarregar CV'
 		},
 		contacts: {
 			name: 'Nome', email: 'Email', msg: 'Mensagem', send: 'ENVIAR',

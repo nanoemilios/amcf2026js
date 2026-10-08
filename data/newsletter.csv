@@ -1,0 +1,4 @@
+﻿email,timestamp,ip
+test@test.com,2026-10-02T17:24:29+02:00,127.0.0.1
+test@example.com,2026-10-02T19:40:11+02:00,127.0.0.1
+info@albertocosta.info,2026-10-02T20:08:30+02:00,127.0.0.1

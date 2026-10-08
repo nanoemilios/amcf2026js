@@ -53,14 +53,20 @@
 	}
 
 	function applyText(el, key, lang) {
+		var val = t(key, lang);
+		if (key === 'footer') {
+			val = val.replace('{year}', new Date().getFullYear());
+		}
 		if (el.hasAttribute('data-i18n-html')) {
-			el.innerHTML = t(key, lang);
+			el.innerHTML = val;
 		} else {
-			el.textContent = t(key, lang);
+			el.textContent = val;
 		}
 	}
 
 	function render(lang) {
+		window.AMCF_I18N_RENDERED = true;
+		window.AMCF_I18N_LANG = lang;
 		document.documentElement.setAttribute('lang', lang);
 		var nodes = document.querySelectorAll('[data-i18n], [data-i18n-html]');
 		for (var i = 0; i < nodes.length; i++) {
@@ -114,6 +120,13 @@
 		var lang = detectLang();
 		window.AMCF_I18N_CURRENT = lang;
 		render(lang);
+	});
+	// Force render after a short delay to ensure all scripts are loaded
+	setTimeout(function () {
+		var lang = detectLang();
+		window.AMCF_I18N_CURRENT = lang;
+		render(lang);
+	}, 100);
 
 		var selector = document.getElementById('langSelector');
 		if (selector) {

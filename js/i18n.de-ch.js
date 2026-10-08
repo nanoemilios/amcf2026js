@@ -97,60 +97,30 @@
 			error: 'Bitte schriib e gültigi Email-Adress'
 		},
 		resume: {
-			head: 'Fakte über mich',
-			title: 'Lebenslauf',
-			facts: {
-				name: 'Name:', address: 'Adress:', street: 'Auenstrasse 7a', address2: '8500 Frauefeld - Schwiiz',
-				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
-				birth: 'Geburtsdatum:', license: 'Füerusschii:', civil: 'Zivilstand:', permit: 'Usländeruuswiis:',
-				nationV: 'Spanier', civilV: 'Verhürotet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
+            job1: {
+				date: '1997 - 1999',
+				title: 'Migros - Schwiiz (Lagerischti Lehri)',
+            facts: {
+                name: 'Name:', address: 'Adress:', address2: '8500 Frauefeld',
+                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
+                birth: 'Geburtsdatum:', license: 'Füerusschii:', civil: 'Zivilstand:', permit: 'Usländeruuswiis:',
+                nationV: 'Spanier', civilV: 'Verhürotet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
+            },
+				text: 'Bi de <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> ha ich mini Lehre als Lagerist agfange und während 2 Jahr erfolgriich absolviert.'
 			},
-			job1: {
-				date: '04.2019 - Hüt',
-				title: 'Garaventa Lift AG',
-				text: 'Bi de Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bi ich zuständig für de Unterhalt und Reparature a Homelifte und Hebebühne. E abwechsligsriichi Tätigkeit, wo vil Useforderige mit sich bringt.'
+            job2: {
+				date: '1999-2002',
+				title: 'Coop - Suisse (Verkäufer)',
+				text: 'Bi <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schwiiz</a> ha ich e sehr lehrriichi Zit erläbt und vil über de Alltag im Arbetäsläbe glehrt.'
 			},
-			job2: {
-				date: '07.2015 - Hüt',
-				title: 'Schindler Ufzüg AG',
-				text: 'Bi de <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Ufzüg AG</a> ha ich mich als Servicetechniker Lift usbilde la und die Arbeit in de letschte Jahr au usgübt.'
-			},
-			job3: {
-				date: '07.2014 - 12.2014',
-				title: 'D Schwiizerischi Post',
-				text: 'Bi de <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> bin ich im Paketzentrum Frauefeld zuständig gsi für s Codiere vo de Paket und s Sortiere vo Sperrgut.'
-			},
-			job4: {
-				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'Bi de <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> ha ich als Produktionsmitarbeiter wider die körperlichi Stärchi und de Seeläfride gfunde, wo ich bruche, zum mini Ufgabe schaffe.'
-			},
-			job5: {
-				date: '08.2008 - Hüt',
-				title: 'Bipresent.com',
-				text: 'Mini sälbständigi Tätigkeit als Webdesigner und Informatiker. Bi <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> ha ich in aune dene Beriich sehr vil Erfahrig und Kenntnis gsammlet:',
-				l1: 'Webdesign', l2: 'IT-Beratig', l3: 'Kassesystem', l4: 'eCommerce', l5: 'Branding', l6: 'PC-Support', l7: '...'
-			},
-			job6: {
+            job3: {
 				date: '06.2002 - 05.2007',
-				title: 'Hug Engineering AG (Gruppeleiter)',
+				title: 'Hug Engineering AG (Gruppeliiter)',
 				l1: 'Fabrikation, Instandsetzig und Service vo Katalysatore und Russpartikelfilter.',
 				l2: 'Qualitätskontrolle',
 				l3: 'Ware i-/usgang Verwaltig'
 			},
-			job7: {
-				date: '1999-2002',
-				title: 'Coop – Suisse (Verchäufer)',
-				text: 'Bi <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schwiiz</a> ha ich e sehr lehrriichi Zit erläbt und vil über de Alltag im Arbetäsläbe glehrt.'
-			},
-			job8: {
-				date: '2005',
-				title: 'Diplomierte Webdesigner (EU-Norm)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. Döt ha ich mit über 300 Stunde mis Diplom als Webdesigner und Multimedia gholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spanien.',
-				l1: 'Webdesign und Multimedia',
-				l2: 'HTML – CSS – JS – PHP - SQL'
-			},
-			job9: {
+            job4: {
 				date: '2003 - 2005',
 				title: 'BVS Winterthur (PC Master)',
 				l1: 'Installiere und repariere vo Hardware und Software',
@@ -158,12 +128,45 @@
 				l3: 'Iifüehrig is Webdesign HTML – CSS – JS',
 				l4: 'ECDL – European Computer Driver\u0027s License'
 			},
-			job10: {
-				date: '1997 - 1999',
-				title: 'Migros - Schwiiz (Lagerist Lehre)',
-				text: 'Bi de <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> ha ich mini Lehre als Lagerist agfange und während 2 Jahr erfolgriich absolviert.'
+            job5: {
+				date: '2005',
+				title: 'Dipl. Webdesigner (EU Norm)',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. Döt ha ich mit über 300 Stunde mis Diplom als Webdesigner und Multimedia gholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spanien.',
+				l1: 'Webdesign und Multimedia',
+				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
-			download: 'CV abelade'
+            job6: {
+				date: '08.2008 - 12.2013',
+				title: 'Bipresent.com',
+				text: 'Mini sälbständigi Tätigkeit als Webdesigner und Informatiker. Bi <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> ha ich in aune dene Beriich sehr vil Erfahrig und Kenntnis gsammlet:',
+				l1: 'Webdesign', l2: 'IT-Beratig', l3: 'Kassesystem', l4: 'eCommerce', l5: 'Branding', l6: 'PC-Support', l7: '...'
+			},
+            job7: {
+				date: '06.2013 - 06.2014',
+				title: 'Hug Engineering AG',
+				text: 'Bi de <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> ha ich als Produktionsmitarbeiter wider die körperlichi Stärchi und de Seeläfride gfunde, wo ich bruche, zum mini Ufgabe schaffe.'
+			},
+            job8: {
+				date: '07.2014 - 12.2014',
+				title: 'D Schwiizerisch Post',
+				text: 'Bi de <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> bin ich im Paketzentrum Frauefeld zuständig gsi für s Codiere vo de Paket und s Sortiere vo Sperrgut.'
+			},
+            job9: {
+				date: '07.2015 - 04.2019',
+				title: 'Schindler Lifte AG',
+				text: 'Bi de <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Ufzüg AG</a> ha ich mich als Servicetechniker Lift usbilde la und die Arbeit in de letschte Jahr au usgübt.'
+			},
+            job10: {
+				date: '04.2019 - 09.2020',
+				title: 'Garaventa Lift AG',
+				text: 'Bi de Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bi ich zuständig für de Unterhalt und Reparature a Homelifte und Hebebühne. E abwechsligsriichi Tätigkeit, wo vil Useforderige mit sich bringt.'
+			},
+            job11: {
+				date: '09.2020 - Hüt',
+				title: 'AS Lifte AG',
+				text: 'Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Lifte AG</a> ha ich mich als Servicetechniker Lift wiiter gfaltet. Als Feldtrainer cha ich zum Troubleshooter ufstiege und neu Lüt aarbeite.'
+			},
+download: 'CV abelade'
 		},
 		contacts: {
 			name: 'Name', email: 'Email', msg: 'Nachricht', send: 'SENDE',

@@ -97,60 +97,30 @@
 			error: 'Bitte schreiben Sie eine gültige Email-Adresse'
 		},
 		resume: {
-			head: 'Fakten über mich',
-			title: 'Lebenslauf',
-			facts: {
-				name: 'Name:', address: 'Adresse:', street: 'Auenstrasse 7a', address2: '8500 Frauenfeld - Schweiz',
-				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
-				birth: 'Geburtsdatum:', license: 'Führerschein:', civil: 'Zivilstand:', permit: 'Ausländerausweiss:',
-				nationV: 'Spanier', civilV: 'Verheiratet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
+            job1: {
+				date: '1997 - 1999',
+				title: 'Migros - Schweiz (Lageristen Lehre)',
+            facts: {
+                name: 'Name:', address: 'Wohnort:', address2: '8500 Frauenfeld',
+                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
+                birth: 'Geburtsdatum:', license: 'Führerschein:', civil: 'Zivilstand:', permit: 'Ausländerausweis:',
+                nationV: 'Spanier', civilV: 'Verheiratet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
+            },
+				text: 'Bei der <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> habe ich meine Lehre als Lagerist angefangen und während 2 Jahren erfolgreich absolviert.'
 			},
-			job1: {
-				date: '04.2019 - Heute',
-				title: 'Garaventa Lift AG',
-				text: 'Bei der Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bin ich für den Unterhalt und Reparaturen an Homeliften und Hebebühnen zuständig. Eine abwechslungsreiche Tätigkeit, die viele Herausforderungen mit sich bringt.'
+            job2: {
+				date: '1999-2002',
+				title: 'Coop - Suisse (Verkäufer)',
+				text: 'Bei <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schweiz</a> habe ich eine sehr lehrreiche Zeit erlebt und viel über den Alltag im Arbeitsleben gelernt.'
 			},
-			job2: {
-				date: '07.2015 - Heute',
-				title: 'Schindler Aufzüge AG',
-				text: 'Bei der <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und in den letzten Jahren diese Arbeit ausgeübt.'
-			},
-			job3: {
-				date: '07.2014 - 12.2014',
-				title: 'Die Schweizerische Post',
-				text: 'Bei der <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> war ich im Paketzentrum Frauenfeld für das Codieren der Pakete und das Sortieren von Sperrgut zuständig.'
-			},
-			job4: {
-				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich als Produktionsmitarbeiter wieder die körperliche Stärke und den Seelenfrieden gefunden, die ich brauche, um meine Aufgaben zu meistern.'
-			},
-			job5: {
-				date: '08.2008 - Jetzt',
-				title: 'Bipresent.com',
-				text: 'Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> habe ich in all diesen Bereichen sehr viel Erfahrung und Kenntnisse gesammelt:',
-				l1: 'Webdesign', l2: 'IT-Beratung', l3: 'Kassensysteme', l4: 'eCommerce', l5: 'Branding', l6: 'PC-Support', l7: '...'
-			},
-			job6: {
+            job3: {
 				date: '06.2002 - 05.2007',
 				title: 'Hug Engineering AG (Gruppenleiter)',
 				l1: 'Fabrikation, Instandsetzung und Service von Katalysatoren und Russpartikelfiltern.',
 				l2: 'Qualitätskontrolle',
 				l3: 'Waren ein-/ausgang Verwaltung'
 			},
-			job7: {
-				date: '1999-2002',
-				title: 'Coop – Suisse (Verkäufer)',
-				text: 'Bei <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schweiz</a> habe ich eine sehr lehrreiche Zeit erlebt und viel über den Alltag im Arbeitsleben gelernt.'
-			},
-			job8: {
-				date: '2005',
-				title: 'Diplomierter Webdesigner (EU Norm)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. Dort habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spanien.',
-				l1: 'Webdesign und Multimedia',
-				l2: 'HTML – CSS – JS – PHP - SQL'
-			},
-			job9: {
+            job4: {
 				date: '2003 - 2005',
 				title: 'BVS Winterthur (PC Master)',
 				l1: 'Installieren und reparieren von Hardware und Software',
@@ -158,12 +128,45 @@
 				l3: 'Einführung ins Webdesign HTML – CSS – JS',
 				l4: 'ECDL – European Computer Driver\u0027s License'
 			},
-			job10: {
-				date: '1997 - 1999',
-				title: 'Migros - Schweiz (Lageristen Lehre)',
-				text: 'Bei der <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> habe ich meine Lehre als Lagerist angefangen und während 2 Jahren erfolgreich absolviert.'
+            job5: {
+				date: '2005',
+				title: 'Diplomierter Webdesigner (EU Norm)',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. Dort habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spanien.',
+				l1: 'Webdesign und Multimedia',
+				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
-			download: 'CV Runterladen'
+            job6: {
+				date: '08.2008 - 12.2013',
+				title: 'Bipresent.com',
+				text: 'Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> habe ich in all diesen Bereichen sehr viel Erfahrung und Kenntnisse gesammelt:',
+				l1: 'Webdesign', l2: 'IT-Beratung', l3: 'Kassensysteme', l4: 'eCommerce', l5: 'Branding', l6: 'PC-Support', l7: '...'
+			},
+            job7: {
+				date: '06.2013 - 06.2014',
+				title: 'Hug Engineering AG',
+				text: 'Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich als Produktionsmitarbeiter wieder die körperliche Stärke und den Seelenfrieden gefunden, die ich brauche, um meine Aufgaben zu meistern.'
+			},
+            job8: {
+				date: '07.2014 - 12.2014',
+				title: 'Die Schweizerische Post',
+				text: 'Bei der <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> war ich im Paketzentrum Frauenfeld für das Codieren der Pakete und das Sortieren von Sperrgut zuständig.'
+			},
+            job9: {
+				date: '07.2015 - 04.2019',
+				title: 'Schindler Aufzüge AG',
+				text: 'Bei der <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und in den letzten Jahren diese Arbeit ausgeübt.'
+			},
+            job10: {
+				date: '04.2019 - 09.2020',
+				title: 'Garaventa Lift AG',
+				text: 'Bei der Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bin ich für den Unterhalt und Reparaturen an Homeliften und Hebebühnen zuständig. Eine abwechslungsreiche Tätigkeit, die viele Herausforderungen mit sich bringt.'
+			},
+            job11: {
+				date: '09.2020 - Heute',
+				title: 'AS Aufzüge AG',
+				text: 'Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Aufzüge AG</a> habe ich mich als Servicetechniker Lift weiter entwickelt. Als Feldtrainer konnte ich zum Troubleshooter aufsteigen und neue Mitarbeiter einarbeiten.'
+			},
+download: 'CV Runterladen'
 		},
 		contacts: {
 			name: 'Name', email: 'Email', msg: 'Nachricht', send: 'SENDEN',
