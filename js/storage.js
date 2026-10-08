@@ -13,7 +13,7 @@ const STORAGE_KEYS = {
     SETTINGS: 'amcf_settings'
 };
 
-const Storage = {
+const AMCFStorageClass = {
     // Generic get/set
     get: function(key, defaultValue = null) {
         try {
@@ -147,8 +147,50 @@ const Storage = {
         for (const storageKey of Object.values(STORAGE_KEYS)) {
             localStorage.removeItem(storageKey);
         }
-    }
-};
+    },
 
+    // Initialize from data/projects.js if localStorage is empty
+    initFromProjectsJs: function() {
+    return new Promise(function(resolve) {
+        // Check if we already have data in localStorage
+        var hasProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS);
+        var hasResume = localStorage.getItem(STORAGE_KEYS.RESUME);
+        
+        if (hasProjects && hasResume) {
+            resolve();
+            return;
+        }
+        
+        // Fetch data/projects.js
+        var script = document.createElement('script');
+        script.src = 'data/projects.js?v=' + Date.now();
+        script.onload = function() {
+            if (typeof window.AMCF_SITE_DATA !== 'undefined') {
+                var data = window.AMCF_SITE_DATA;
+                
+                // Initialize projects if empty
+                if (!localStorage.getItem(STORAGE_KEYS.PROJECTS) && data.projects) {
+                    localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(data.projects));
+                }
+                
+                // Initialize resume if empty
+                if (!localStorage.getItem(STORAGE_KEYS.RESUME) && data.resume) {
+                    var resumeData = {
+                        facts: data.resume.facts || {},
+                        jobs: data.resume.jobs || {},
+                        newJobs: data.resume.newJobs || []
+                    };
+                    localStorage.setItem(STORAGE_KEYS.RESUME, JSON.stringify(resumeData));
+                }
+            }
+            resolve();
+        };
+        script.onerror = function() {
+            console.warn('Could not load data/projects.js');
+            resolve();
+        };
+        document.head.appendChild(script);
+    });
+},
 // Make globally available
-window.AMCFStorage = Storage;
+window.AMCFStorage = AMCFStorageClass;

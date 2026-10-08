@@ -88,13 +88,18 @@
 		<div id="adminApp" class="admin-hidden">
 			<div id="saveMsg" class="admin-error" style="background:#1c3a20;color:#b7e6c0;border-color:#2a5c35;"></div>
 
-			<h2 id="formTitle" style="font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;" data-i18n="admin.newProject">Neues Projekt</h2>
-			<input type="hidden" id="editIndex" value="">
+			<!-- Project form (hidden by default, shown via "New Project" button) -->
+			<div id="projectForm" class="admin-hidden">
+				<h2 id="formTitle" style="font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;" data-i18n="admin.newProject">Neues Projekt</h2>
+				<div class="admin-field" style="text-align:right;margin-bottom:10px;">
+					<button type="button" class="admin-btn ghost" id="closeProjectFormBtn" data-i18n="admin.cancel">Schließen</button>
+				</div>
+				<input type="hidden" id="editIndex" value="">
 
-			<div class="admin-field">
-				<label for="pName" data-i18n="admin.projectName">Projektname</label>
-				<input type="text" id="pName" placeholder="z.B. Meine Webseite GmbH">
-			</div>
+				<div class="admin-field">
+					<label for="pName" data-i18n="admin.projectName">Projektname</label>
+					<input type="text" id="pName" placeholder="z.B. Meine Webseite GmbH">
+				</div>
 
 			<div class="admin-field">
 				<label for="pCategory" data-i18n="admin.category">Kategorie (Filter)</label>
@@ -142,12 +147,18 @@
 				<input type="url" id="pUrl" placeholder="https://projekt-seite.ch">
 			</div>
 
-			<div>
-				<button type="button" class="admin-btn" id="addBtn" data-i18n="admin.addProject">Projekt hinzuf&uuml;gen</button>
-				<button type="button" class="admin-btn ghost admin-hidden" id="cancelEditBtn" data-i18n="admin.cancel">Abbrechen</button>
+			<div class="admin-field">
+				<button type="button" class="admin-btn" id="addBtn" data-i18n="admin.addProject">Projekt hinzufügen</button>
+				<button type="button" class="admin-btn ghost" id="cancelEditBtn" data-i18n="admin.cancel">Abbrechen</button>
 			</div>
+		</div>
 
-			<!-- existing projects -->
+		<!-- New Project button (shows the form) -->
+		<div class="admin-field" style="margin-top:20px;">
+			<button type="button" class="admin-btn" id="newProjectBtn" data-i18n="admin.addProject">Neues Projekt</button>
+		</div>
+
+		<!-- existing projects -->
 			<div class="admin-list" id="existingList"></div>
 
 			<!-- existing local projects -->

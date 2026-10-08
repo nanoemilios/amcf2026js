@@ -6,8 +6,8 @@
 	var LS_EDITS = 'amcf_local_edits';
 	var LS_RESUME = 'amcf_local_resume';
 
-var RESUME_FACTS = ['name','street','address2','web','email','tel','nationV','birthV','licenseV','civilV','permitV'];
-var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10','11'];
+	var RESUME_FACTS = ['name','street','address2','web','email','tel','nationV','birthV','licenseV','civilV','permitV'];
+	var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10','11'];
 	var RESUME_JOB_FIELDS = ['date','title','text','l1','l2','l3','l4','l5','l6','l7'];
 	// Values hardcoded in index.html (not in the i18n dicts)
 	var RESUME_FACT_DEFAULTS = {
@@ -31,7 +31,7 @@ var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10','11'];
 	var editIndex = null;
 	var localEditIndex = null;
 	var resumeJobImgs = [];
-	var currentPassword = null;
+	var currentPwHash = null;
 
 	function sha256(str) {
 		if (window.crypto && crypto.subtle && crypto.subtle.digest) {
@@ -46,28 +46,49 @@ var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10','11'];
 	}
 
 	function getProjects() {
-	return AMCFStorage.getProjects();
-}
+		try {
+			var raw = localStorage.getItem(LS_KEY);
+			return raw ? JSON.parse(raw) : [];
+		} catch (e) { return []; }
+	}
 
-function saveProjects(list) {
-	return AMCFStorage.saveProjects(list);
-}
+	function saveProjects(list) {
+		try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch (e) {
+			alert('Speichern fehlgeschlagen (localStorage voll?).');
+			return false;
+		}
+		return true;
+	}
 
-function getEdits() {
-	return AMCFStorage.getEdits();
-}
+	function getEdits() {
+		try {
+			var raw = localStorage.getItem(LS_EDITS);
+			return raw ? JSON.parse(raw) : {};
+		} catch (e) { return {}; }
+	}
 
-function saveEdits(obj) {
-	return AMCFStorage.saveEdits(obj);
-}
+	function saveEdits(obj) {
+		try { localStorage.setItem(LS_EDITS, JSON.stringify(obj)); } catch (e) {
+			alert('Speichern fehlgeschlagen (localStorage voll?).');
+			return false;
+		}
+		return true;
+	}
 
-function getResume() {
-	return AMCFStorage.getResume();
-}
+	function getResume() {
+		try {
+			var raw = localStorage.getItem(LS_RESUME);
+			return raw ? JSON.parse(raw) : { facts: {}, jobs: {}, newJobs: [] };
+		} catch (e) { return { facts: {}, jobs: {}, newJobs: [] }; }
+	}
 
-function saveResume(obj) {
-	return AMCFStorage.saveResume(obj);
-}
+	function saveResume(obj) {
+		try { localStorage.setItem(LS_RESUME, JSON.stringify(obj)); } catch (e) {
+			alert('Speichern fehlgeschlagen (localStorage voll?).');
+			return false;
+		}
+		return true;
+	}
 
 	// German dict is the base/fallback for pre-filling the resume forms.
 	function resumeBase() {
@@ -331,9 +352,17 @@ if (loc.jobs) {
 		document.getElementById('formTitle').textContent = 'Neues Projekt';
 		document.getElementById('addBtn').textContent = 'Projekt hinzufügen';
 		document.getElementById('cancelEditBtn').classList.add('admin-hidden');
+		// Hide project form, show new project button
+		document.getElementById('projectForm').classList.add('admin-hidden');
+		document.getElementById('newProjectBtn').classList.remove('admin-hidden');
 	}
 
 	function fillForm(p) {
+		// Show project form when editing
+		document.getElementById('projectForm').classList.remove('admin-hidden');
+		document.getElementById('newProjectBtn').classList.add('admin-hidden');
+		document.getElementById('cancelEditBtn').classList.remove('admin-hidden');
+		
 		document.getElementById('pName').value = p.name || '';
 		document.getElementById('pCategory').value = p.category || 'category_1';
 		document.getElementById('pTags').value = p.tags || '';
@@ -459,31 +488,24 @@ if (loc.jobs) {
 	}
 
 	// sendet den Stand an save.php (schreibt data/projects.js auf dem Server)
-	// oder speichert lokal wenn kein Server verfügbar
 	function pushToServer() {
-		if (!currentPassword) { return Promise.resolve(false); }
-		// Server expects the SHA256 hash of the password
+		if (!currentPwHash) { return Promise.resolve(false); }
 		return fetch('save.php', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ pwHash: currentPassword, data: buildPayload() })
+			body: JSON.stringify({ pwHash: currentPwHash, data: buildPayload() })
 		}).then(function (r) {
 			return r.json();
 		}).then(function (j) {
-			if (j && j.ok) return true;
-			// Fallback to local storage if server fails
-			AMCFStorage.downloadJSON();
-			return false;
+			return !!(j && j.ok);
 		}).catch(function () {
-			// Fallback to local storage
-			AMCFStorage.downloadJSON();
 			return false;
 		});
 	}
 
 	// speichert lokal + überträgt an den Server, dann Rückmeldung zeigen
 	function syncNow(successText) {
-		if (!currentPassword) { showMsg(successText); return; }
+		if (!currentPwHash) { showMsg(successText); return; }
 		pushToServer().then(function (ok) {
 			if (ok) { showMsg(successText + ' – für alle Besucher sofort verfügbar.'); }
 			else { showMsg(successText + '. ACHTUNG: Server-Speicherung fehlgeschlagen – bitte „Datei data/projects.js herunterladen" und manuell hochladen.'); }
@@ -501,7 +523,7 @@ if (loc.jobs) {
 			if (!val) { showErr('Bitte Passwort eingeben.'); return; }
 			sha256(val).then(function (h) {
 				if (h === PW_HASH) {
-					currentPassword = h;
+					currentPwHash = h;
 					loginBox.style.display = 'none';
 					app.classList.remove('admin-hidden');
 					renderAll();
@@ -570,70 +592,7 @@ if (loc.jobs) {
 				list.push({
 					name: f.name, category: f.category, tags: f.tags, image: finalImage,
 					desc: f.desc, client: f.client, date: f.date, url: f.url
-});
-
-// Admin translations
-function renderAdminI18n() {
-	var lang = localStorage.getItem('amcf_lang') || 'de';
-	var dict = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang] && window.AMCF_I18N_LANGS[lang].admin;
-	if (!dict) { return; }
-	
-	// Elements with data-i18n
-	document.querySelectorAll('[data-i18n]').forEach(function (el) {
-		var key = el.getAttribute('data-i18n');
-		var val = dict[key];
-		if (val !== undefined) {
-			if (el.hasAttribute('data-i18n-html')) {
-				el.innerHTML = val;
-			} else {
-				el.textContent = val;
-			}
-		}
-	});
-	
-	// Elements with data-i18n-placeholder
-	document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
-		var key = el.getAttribute('data-i18n-placeholder');
-		var val = dict[key];
-		if (val !== undefined) {
-			el.placeholder = val;
-		}
-	});
-	
-	// Update select options with data-i18n
-	document.querySelectorAll('option[data-i18n]').forEach(function (opt) {
-		var key = opt.getAttribute('data-i18n');
-		var val = dict[key];
-		if (val !== undefined) {
-			opt.textContent = val;
-		}
-	});
-	
-	// Update admin language selector
-	var langSelect = document.getElementById('adminLang');
-	if (langSelect) {
-		langSelect.value = localStorage.getItem('amcf_lang') || 'de';
-	}
-}
-
-// Listen for language changes
-document.addEventListener('AMCF_I18N_RENDER', function () {
-	renderAdminI18n();
-});
-
-// Initial render
-if (document.readyState === 'loading') {
-	document.addEventListener('DOMContentLoaded', renderAdminI18n);
-} else {
-	renderAdminI18n();
-}
-
-// Listen for language changes from i18n.js
-window.addEventListener('storage', function (e) {
-	if (e.key === 'amcf_lang') {
-		renderAdminI18n();
-	}
-});
+				});
 				if (!saveProjects(list)) { return; }
 				clearForm();
 				renderAll();
@@ -647,6 +606,20 @@ window.addEventListener('storage', function (e) {
 		});
 
 		document.getElementById('cancelEditBtn').addEventListener('click', function () {
+			clearForm();
+		});
+
+		// New Project form show/hide
+		document.getElementById('newProjectBtn').addEventListener('click', function () {
+			document.getElementById('projectForm').classList.remove('admin-hidden');
+			document.getElementById('newProjectBtn').classList.add('admin-hidden');
+			document.getElementById('formTitle').textContent = 'Neues Projekt';
+			clearForm();
+		});
+
+		document.getElementById('closeProjectFormBtn').addEventListener('click', function () {
+			document.getElementById('projectForm').classList.add('admin-hidden');
+			document.getElementById('newProjectBtn').classList.remove('admin-hidden');
 			clearForm();
 		});
 
