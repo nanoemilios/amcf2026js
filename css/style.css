@@ -2647,8 +2647,52 @@ body.dark .dm-track{
 }
 body.dark .dm-track::after{
 	transform:translateX(22px);
-	background:#f54f36;
 }
+
+/* ====================
+Admin Panel
+--------------------------------------------------------------*/
+.admin-page{background:#101010;color:#e0e0e0;min-height:100vh;font-family:'Open Sans',sans-serif;}
+.admin-wrap{max-width:860px;margin:0 auto;padding:40px 20px 60px;}
+.admin-head{text-align:center;margin-bottom:30px;}
+.admin-head h1{font-family:'Oswald',sans-serif;font-size:30px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px;}
+.admin-head p{font-size:14px;color:#8f8f8f;margin:0;}
+.admin-lang{margin-bottom:20px;text-align:right;}
+.admin-lang select{background:#1c1c1d;border:1px solid #2a2a2b;color:#fff;padding:8px 12px;font-family:'Open Sans',sans-serif;}
+.admin-login{max-width:380px;margin:40px auto;background:#141414;border:1px solid #2a2a2b;padding:30px;}
+.admin-login h2{font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;}
+.admin-field{margin-bottom:16px;}
+.admin-field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#8f8f8f;margin-bottom:6px;}
+.admin-field input[type=password],.admin-field input[type=text],.admin-field input[type=url],.admin-field input[type=date],.admin-field select,.admin-field textarea{
+	width:100%;box-sizing:border-box;background:#1c1c1d;border:1px solid #2a2a2b;color:#fff;padding:10px 12px;font-size:14px;font-family:'Open Sans',sans-serif;}
+.admin-field textarea{min-height:110px;resize:vertical;}
+.admin-btn{display:inline-block;background:#f54f36;color:#fff;border:none;font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:11px 22px;cursor:pointer;}
+.admin-btn:hover{background:#d83e26;}
+.admin-btn.ghost{background:#2a2a2b;color:#fff;}
+.admin-btn.ghost:hover{background:#3a3a3b;}
+.admin-error{display:none;background:#5c1f17;color:#ffc6bd;border:1px solid #8a2f22;padding:10px 14px;font-size:13px;margin-bottom:16px;}
+.admin-hidden{display:none;}
+.admin-export{margin-top:26px;background:#141414;border:1px solid #2a2a2b;padding:20px;}
+.admin-export h3{font-family:'Oswald',sans-serif;font-size:15px;color:#fff;text-transform:uppercase;margin:0 0 8px;}
+.admin-export pre{background:#1c1c1d;color:#9bd0a5;border:1px solid #2a2a2b;padding:12px;font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-all;max-height:280px;overflow:auto;}
+.admin-list{margin-top:16px;}
+.admin-list-item{display:flex;align-items:center;justify-content:space-between;background:#141414;border:1px solid #2a2a2b;padding:10px 14px;margin-bottom:8px;font-size:14px;}
+.admin-list-item span{color:#fff;}
+.admin-list-item .del{cursor:pointer;color:#f54f36;font-size:13px;border:none;background:none;font-family:'Oswald',sans-serif;text-transform:uppercase;margin-left:10px;}
+.admin-list-item .del:hover{color:#ff6a52;}
+.admin-list-item .edit{cursor:pointer;color:#c9a84b;font-size:13px;border:none;background:none;font-family:'Oswald',sans-serif;text-transform:uppercase;}
+.admin-list-item .edit:hover{color:#e6c66a;}
+.admin-list-item .hidden-tag{color:#5f6b5f;font-size:12px;font-style:italic;margin-left:10px;}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.admin-grid .full{grid-column:1 / -1;}
+.admin-subhead{font-family:'Oswald',sans-serif;font-size:15px;color:#fff;text-transform:uppercase;margin:26px 0 10px;}
+.admin-job-box{background:#141414;border:1px solid #2a2a2b;padding:14px;margin-bottom:14px;}
+.admin-back{display:inline-block;margin:0 0 20px;color:#8f8f8f;font-size:13px;text-decoration:none;}
+.admin-back:hover{color:#fff;}
+.jmx{position:relative;display:inline-block;margin:0 8px 8px 0;}
+.jmx img{display:block;width:120px;height:80px;object-fit:cover;border:1px solid #2a2a2b;background:#1c1c1d;}
+.jmx-del{position:absolute;top:2px;right:2px;width:22px;height:22px;border:none;background:#f54f36;color:#fff;cursor:pointer;font-size:14px;line-height:1;border-radius:2px;}
+.jmx-del:hover{background:#d83e26;}
 
 /* ====================
 Dark mode: theme overrides
