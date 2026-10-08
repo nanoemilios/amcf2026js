@@ -16,6 +16,8 @@
 		.admin-head p{font-size:14px;color:#8f8f8f;margin:0;}
 		.admin-login{max-width:380px;margin:40px auto;background:#141414;border:1px solid #2a2a2b;padding:30px;}
 		.admin-login h2{font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;}
+		.admin-lang{margin-bottom:20px;text-align:right;}
+		.admin-lang select{background:#1c1c1d;border:1px solid #2a2a2b;color:#fff;padding:8px 12px;font-family:'Open Sans',sans-serif;}
 		.admin-field{margin-bottom:16px;}
 		.admin-field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#8f8f8f;margin-bottom:6px;}
 		.admin-field input[type=password],.admin-field input[type=text],.admin-field input[type=url],.admin-field input[type=date],.admin-field select,.admin-field textarea{
@@ -55,82 +57,94 @@
 		<a href="index.html" class="admin-back">&larr; Zur&uuml;ck zur Website</a>
 
 		<div class="admin-head">
-			<h1>Projektverwaltung</h1>
-			<p>Passwortgesch&uuml;tzter Bereich zum Hinzuf&uuml;gen neuer Portfolio-Projekte</p>
+			<h1 data-i18n="admin.title">Projektverwaltung</h1>
+			<p data-i18n="admin.subtitle">Passwortgesch&uuml;tzter Bereich zum Hinzuf&uuml;gen neuer Portfolio-Projekte</p>
+		</div>
+
+		<div class="admin-lang">
+			<label for="adminLang" data-i18n="admin.language">Sprache:</label>
+			<select id="adminLang">
+				<option value="de">Deutsch</option>
+				<option value="de-ch">Schwiizerd&uuml;tsch</option>
+				<option value="en">English</option>
+				<option value="es">Espa&ntilde;ol</option>
+				<option value="gl">Galego</option>
+				<option value="pt">Portugu&ecirc;s</option>
+			</select>
 		</div>
 
 		<!-- Login -->
 		<div id="adminLogin" class="admin-login">
-			<h2>Anmeldung</h2>
+			<h2 data-i18n="admin.login">Anmeldung</h2>
 			<div id="adminError" class="admin-error"></div>
 			<div class="admin-field">
-				<label for="pw">Passwort</label>
+				<label for="pw" data-i18n="admin.password">Passwort</label>
 				<input type="password" id="pw" autocomplete="current-password">
 			</div>
-			<button type="button" class="admin-btn" id="loginBtn">Anmelden</button>
+			<button type="button" class="admin-btn" id="loginBtn" data-i18n="admin.loginBtn">Anmelden</button>
 		</div>
 
 		<!-- Form -->
 		<div id="adminApp" class="admin-hidden">
 			<div id="saveMsg" class="admin-error" style="background:#1c3a20;color:#b7e6c0;border-color:#2a5c35;"></div>
 
-			<h2 id="formTitle" style="font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;">Neues Projekt</h2>
+			<h2 id="formTitle" style="font-family:'Oswald',sans-serif;font-size:18px;color:#fff;text-transform:uppercase;margin:0 0 18px;" data-i18n="admin.newProject">Neues Projekt</h2>
 			<input type="hidden" id="editIndex" value="">
 
 			<div class="admin-field">
-				<label for="pName">Projektname</label>
+				<label for="pName" data-i18n="admin.projectName">Projektname</label>
 				<input type="text" id="pName" placeholder="z.B. Meine Webseite GmbH">
 			</div>
 
 			<div class="admin-field">
-				<label for="pCategory">Kategorie (Filter)</label>
+				<label for="pCategory" data-i18n="admin.category">Kategorie (Filter)</label>
 				<select id="pCategory">
-					<option value="category_1">Web</option>
-					<option value="category_2">eCommerce</option>
-					<option value="category_3">Branding</option>
-					<option value="category_4">Video</option>
-					<option value="category_1">Andere (Web)</option>
+					<option value="category_1" data-i18n="admin.cat.web">Web</option>
+					<option value="category_2" data-i18n="admin.cat.ecommerce">eCommerce</option>
+					<option value="category_3" data-i18n="admin.cat.branding">Branding</option>
+					<option value="category_4" data-i18n="admin.cat.video">Video</option>
+					<option value="category_1" data-i18n="admin.cat.other">Andere (Web)</option>
 				</select>
 			</div>
 
 			<div class="admin-field">
-				<label for="pTags">Tags (durch / getrennt)</label>
+				<label for="pTags" data-i18n="admin.tags">Tags (durch / getrennt)</label>
 				<input type="text" id="pTags" placeholder="z.B. web / design">
 			</div>
 
 			<div class="admin-field">
-				<label for="pImageUrl">Bild-URL (alternativ zu Upload)</label>
+				<label for="pImageUrl" data-i18n="admin.imageUrl">Bild-URL (alternativ zu Upload)</label>
 				<input type="url" id="pImageUrl" placeholder="https://…/image.png">
 			</div>
 
 			<div class="admin-field">
-				<label for="pImageFile">Oder Bild hochladen</label>
+				<label for="pImageFile" data-i18n="admin.imageUpload">Oder Bild hochladen</label>
 				<input type="file" id="pImageFile" accept="image/*">
 			</div>
 
 			<div class="admin-field">
-				<label for="pDesc">Beschreibung</label>
+				<label for="pDesc" data-i18n="admin.description">Beschreibung</label>
 				<textarea id="pDesc" placeholder="Kurzbeschreibung des Projekts"></textarea>
 			</div>
 
 			<div class="admin-field">
-				<label for="pClient">Kunde</label>
+				<label for="pClient" data-i18n="admin.client">Kunde</label>
 				<input type="text" id="pClient" placeholder="z.B. Muster GmbH">
 			</div>
 
 			<div class="admin-field">
-				<label for="pDate">Jahr</label>
+				<label for="pDate" data-i18n="admin.year">Jahr</label>
 				<input type="text" id="pDate" placeholder="z.B. 2024">
 			</div>
 
 			<div class="admin-field">
-				<label for="pUrl">Projekt-Link</label>
+				<label for="pUrl" data-i18n="admin.projectLink">Projekt-Link</label>
 				<input type="url" id="pUrl" placeholder="https://projekt-seite.ch">
 			</div>
 
 			<div>
-				<button type="button" class="admin-btn" id="addBtn">Projekt hinzuf&uuml;gen</button>
-				<button type="button" class="admin-btn ghost admin-hidden" id="cancelEditBtn">Abbrechen</button>
+				<button type="button" class="admin-btn" id="addBtn" data-i18n="admin.addProject">Projekt hinzuf&uuml;gen</button>
+				<button type="button" class="admin-btn ghost admin-hidden" id="cancelEditBtn" data-i18n="admin.cancel">Abbrechen</button>
 			</div>
 
 			<!-- existing projects -->
@@ -139,58 +153,58 @@
 			<!-- existing local projects -->
 			<div class="admin-list" id="localList"></div>
 
-			<!-- ===== Lebenslauf ===== -->
+<!-- ===== Lebenslauf ===== -->
 			<div id="resumeApp">
-				<h2 class="admin-subhead" style="font-size:18px;margin-top:36px;">Lebenslauf</h2>
+				<h2 class="admin-subhead" style="font-size:18px;margin-top:36px;" data-i18n="admin.resume">Lebenslauf</h2>
 
 				<div id="resumeFacts">
-					<h3 class="admin-subhead">Fakten (über mich)</h3>
+					<h3 class="admin-subhead" data-i18n="admin.facts">Fakten (&uuml;ber mich)</h3>
 					<div class="admin-grid">
-						<div class="admin-field"><label for="rf-name">Name</label><input type="text" id="rf-name"></div>
-						<div class="admin-field"><label for="rf-street">Strasse / Hausnr.</label><input type="text" id="rf-street"></div>
-						<div class="admin-field"><label for="rf-address2">PLZ / Ort</label><input type="text" id="rf-address2"></div>
-						<div class="admin-field"><label for="rf-web">Web</label><input type="text" id="rf-web"></div>
-						<div class="admin-field"><label for="rf-email">Email</label><input type="text" id="rf-email"></div>
-						<div class="admin-field"><label for="rf-tel">Telefon</label><input type="text" id="rf-tel"></div>
-						<div class="admin-field"><label for="rf-nationV">Nationalit&auml;t</label><input type="text" id="rf-nationV"></div>
-						<div class="admin-field"><label for="rf-birthV">Geburtsdatum</label><input type="text" id="rf-birthV"></div>
-						<div class="admin-field"><label for="rf-licenseV">F&uuml;hrerschein</label><input type="text" id="rf-licenseV"></div>
-						<div class="admin-field"><label for="rf-civilV">Zivilstand</label><input type="text" id="rf-civilV"></div>
-						<div class="admin-field"><label for="rf-permitV">Ausl&auml;nderausweiss</label><input type="text" id="rf-permitV"></div>
-						<div class="admin-field"><label>&nbsp;</label><button type="button" class="admin-btn" id="saveFactsBtn">Fakten speichern</button>
-							<button type="button" class="admin-btn ghost" id="resetFactsBtn">Fakten zur&uuml;cksetzen</button></div>
+						<div class="admin-field"><label for="rf-name" data-i18n="admin.facts.name">Name</label><input type="text" id="rf-name"></div>
+						<div class="admin-field"><label for="rf-street" data-i18n="admin.facts.street">Strasse / Hausnr.</label><input type="text" id="rf-street"></div>
+						<div class="admin-field"><label for="rf-address2" data-i18n="admin.facts.address2">PLZ / Ort</label><input type="text" id="rf-address2"></div>
+						<div class="admin-field"><label for="rf-web" data-i18n="admin.facts.web">Web</label><input type="text" id="rf-web"></div>
+						<div class="admin-field"><label for="rf-email" data-i18n="admin.facts.email">Email</label><input type="text" id="rf-email"></div>
+						<div class="admin-field"><label for="rf-tel" data-i18n="admin.facts.tel">Telefon</label><input type="text" id="rf-tel"></div>
+						<div class="admin-field"><label for="rf-nationV" data-i18n="admin.facts.nation">Nationalit&auml;t</label><input type="text" id="rf-nationV"></div>
+						<div class="admin-field"><label for="rf-birthV" data-i18n="admin.facts.birth">Geburtsdatum</label><input type="text" id="rf-birthV"></div>
+						<div class="admin-field"><label for="rf-licenseV" data-i18n="admin.facts.license">F&uuml;hrerschein</label><input type="text" id="rf-licenseV"></div>
+						<div class="admin-field"><label for="rf-civilV" data-i18n="admin.facts.civil">Zivilstand</label><input type="text" id="rf-civilV"></div>
+						<div class="admin-field"><label for="rf-permitV" data-i18n="admin.facts.permit">Ausl&auml;nderausweiss</label><input type="text" id="rf-permitV"></div>
+						<div class="admin-field"><label>&nbsp;</label><button type="button" class="admin-btn" id="saveFactsBtn" data-i18n="admin.saveFacts">Fakten speichern</button>
+							<button type="button" class="admin-btn ghost" id="resetFactsBtn" data-i18n="admin.resetFacts">Fakten zur&uuml;cksetzen</button></div>
 					</div>
 				</div>
 
-				<h3 class="admin-subhead">Lebenslauf-Eintr&auml;ge</h3>
-				<p style="font-size:12px;color:#8f8f8f;margin:0 0 12px;">Hier kannst du Titel, Zeitraum und Beschreibungstexte der 10 Eintr&auml;ge &auml;ndern und neue Eintr&auml;ge hinzuf&uuml;gen. Neue Eintr&auml;ge erscheinen oben.</p>
-				<div class="admin-field"><button type="button" class="admin-btn" id="addJobBtn">Neuer Eintrag (oben)</button></div>
+				<h3 class="admin-subhead" data-i18n="admin.resumeEntries">Lebenslauf-Eintr&auml;ge</h3>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 12px;" data-i18n="admin.resumeHelp">Hier kannst du Titel, Zeitraum und Beschreibungstexte der 11 Eintr&auml;ge &auml;ndern und neue Eintr&auml;ge hinzuf&uuml;gen. Neue Eintr&auml;ge erscheinen oben.</p>
+				<div class="admin-field"><button type="button" class="admin-btn" id="addJobBtn" data-i18n="admin.addEntry">Neuer Eintrag (oben)</button></div>
 				<div id="resumeJobList"></div>
 
 				<div id="resumeJobEdit" class="admin-job-box admin-hidden">
-					<h3 class="admin-subhead" id="jobEditTitle">Eintrag bearbeiten</h3>
-					<div class="admin-field"><label for="rj-date">Zeitraum</label><input type="text" id="rj-date"></div>
-					<div class="admin-field"><label for="rj-title">Titel</label><input type="text" id="rj-title"></div>
-					<div class="admin-field"><label for="rj-text">Beschreibung (HTML erlaubt)</label><textarea id="rj-text"></textarea></div>
+					<h3 class="admin-subhead" id="jobEditTitle" data-i18n="admin.editEntry">Eintrag bearbeiten</h3>
+					<div class="admin-field"><label for="rj-date" data-i18n="admin.period">Zeitraum</label><input type="text" id="rj-date"></div>
+					<div class="admin-field"><label for="rj-title" data-i18n="admin.title">Titel</label><input type="text" id="rj-title"></div>
+					<div class="admin-field"><label for="rj-text" data-i18n="admin.description">Beschreibung (HTML erlaubt)</label><textarea id="rj-text"></textarea></div>
 					<div class="admin-field">
-						<label for="rj-imgs">Bilder (URL, dann &plus; klicken &ndash; oder weiter unten hochladen)</label>
+						<label for="rj-imgs" data-i18n="admin.images">Bilder (URL, dann &plus; klicken &ndash; oder weiter unten hochladen)</label>
 						<div style="display:flex;gap:8px;">
 							<input type="text" id="rj-imgs" placeholder="https://…/bild.jpg">
-							<button type="button" class="admin-btn" id="rj-imgs-add" style="white-space:nowrap;flex:0 0 auto;">+ Hinzuf&uuml;gen</button>
+							<button type="button" class="admin-btn" id="rj-imgs-add" style="white-space:nowrap;flex:0 0 auto;" data-i18n="admin.addImage">+ Hinzuf&uuml;gen</button>
 						</div>
 					</div>
-					<div class="admin-field"><label for="rj-imgfiles">Bilder hochladen (mehrfach m&ouml;glich)</label><input type="file" id="rj-imgfiles" accept="image/*" multiple></div>
+					<div class="admin-field"><label for="rj-imgfiles" data-i18n="admin.imageUpload">Bilder hochladen (mehrfach m&ouml;glich)</label><input type="file" id="rj-imgfiles" accept="image/*" multiple></div>
 					<div id="rj-preview"></div>
-					<div class="admin-field"><label for="rj-l1">Aufz&auml;hlung Punkt 1</label><input type="text" id="rj-l1"></div>
-					<div class="admin-field"><label for="rj-l2">Aufz&auml;hlung Punkt 2</label><input type="text" id="rj-l2"></div>
-					<div class="admin-field"><label for="rj-l3">Aufz&auml;hlung Punkt 3</label><input type="text" id="rj-l3"></div>
-					<div class="admin-field"><label for="rj-l4">Aufz&auml;hlung Punkt 4</label><input type="text" id="rj-l4"></div>
-					<div class="admin-field"><label for="rj-l5">Aufz&auml;hlung Punkt 5</label><input type="text" id="rj-l5"></div>
-					<div class="admin-field"><label for="rj-l6">Aufz&auml;hlung Punkt 6</label><input type="text" id="rj-l6"></div>
-					<div class="admin-field"><label for="rj-l7">Aufz&auml;hlung Punkt 7</label><input type="text" id="rj-l7"></div>
+					<div class="admin-field"><label for="rj-l1" data-i18n="admin.item1">Aufz&auml;hlung Punkt 1</label><input type="text" id="rj-l1"></div>
+					<div class="admin-field"><label for="rj-l2" data-i18n="admin.item2">Aufz&auml;hlung Punkt 2</label><input type="text" id="rj-l2"></div>
+					<div class="admin-field"><label for="rj-l3" data-i18n="admin.item3">Aufz&auml;hlung Punkt 3</label><input type="text" id="rj-l3"></div>
+					<div class="admin-field"><label for="rj-l4" data-i18n="admin.item4">Aufz&auml;hlung Punkt 4</label><input type="text" id="rj-l4"></div>
+					<div class="admin-field"><label for="rj-l5" data-i18n="admin.item5">Aufz&auml;hlung Punkt 5</label><input type="text" id="rj-l5"></div>
+					<div class="admin-field"><label for="rj-l6" data-i18n="admin.item6">Aufz&auml;hlung Punkt 6</label><input type="text" id="rj-l6"></div>
+					<div class="admin-field"><label for="rj-l7" data-i18n="admin.item7">Aufz&auml;hlung Punkt 7</label><input type="text" id="rj-l7"></div>
 					<div>
-						<button type="button" class="admin-btn" id="saveJobBtn">Eintrag speichern</button>
-						<button type="button" class="admin-btn ghost" id="cancelJobBtn">Abbrechen</button>
+						<button type="button" class="admin-btn" id="saveJobBtn" data-i18n="admin.saveEntry">Eintrag speichern</button>
+						<button type="button" class="admin-btn ghost" id="cancelJobBtn" data-i18n="admin.cancel">Abbrechen</button>
 					</div>
 				</div>
 			</div>
@@ -198,22 +212,45 @@
 
 			<!-- export -->
 			<div class="admin-export">
-				<h3>Ver&ouml;ffentlichen (f&uuml;r alle Besucher)</h3>
-				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;">Jede gespeicherte &Auml;nderung wird automatisch &uuml;ber <code>save.php</code> in <code>data/projects.js</code> auf dem Server geschrieben &ndash; alle Besucher sehen sie beim n&auml;chsten Seitenaufruf. (Voraussetzung: PHP-Hosting, z. B. Apache/XAMPP. Funktioniert nicht auf rein statischen Hosts wie GitHub Pages.)</p>
-				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;">Falls die automatische Speicherung fehlschl&auml;gt (Meldung im Admin), lade die Datei manuell herunter und ersetze <code>2026/data/projects.js</code>.</p>
-				<button type="button" class="admin-btn" id="dlDataBtn">Datei data/projects.js herunterladen (Fallback)</button>
-				<h3 style="margin-top:24px;">Export-Code (f&uuml;r die W&ouml;rterb&uuml;cher)</h3>
-				<button type="button" class="admin-btn ghost" id="genCodeBtn">Code erzeugen</button>
+				<h3 data-i18n="admin.publish">Ver&ouml;ffentlichen (f&uuml;r alle Besucher)</h3>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;" data-i18n="admin.publishInfo">Jede gespeicherte &Auml;nderung wird automatisch &uuml;ber <code>save.php</code> in <code>data/projects.js</code> auf dem Server geschrieben &ndash; alle Besucher sehen sie beim n&auml;chsten Seitenaufruf. (Voraussetzung: PHP-Hosting, z. B. Apache/XAMPP. Funktioniert nicht auf rein statischen Hosts wie GitHub Pages.)</p>
+				<p style="font-size:12px;color:#8f8f8f;margin:0 0 10px;" data-i18n="admin.publishFallback">Falls die automatische Speicherung fehlschl&auml;gt (Meldung im Admin), lade die Datei manuell herunter und ersetze <code>2026/data/projects.js</code>.</p>
+				<button type="button" class="admin-btn" id="dlDataBtn" data-i18n="admin.downloadFile">Datei data/projects.js herunterladen (Fallback)</button>
+				<h3 style="margin-top:24px;" data-i18n="admin.exportCode">Export-Code (f&uuml;r die W&ouml;rterb&uuml;cher)</h3>
+				<button type="button" class="admin-btn ghost" id="genCodeBtn" data-i18n="admin.generateCode">Code erzeugen</button>
 				<pre id="exportCode" class="dis-block" style="margin-top:12px;display:none;"></pre>
-				<p style="font-size:12px;color:#8f8f8f;margin:10px 0 0;">Alternativ: Kopiere diesen Code in jedes <code>js/i18n.*.js</code> in das <code>port.items</code>-Array, damit das Projekt dauerhaft f&uuml;r alle Besucher erscheint (siehe Kommentar im Code).</p>
+				<p style="font-size:12px;color:#8f8f8f;margin:10px 0 0;" data-i18n="admin.exportInfo">Alternativ: Kopiere diesen Code in jedes <code>js/i18n.*.js</code> in das <code>port.items</code>-Array, damit das Projekt dauerhaft f&uuml;r alle Besucher erscheint (siehe Kommentar im Code).</p>
 			</div>
+			<!-- export -->
 		</div>
 	</div>
 
 	<script>
+		// Language switcher for admin
+		document.addEventListener('DOMContentLoaded', function () {
+			var langSelect = document.getElementById('adminLang');
+			if (langSelect) {
+				// Set initial value from localStorage or default to 'de'
+				var savedLang = localStorage.getItem('amcf_lang') || 'de';
+				langSelect.value = savedLang;
+				
+				langSelect.addEventListener('change', function () {
+					var lang = this.value;
+					localStorage.setItem('amcf_lang', lang);
+					// Reload page to apply translations
+					window.location.reload();
+				});
+			}
+		});
 		// index.html portfolio integration reads localStorage key: amcf_local_projects
 	</script>
 	<script src="js/admin.js"></script>
 	<script src="js/i18n.de.js"></script>
+	<script src="js/i18n.de-ch.js"></script>
+	<script src="js/i18n.gl.js"></script>
+	<script src="js/i18n.es.js"></script>
+	<script src="js/i18n.pt.js"></script>
+	<script src="js/i18n.en.js"></script>
+	<script src="js/i18n.js"></script>
 </body>
 </html>

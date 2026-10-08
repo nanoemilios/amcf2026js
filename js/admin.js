@@ -6,8 +6,8 @@
 	var LS_EDITS = 'amcf_local_edits';
 	var LS_RESUME = 'amcf_local_resume';
 
-	var RESUME_FACTS = ['name','street','address2','web','email','tel','nationV','birthV','licenseV','civilV','permitV'];
-	var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10'];
+var RESUME_FACTS = ['name','street','address2','web','email','tel','nationV','birthV','licenseV','civilV','permitV'];
+var RESUME_JOBS = ['1','2','3','4','5','6','7','8','9','10','11'];
 	var RESUME_JOB_FIELDS = ['date','title','text','l1','l2','l3','l4','l5','l6','l7'];
 	// Values hardcoded in index.html (not in the i18n dicts)
 	var RESUME_FACT_DEFAULTS = {
@@ -570,7 +570,70 @@ if (loc.jobs) {
 				list.push({
 					name: f.name, category: f.category, tags: f.tags, image: finalImage,
 					desc: f.desc, client: f.client, date: f.date, url: f.url
-				});
+});
+
+// Admin translations
+function renderAdminI18n() {
+	var lang = localStorage.getItem('amcf_lang') || 'de';
+	var dict = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang] && window.AMCF_I18N_LANGS[lang].admin;
+	if (!dict) { return; }
+	
+	// Elements with data-i18n
+	document.querySelectorAll('[data-i18n]').forEach(function (el) {
+		var key = el.getAttribute('data-i18n');
+		var val = dict[key];
+		if (val !== undefined) {
+			if (el.hasAttribute('data-i18n-html')) {
+				el.innerHTML = val;
+			} else {
+				el.textContent = val;
+			}
+		}
+	});
+	
+	// Elements with data-i18n-placeholder
+	document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+		var key = el.getAttribute('data-i18n-placeholder');
+		var val = dict[key];
+		if (val !== undefined) {
+			el.placeholder = val;
+		}
+	});
+	
+	// Update select options with data-i18n
+	document.querySelectorAll('option[data-i18n]').forEach(function (opt) {
+		var key = opt.getAttribute('data-i18n');
+		var val = dict[key];
+		if (val !== undefined) {
+			opt.textContent = val;
+		}
+	});
+	
+	// Update admin language selector
+	var langSelect = document.getElementById('adminLang');
+	if (langSelect) {
+		langSelect.value = localStorage.getItem('amcf_lang') || 'de';
+	}
+}
+
+// Listen for language changes
+document.addEventListener('AMCF_I18N_RENDER', function () {
+	renderAdminI18n();
+});
+
+// Initial render
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', renderAdminI18n);
+} else {
+	renderAdminI18n();
+}
+
+// Listen for language changes from i18n.js
+window.addEventListener('storage', function (e) {
+	if (e.key === 'amcf_lang') {
+		renderAdminI18n();
+	}
+});
 				if (!saveProjects(list)) { return; }
 				clearForm();
 				renderAll();
