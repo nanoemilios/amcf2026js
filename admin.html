@@ -57,7 +57,7 @@
 		<a href="index.html" class="admin-back">&larr; Zur&uuml;ck zur Website</a>
 
 		<div class="admin-head">
-			<h1 data-i18n="admin.title">Projektverwaltung</h1>
+			<h1 data-i18n="admin.heading">Projektverwaltung</h1>
 			<p data-i18n="admin.subtitle">Passwortgesch&uuml;tzter Bereich zum Hinzuf&uuml;gen neuer Portfolio-Projekte</p>
 		</div>
 
@@ -123,12 +123,12 @@
 			</div>
 
 			<div class="admin-field">
-				<label for="pImageFile" data-i18n="admin.imageUpload">Oder Bild hochladen</label>
+				<label for="pImageFile" data-i18n="admin.projectImageUpload">Oder Bild hochladen</label>
 				<input type="file" id="pImageFile" accept="image/*">
 			</div>
 
 			<div class="admin-field">
-				<label for="pDesc" data-i18n="admin.description">Beschreibung</label>
+				<label for="pDesc" data-i18n="admin.projectDescription">Beschreibung</label>
 				<textarea id="pDesc" placeholder="Kurzbeschreibung des Projekts"></textarea>
 			</div>
 
@@ -169,7 +169,7 @@
 				<h2 class="admin-subhead" style="font-size:18px;margin-top:36px;" data-i18n="admin.resume">Lebenslauf</h2>
 
 				<div id="resumeFacts">
-					<h3 class="admin-subhead" data-i18n="admin.facts">Fakten (&uuml;ber mich)</h3>
+					<h3 class="admin-subhead" data-i18n="admin.factsSection">Fakten (&uuml;ber mich)</h3>
 					<div class="admin-grid">
 						<div class="admin-field"><label for="rf-name" data-i18n="admin.facts.name">Name</label><input type="text" id="rf-name"></div>
 						<div class="admin-field"><label for="rf-street" data-i18n="admin.facts.street">Strasse / Hausnr.</label><input type="text" id="rf-street"></div>
@@ -196,7 +196,7 @@
 					<h3 class="admin-subhead" id="jobEditTitle" data-i18n="admin.editEntry">Eintrag bearbeiten</h3>
 					<div class="admin-field"><label for="rj-date" data-i18n="admin.period">Zeitraum</label><input type="text" id="rj-date"></div>
 					<div class="admin-field"><label for="rj-title" data-i18n="admin.title">Titel</label><input type="text" id="rj-title"></div>
-					<div class="admin-field"><label for="rj-text" data-i18n="admin.description">Beschreibung (HTML erlaubt)</label><textarea id="rj-text"></textarea></div>
+					<div class="admin-field"><label for="rj-text" data-i18n="admin.resumeDescription">Beschreibung (HTML erlaubt)</label><textarea id="rj-text"></textarea></div>
 					<div class="admin-field">
 						<label for="rj-imgs" data-i18n="admin.images">Bilder (URL, dann &plus; klicken &ndash; oder weiter unten hochladen)</label>
 						<div style="display:flex;gap:8px;">
@@ -204,7 +204,7 @@
 							<button type="button" class="admin-btn" id="rj-imgs-add" style="white-space:nowrap;flex:0 0 auto;" data-i18n="admin.addImage">+ Hinzuf&uuml;gen</button>
 						</div>
 					</div>
-					<div class="admin-field"><label for="rj-imgfiles" data-i18n="admin.imageUpload">Bilder hochladen (mehrfach m&ouml;glich)</label><input type="file" id="rj-imgfiles" accept="image/*" multiple></div>
+					<div class="admin-field"><label for="rj-imgfiles" data-i18n="admin.resumeImageUpload">Bilder hochladen (mehrfach m&ouml;glich)</label><input type="file" id="rj-imgfiles" accept="image/*" multiple></div>
 					<div id="rj-preview"></div>
 					<div class="admin-field"><label for="rj-l1" data-i18n="admin.item1">Aufz&auml;hlung Punkt 1</label><input type="text" id="rj-l1"></div>
 					<div class="admin-field"><label for="rj-l2" data-i18n="admin.item2">Aufz&auml;hlung Punkt 2</label><input type="text" id="rj-l2"></div>

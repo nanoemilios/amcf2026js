@@ -191,7 +191,8 @@ const AMCFStorageClass = {
         };
         document.head.appendChild(script);
     });
-}
+    }
+};
 
 // Make globally available
 window.AMCFStorage = AMCFStorageClass;

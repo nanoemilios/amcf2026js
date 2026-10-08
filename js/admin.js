@@ -339,9 +339,10 @@ if (loc.jobs) {
 		renderExisting();
 		renderLocal();
 		renderResume();
+		renderAdminI18n();
 	}
 
-	function clearForm() {
+	function resetFormFields() {
 		['pName','pTags','pImageUrl','pDesc','pClient','pDate','pUrl'].forEach(function (id) {
 			document.getElementById(id).value = '';
 		});
@@ -349,12 +350,24 @@ if (loc.jobs) {
 		document.getElementById('pImageFile').value = '';
 		editIndex = null;
 		localEditIndex = null;
-		document.getElementById('formTitle').textContent = 'Neues Projekt';
-		document.getElementById('addBtn').textContent = 'Projekt hinzufügen';
 		document.getElementById('cancelEditBtn').classList.add('admin-hidden');
-		// Hide project form, show new project button
+	}
+
+	function openProjectForm() {
+		resetFormFields();
+		document.getElementById('projectForm').classList.remove('admin-hidden');
+		document.getElementById('newProjectBtn').classList.add('admin-hidden');
+		renderAdminI18n();
+	}
+
+	function closeProjectForm() {
+		resetFormFields();
 		document.getElementById('projectForm').classList.add('admin-hidden');
 		document.getElementById('newProjectBtn').classList.remove('admin-hidden');
+	}
+
+	function clearForm() {
+		closeProjectForm();
 	}
 
 	function fillForm(p) {
@@ -539,18 +552,9 @@ if (loc.jobs) {
 		pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') { attemptLogin(); } });
 
 		// New Project form show/hide (attached on page load, not after login)
-		document.getElementById('newProjectBtn').addEventListener('click', function () {
-			document.getElementById('projectForm').classList.remove('admin-hidden');
-			document.getElementById('newProjectBtn').classList.add('admin-hidden');
-			document.getElementById('formTitle').textContent = 'Neues Projekt';
-			clearForm();
-		});
+		document.getElementById('newProjectBtn').addEventListener('click', openProjectForm);
 
-		document.getElementById('closeProjectFormBtn').addEventListener('click', function () {
-			document.getElementById('projectForm').classList.add('admin-hidden');
-			document.getElementById('newProjectBtn').classList.remove('admin-hidden');
-			clearForm();
-		});
+		document.getElementById('closeProjectFormBtn').addEventListener('click', closeProjectForm);
 
 		resumeAppReady();
 
@@ -630,8 +634,8 @@ if (loc.jobs) {
 				var eff = getEffectiveExisting(i);
 				fillForm({ name: eff.name, category: eff.category, tags: eff.tags, image: eff.image, desc: eff.desc, client: eff.client, date: eff.date, url: eff.url });
 				editIndex = i;
-				document.getElementById('formTitle').textContent = 'Projekt bearbeiten (Index ' + i + ')';
-				document.getElementById('addBtn').textContent = 'Änderungen speichern';
+				document.getElementById('formTitle').textContent = tr('admin.editTitle', 'Projekt bearbeiten (Index {i})').replace('{i}', i);
+				document.getElementById('addBtn').textContent = tr('admin.saveChanges', 'Änderungen speichern');
 				document.getElementById('cancelEditBtn').classList.remove('admin-hidden');
 				document.getElementById('formTitle').scrollIntoView({ behavior: 'smooth' });
 				return;
@@ -668,8 +672,8 @@ if (loc.jobs) {
 				fillForm({ name: p.name, category: p.category, tags: p.tags, image: p.image, desc: p.desc, client: p.client, date: p.date, url: p.url });
 				localEditIndex = li;
 				editIndex = null;
-				document.getElementById('formTitle').textContent = 'Lokales Projekt bearbeiten';
-				document.getElementById('addBtn').textContent = 'Änderungen speichern';
+				document.getElementById('formTitle').textContent = tr('admin.editLocal', 'Lokales Projekt bearbeiten');
+				document.getElementById('addBtn').textContent = tr('admin.saveChanges', 'Änderungen speichern');
 				document.getElementById('cancelEditBtn').classList.remove('admin-hidden');
 				document.getElementById('formTitle').scrollIntoView({ behavior: 'smooth' });
 				return;
@@ -820,15 +824,32 @@ if (loc.jobs) {
 	});
 
 	// Admin translations
+	function lookupPath(dict, key) {
+		var parts = key.split('.');
+		var cur = dict;
+		for (var i = 0; i < parts.length; i++) {
+			if (cur === null || cur === undefined) { return undefined; }
+			cur = cur[parts[i]];
+		}
+		return cur;
+	}
+
+	function tr(key, fallback) {
+		var lang = localStorage.getItem('amcf_lang') || 'de';
+		var root = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang];
+		var val = lookupPath(root, key);
+		return (typeof val === 'string') ? val : (fallback || key);
+	}
+
 	function renderAdminI18n() {
 		var lang = localStorage.getItem('amcf_lang') || 'de';
-		var dict = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang] && window.AMCF_I18N_LANGS[lang].admin;
+		var dict = window.AMCF_I18N_LANGS && window.AMCF_I18N_LANGS[lang];
 		if (!dict) { return; }
 		
 		// Elements with data-i18n
 		document.querySelectorAll('[data-i18n]').forEach(function (el) {
 			var key = el.getAttribute('data-i18n');
-			var val = dict[key];
+			var val = lookupPath(dict, key);
 			if (val !== undefined) {
 				if (el.hasAttribute('data-i18n-html')) {
 					el.innerHTML = val;
@@ -841,7 +862,7 @@ if (loc.jobs) {
 		// Elements with data-i18n-placeholder
 		document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
 			var key = el.getAttribute('data-i18n-placeholder');
-			var val = dict[key];
+			var val = lookupPath(dict, key);
 			if (val !== undefined) {
 				el.placeholder = val;
 			}
