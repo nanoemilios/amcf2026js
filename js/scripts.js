@@ -422,6 +422,27 @@ function getResumeData() {
 var RESUME_JOB_FIELDS_LITE = ['date','title','text','l1','l2','l3','l4','l5','l6','l7'];
 
 // apply resume overrides to the DOM (run after i18n render)
+/* The job number must come from the holder's resume.jobN.* data-i18n keys.
+   data-rvnum is NOT the job number and is not even unique (job11 and job9 are
+   both rvnum 2), so it is only a last-resort fallback. */
+function jobNumFromKeys(rvnum, keys) {
+	for (var i = 0; i < keys.length; i++) {
+		var m = /resume\.job(\d+)\./.exec(keys[i] || '');
+		if (m) { return parseInt(m[1], 10); }
+	}
+	var n = parseInt(rvnum, 10);
+	return isNaN(n) ? null : n;
+}
+
+function holderJobNum($holder) {
+	var keys = [];
+	$holder.find('[data-i18n], [data-i18n-html]').each(function () {
+		keys.push($(this).attr('data-i18n') || '');
+		keys.push($(this).attr('data-i18n-html') || '');
+	});
+	return jobNumFromKeys($holder.attr('data-rvnum'), keys);
+}
+
 function applyResumeOverrides() {
 	var rd = getResumeData();
 	// facts
@@ -435,6 +456,7 @@ function applyResumeOverrides() {
 	Object.keys(jobs).forEach(function (num) {
 		var job = jobs[num];
 		if (!job) { return; }
+		var $jobHolder = $();
 		RESUME_JOB_FIELDS_LITE.forEach(function (f) {
 			if (job[f] == null || job[f] === '') { return; }
 			var key = 'resume.job' + num + '.' + f;
@@ -442,13 +464,18 @@ function applyResumeOverrides() {
 			var sel = htmlMode ? '[data-i18n-html="' + key + '"]' : '[data-i18n="' + key + '"]';
 			var el = document.querySelector(sel);
 			if (!el) { return; }
+			// capture the holder before the data-i18n attributes are stripped
+			if (!$jobHolder.length) { $jobHolder = $(el).closest('.resume-holder'); }
 			if (htmlMode) { el.innerHTML = job[f]; } else { el.textContent = job[f]; }
 			el.removeAttribute('data-i18n');
 			el.removeAttribute('data-i18n-html');
 		});
 		// replacement images (admin-provided) for existing entries
 		if (Array.isArray(job.imgs) && job.imgs.length) {
-			var $holder = $('[data-rvnum="' + num + '"]').first();
+			// resolve the holder by job number, never by data-rvnum
+			var $holder = $jobHolder.length ? $jobHolder :
+				$('[data-i18n*="resume.job' + num + '."], [data-i18n-html*="resume.job' + num + '."]')
+					.first().closest('.resume-holder');
 			if ($holder.length && !$holder.find('.resume-slider[data-injected]').length) {
 				var slides = '<div class="resume-slider" data-injected="1"><ul class="slides">';
 				job.imgs.forEach(function (s) {
@@ -937,12 +964,7 @@ function rvResolveJob() {
 		};
 	}
 
-	var num = parseInt($holder.attr('data-rvnum'), 10);
-	if (isNaN(num)) {
-		var key = $holder.find('[data-i18n]').first().attr('data-i18n') || '';
-		var m = /resume\.job(\d+)\./.exec(key);
-		num = m ? parseInt(m[1], 10) : null;
-	}
+	var num = holderJobNum($holder);
 
 	var d = pbGetDict();
 	var job = (d && d.resume && num && d.resume['job' + num]) ? d.resume['job' + num] : {};
