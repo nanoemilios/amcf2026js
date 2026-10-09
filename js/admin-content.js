@@ -258,6 +258,7 @@
 
 	function renderJobs() {
 		var host = $('acPanelJobs');
+		var isSrc = state.target === 'source';
 		var nums = Object.keys(state.model.jobs).map(Number).sort(function (a, b) { return a - b; });
 		var html = '<p><button type="button" class="admin-btn" id="acAddJob" data-i18n="admin.addEntry">Neuer Eintrag (oben)</button></p>';
 		nums.forEach(function (n) {
