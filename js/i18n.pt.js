@@ -171,6 +171,8 @@
 			},
 		},
 		admin: {
+			delete: 'Excluir',
+			confirmDelete: 'Excluir mesmo? Só é definitivo depois de salvar.',
 			back: "Voltar ao site",
 			save: 'Salvar',
 			saving: 'Salvando …',

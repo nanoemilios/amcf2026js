@@ -88,6 +88,8 @@
 			},
 		},
 		admin: {
+			delete: 'Löschen',
+			confirmDelete: 'Wirklich löschen? Das ist erst nach dem Speichern endgültig.',
 			back: "Zur&uuml;ck zur Website",
 			save: 'Speichern',
 			saving: 'Wird gespeichert …',

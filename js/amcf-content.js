@@ -107,16 +107,20 @@
 		return jobs;
 	}
 
-	function writeJobs(html, jobs) {
-		var reg = regionSlice(html, 'RESUME');
-		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
-		var body = reg.text.replace(JOB_RE, function (whole, tag, before, isHtml, numS, field, after, content) {
+	function writeJobFieldsInBlock(block, jobs) {
+		return block.replace(JOB_RE, function (whole, tag, before, isHtml, numS, field, after, content) {
 			var job = jobs[parseInt(numS, 10)];
 			if (!job || job[field] === undefined) { return whole; }
 			var val = isHtml ? job[field] : esc(job[field]);
 			return '<' + tag + before + (isHtml ? ' data-i18n-html' : ' data-i18n') +
 				'="resume.job' + numS + '.' + field + '"' + after + '>' + val + '</' + tag + '>';
 		});
+	}
+
+	function writeJobs(html, jobs) {
+		var reg = regionSlice(html, 'RESUME');
+		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
+		var body = writeJobFieldsInBlock(reg.text, jobs);
 		return html.slice(0, reg.start) + body + html.slice(reg.end);
 	}
 
@@ -244,15 +248,166 @@
 		return out;
 	}
 
+	/* ---------------- creating and removing ---------------- */
+	// Slice a balanced <tag> element starting at or after from.
+	function sliceElement(html, from, tag) {
+		var openRe = new RegExp('<' + tag + '\\b', 'g');
+		openRe.lastIndex = from;
+		var open = openRe.exec(html);
+		if (!open) { return null; }
+		var tagRe = new RegExp('<(/?)' + tag + '\\b[^>]*?(/?)>', 'g');
+		tagRe.lastIndex = open.index;
+		var depth = 0, m;
+		while ((m = tagRe.exec(html)) !== null) {
+			if (m[2] === '/') { continue; }
+			if (m[1] === '/') { depth--; if (depth === 0) { return { start: open.index, end: tagRe.lastIndex, text: html.slice(open.index, tagRe.lastIndex) }; } }
+			else { depth++; }
+		}
+		return null;
+	}
+
+	// Start index of the last <tag> match at or before `before`, or -1.
+	function lastTagBefore(text, tagRe, before) {
+		var re = new RegExp(tagRe.source, 'g'), last = -1, m;
+		while ((m = re.exec(text)) !== null) {
+			if (m.index > before) { break; }
+			last = m.index;
+		}
+		return last;
+	}
+
+	function nextJobNum(html) {
+		var jobs = parseJobs(html), max = 0;
+		Object.keys(jobs).forEach(function (n) { if (+n > max) { max = +n; } });
+		return max + 1;
+	}
+	function freeRvnum(html) {
+		var re = /data-rvnum="(\d+)"/g, max = 0, m;
+		while ((m = re.exec(html)) !== null) { if (+m[1] > max) { max = +m[1]; } }
+		return max + 1;
+	}
+
+	var JOB_DEFAULTS = { date: '', title: '', text: '', l1: '', l2: '', l3: '', l4: '', l5: '', l6: '', l7: '' };
+
+	// Clone the first existing job holder so the new entry inherits the exact
+	// markup shape (circles, head, slider) that the layout expects.
+	function addJob(html, fields) {
+		var reg = regionSlice(html, 'RESUME');
+		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
+		// the first resume.jobN.* key inside the region identifies the first holder
+		var firstKey = /resume\.job\d+\./.exec(reg.text);
+		if (!firstKey) { throw new Error('no job holder found in the resume region'); }
+		var holderStart = lastTagBefore(reg.text, /<div class="resume-holder"/g, firstKey.index);
+		if (holderStart === -1) { throw new Error('could not locate the job holder'); }
+		var holder = sliceElement(reg.text, holderStart, 'div');
+		if (!holder) { throw new Error('could not slice a job holder'); }
+		var oldNumM = /resume\.job(\d+)\./.exec(holder.text);
+		if (!oldNumM) { throw new Error('job holder has no resume.jobN.* keys'); }
+		var oldNum = oldNumM[1];
+		var num = nextJobNum(html);
+		var rv = freeRvnum(html);
+
+		var block = holder.text
+			.split('resume.job' + oldNum + '.').join('resume.job' + num + '.')
+			.replace(/data-rvnum="\d+"/, 'data-rvnum="' + rv + '"');
+
+		// normalise every keyed field to its default, then apply the supplied values
+		var blank = {};
+		blank[num] = Object.assign({}, JOB_DEFAULTS, fields || {});
+		block = writeJobFieldsInBlock(block, blank);
+
+		var insertAt = reg.start + reg.text.indexOf(holder.text);
+		return { html: html.slice(0, insertAt) + block + html.slice(insertAt), num: num, rvnum: rv };
+	}
+
+	function removeJob(html, num) {
+		var reg = regionSlice(html, 'RESUME');
+		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
+		var key = 'resume.job' + num + '.';
+		var anchor = reg.text.indexOf(key);
+		if (anchor === -1) { return { html: html, removed: false }; }
+		// walk back to the enclosing holder opening tag
+		var head = lastTagBefore(reg.text, /<div class="resume-holder"/g, anchor);
+		if (head === -1) { return { html: html, removed: false }; }
+		var holder = sliceElement(reg.text, head, 'div');
+		if (!holder) { return { html: html, removed: false }; }
+		return { html: html.slice(0, reg.start) + reg.text.slice(0, holder.start) + reg.text.slice(holder.end) + html.slice(reg.end), removed: true };
+	}
+
+	var PROJECT_TEMPLATE =
+		'<li class="box mix category_1 mix_all" data-desc="" data-client="" data-date="" data-url="">' +
+		'<a href="#" class="folio-open" data-project="__INDEX__">' +
+		'<img src="__IMAGE__" class="respimg" alt="" title="">' +
+		'<div class="folio-name clear"><div class="folio-overlay">' +
+		'<span class="overlay red"></span>' +
+		'<h4>__NAME__</h4><h6>__TAGS__</h6>' +
+		'</div></div></a></li>';
+
+	function addProject(html, project) {
+		var reg = regionSlice(html, 'PROJECTS');
+		if (!reg) { throw new Error('AMCF:PROJECTS region not found'); }
+		project = project || {};
+		var existing = parseProjects(html);
+		var index = existing.length ? Math.max.apply(null, existing.map(function (p) { return p.index; })) + 1 : 0;
+		// match the indentation of the tiles already in the region
+		var lastLi = reg.text.lastIndexOf('<li class="box');
+		var indent = lastLi === -1 ? '\t\t\t\t' : (reg.text.slice(0, lastLi).match(/^[\t ]*/) || [''])[0];
+		var block = indent + PROJECT_TEMPLATE
+			.replace('__INDEX__', String(index))
+			.replace('__IMAGE__', attrEsc(project.image || 'images/folio/new.png'))
+			.replace('__NAME__', esc(project.name || 'Neues Projekt'))
+			.replace('__TAGS__', esc(project.tags || '')) + '\n';
+		var insertAt = reg.start + reg.text.indexOf('<!--AMCF:PROJECTS:END-->');
+		return { html: html.slice(0, insertAt) + block + indent + html.slice(insertAt), index: index };
+	}
+
+	function removeProject(html, index) {
+		var reg = regionSlice(html, 'PROJECTS');
+		if (!reg) { throw new Error('AMCF:PROJECTS region not found'); }
+		var anchor = reg.text.indexOf('data-project="' + index + '"');
+		if (anchor === -1) { return { html: html, removed: false }; }
+		// tiles carry more class tokens than just "box", so match on the tag not a literal
+		var head = lastTagBefore(reg.text, /<li class="[^"]*\bbox\b[^"]*"/g, anchor);
+		if (head === -1) { return { html: html, removed: false }; }
+		var li = sliceElement(reg.text, head, 'li');
+		if (!li) { return { html: html, removed: false }; }
+		return { html: html.slice(0, reg.start) + reg.text.slice(0, li.start) + reg.text.slice(li.end) + html.slice(reg.end), removed: true };
+	}
+
+	// Add an empty job block to a translation dictionary.
+	function addJobToDict(src, num, fields) {
+		var b = findBlock(src, /resume:\s*\{/);
+		if (!b) { return null; }
+		var headerEnd = src.indexOf('\n', b.start);
+		var keys = Object.keys(JOB_DEFAULTS);
+		var body = keys.filter(function (k) { return !!(fields && fields[k]); })
+			.map(function (k) { return "\t\t\t\t" + k + ": '" + escapeJs(fields[k]) + "',"; })
+			.join('\n');
+		var block = "\t\t\tjob" + num + ": {\n" + (body ? body + '\n' : '') + '\t\t\t},';
+		return src.slice(0, headerEnd + 1) + block + '\n' + src.slice(headerEnd + 1);
+	}
+
+	// Remove a job block from a translation dictionary.
+	function removeJobFromDict(src, num) {
+		var b = findBlock(src, new RegExp('job' + num + '\\s*:\\s*\\{'));
+		if (!b) { return null; }
+		return src.slice(0, b.start) + src.slice(b.end);
+	}
+
 	return {
 		parse: parse, write: write,
 		parseProjects: parseProjects, writeProjects: writeProjects,
 		parseJobs: parseJobs, writeJobs: writeJobs,
 		parseFacts: parseFacts, writeFacts: writeFacts,
 		hasRegions: hasRegions, regionSlice: regionSlice,
+		addJob: addJob, removeJob: removeJob,
+		addProject: addProject, removeProject: removeProject,
+		addJobToDict: addJobToDict, removeJobFromDict: removeJobFromDict,
+		nextJobNum: nextJobNum, freeRvnum: freeRvnum,
 		setPortTags: setPortTags, setPortItems: setPortItems,
 		setJobField: setJobField, setFactLabel: setFactLabel,
 		getJobNumList: getJobNumList, findBlock: findBlock,
+		sliceElement: sliceElement,
 		esc: esc, unesc: unesc, attrEsc: attrEsc, escapeJs: escapeJs
 	};
 });

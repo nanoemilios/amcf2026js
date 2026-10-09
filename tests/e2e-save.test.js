@@ -21,7 +21,14 @@ const origIndex = fs.readFileSync(indexFile, 'utf8');
 const origEn = fs.readFileSync(enFile, 'utf8');
 
 // ---- build the edits exactly the way admin-content.js does ----
-const model = C.parse(origIndex);
+// create one project and one entry first, then edit existing content
+const withJob = C.addJob(origIndex, { date: '2027', title: 'Neue Firma', text: 'Neu <i>Text</i>' });
+ok(Object.keys(C.parseJobs(withJob.html)).length === 12, 'added a 12th entry before saving', Object.keys(C.parseJobs(withJob.html)).length);
+const withProject = C.addProject(withJob.html, { name: 'Zusatz Projekt', image: 'images/folio/z.png', tags: 'web' });
+ok(C.parseProjects(withProject.html).length === 9, 'added a 9th project before saving', C.parseProjects(withProject.html).length);
+
+const base = withProject.html;
+const model = C.parse(base);
 model.projects[0].name = 'X&T Probe';
 model.projects[0].desc = 'Beschreibung <mit> & "Anführungszeichen"';
 model.projects[0].client = 'Probe GmbH';
@@ -31,7 +38,7 @@ model.jobs[11].title = 'AS Aufzüge AG Probe';
 model.jobs[11].text = 'Neuer Text mit <a href="https://x.y">Link</a> & Ümläuten.';
 model.facts.name = 'Probe Name & Co';
 
-const newIndex = C.write(origIndex, model);
+const newIndex = C.write(base, model);
 
 let newEn = C.setPortTags(origEn, model.projects.map((p) => p.tags));
 newEn = C.setPortItems(newEn, model.projects.map((p) => ({
@@ -59,11 +66,18 @@ newEn = C.setFactLabel(newEn, 'permit', 'EN Permit');
     ok(m2.projects[0].desc === 'Beschreibung <mit> & "Anführungszeichen"', 'project desc persisted', m2.projects[0].desc);
     ok(m2.projects[0].url === 'https://example.com/?a=1&b=2', 'project url persisted', m2.projects[0].url);
     ok(m2.projects[7].name === 'Naturania.es', 'other projects untouched', m2.projects[7].name);
+ok(m2.projects.length === 9, '9 projects on disk after save', m2.projects.length);
+ok(m2.projects[8].name === 'Zusatz Projekt', 'new project persisted', m2.projects[8].name);
+ok(m2.projects[8].image === 'images/folio/z.png', 'new project image persisted', m2.projects[8].image);
+ok(Object.keys(m2.jobs).length === 12, '12 entries on disk after save', Object.keys(m2.jobs).length);
+ok(m2.jobs[12].title === 'Neue Firma', 'new entry persisted', m2.jobs[12].title);
+ok(m2.jobs[12].text === 'Neu <i>Text</i>', 'new entry html text persisted', m2.jobs[12].text);
+ok(m2.jobs[12].date === '2027', 'new entry date persisted', m2.jobs[12].date);
     ok(m2.jobs[11].title === 'AS Aufzüge AG Probe', 'job title persisted', m2.jobs[11].title);
     ok(m2.jobs[11].text === 'Neuer Text mit <a href="https://x.y">Link</a> & Ümläuten.', 'job html text persisted', m2.jobs[11].text);
     ok(m2.facts.name === 'Probe Name & Co', 'fact persisted', m2.facts.name);
     ok(m2.facts.permitV === 'C', 'other facts untouched', m2.facts.permitV);
-    ok(Object.keys(m2.jobs).length === 11, 'still 11 jobs', Object.keys(m2.jobs).length);
+    ok(m2.jobs[1].text.indexOf('Migros') !== -1, 'job1 text intact after structural change');
 
     // ---- verify en dict on disk ----
     const sandbox = { window: {} };
@@ -72,12 +86,12 @@ newEn = C.setFactLabel(newEn, 'permit', 'EN Permit');
     const EN = sandbox.window.AMCF_I18N_LANGS.en;
     ok(EN.resume.job11.title === 'EN Job 11 Probe', 'en job title persisted', EN.resume.job11.title);
     ok(EN.resume.job11.text === 'EN text with <b>bold</b> & more.', 'en job text persisted', EN.resume.job11.text);
-    ok(EN.port.items.length === 8, 'en items count still 8', EN.port.items.length);
+    ok(EN.port.items.length === 9, 'en items grew to 9 for the new project', EN.port.items.length);
     ok(EN.port.items[0].desc === 'EN X&T Probe', 'en item desc persisted', EN.port.items[0].desc);
     ok(EN.resume.facts.permit === 'EN Permit', 'en fact label persisted', EN.resume.facts.permit);
     ok(EN.resume.facts.permitV === 'C', 'en fact value untouched', EN.resume.facts.permitV);
     ok(EN.resume.job1.text.indexOf('Migros') !== -1, 'en job1 text intact');
-    ok(Array.isArray(EN.port.tags) && EN.port.tags.length === 8, 'en tags still 8', EN.port.tags && EN.port.tags.length);
+    ok(Array.isArray(EN.port.tags) && EN.port.tags.length === 9, 'en tags grew to 9', EN.port.tags && EN.port.tags.length);
   } catch (e) {
     ok(false, 'e2e run threw', e.message);
   } finally {

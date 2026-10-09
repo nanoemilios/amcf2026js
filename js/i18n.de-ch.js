@@ -171,6 +171,8 @@
 			},
 		},
 		admin: {
+			delete: 'Lösche',
+			confirmDelete: 'Wirklich lösche? Das isch erst nach em Speichere endgültig.',
 			back: "Zr&uuml;ck zur Website",
 			save: 'Speichere',
 			saving: 'Wird gspeichert …',

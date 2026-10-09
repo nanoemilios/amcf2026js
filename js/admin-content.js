@@ -154,6 +154,33 @@
 		renderJobs();
 		renderFacts();
 		updateHint();
+		bindPanelActions();
+	}
+
+	// The add buttons are recreated on every render, so they are rebound each time.
+// The delete buttons are handled by delegation bound once in the setup below.
+	function bindPanelActions() {
+		var addP = $('acAddProject');
+		if (addP) { addP.addEventListener('click', addProject); }
+		var addJ = $('acAddJob');
+		if (addJ) { addJ.addEventListener('click', addJob); }
+	}
+
+	function bindDelegates() {
+		var pHost = $('acPanelProjects');
+		if (pHost) {
+			pHost.addEventListener('click', function (e) {
+				var b = e.target.closest('[data-del-project]');
+				if (b) { delProject(parseInt(b.getAttribute('data-del-project'), 10)); }
+			});
+		}
+		var jHost = $('acPanelJobs');
+		if (jHost) {
+			jHost.addEventListener('click', function (e) {
+				var b = e.target.closest('[data-del-job]');
+				if (b) { delJob(parseInt(b.getAttribute('data-del-job'), 10)); }
+			});
+		}
 	}
 	function updateHint() {
 		var isSrc = state.target === 'source';
@@ -179,10 +206,17 @@
 		var html = '<p class="ac-hint">' + (isSrc
 			? 'Name, Bild und Kategorie stehen nur in index.html und sind sprachneutral.'
 			: 'Nur Tags und die Lightbox-Felder sind &uuml;bersetzbar; Namen/Bilder kommen aus index.html.') + '</p>';
+		if (isSrc) {
+			html += '<p><button type="button" class="admin-btn" id="acAddProject" data-i18n="admin.addProject">Projekt hinzuf&uuml;gen</button></p>';
+		} else {
+			html += '<p class="ac-hint">Neue Projekte werden im Bereich <strong>index.html (Deutsch)</strong> angelegt, damit sie in allen Sprachen existieren.</p>';
+		}
 		state.model.projects.forEach(function (p) {
 			var idp = 'p' + p.index;
 			var head = '<div class="ac-item-head"><h3>' + escHtml(p.name || ('#' + p.index)) +
-				'</h3><span class="hidden-tag">' + escHtml(p.category) + '</span></div>';
+				'</h3><span class="hidden-tag">' + escHtml(p.category) + '</span>' +
+				(isSrc ? '<button type="button" class="admin-btn ghost" data-del-project="' + p.index +
+					'" data-i18n="admin.delete">L&ouml;schen</button>' : '') + '</div>';
 			var body = '';
 			if (isSrc) {
 				body += field('admin.projectName', idp + '_name', p.name);
@@ -206,12 +240,14 @@
 	function renderJobs() {
 		var host = $('acPanelJobs');
 		var nums = Object.keys(state.model.jobs).map(Number).sort(function (a, b) { return a - b; });
-		var html = '';
+		var html = '<p><button type="button" class="admin-btn" id="acAddJob" data-i18n="admin.addEntry">Neuer Eintrag (oben)</button></p>';
 		nums.forEach(function (n) {
 			var job = state.model.jobs[n];
 			var idj = 'j' + n;
 			var head = '<div class="ac-item-head"><h3>#' + n + ' &ndash; ' +
-				escHtml(job.title || '') + '</h3></div>';
+				escHtml(job.title || '') + '</h3>' +
+				'<button type="button" class="admin-btn ghost" data-del-job="' + n +
+				'" data-i18n="admin.delete">L&ouml;schen</button></div>';
 			var body = field('admin.period', idj + '_date', job.date);
 			body += field('admin.title', idj + '_title', job.title);
 			body += field('admin.resumeDescription', idj + '_text', job.text, { multiline: true, rows: 5 });
@@ -239,6 +275,68 @@
 		});
 		html += '</div>';
 		host.innerHTML = html;
+	}
+
+	/* ---------- creating and deleting ---------- */
+	function refreshAfterStructureChange(fn) {
+		try {
+			fn();
+		} catch (e) {
+			$('acMsg').className = 'ac-msg err';
+			$('acMsg').textContent = e.message;
+			return;
+		}
+		readModel();
+		renderAll();
+		var m = $('acMsg');
+		m.className = 'ac-msg ok';
+		m.textContent = t('admin.saving', '...') + ' – noch nicht gespeichert, bitte ' +
+			t('admin.save', 'Speichern') + '.';
+	}
+
+	function addProject() {
+		refreshAfterStructureChange(function () {
+			var r = C.addProject(state.indexHtml, {});
+			state.indexHtml = r.html;
+		});
+	}
+	function delProject(index) {
+		if (!window.confirm(t('admin.confirmDelete', 'Wirklich loeschen?'))) { return; }
+		refreshAfterStructureChange(function () {
+			var r = C.removeProject(state.indexHtml, index);
+			if (!r.removed) { throw new Error('Projekt nicht gefunden'); }
+			state.indexHtml = r.html;
+		});
+	}
+	function addJob() {
+		refreshAfterStructureChange(function () {
+			if (state.target === 'source') {
+				var r = C.addJob(state.indexHtml, {});
+				state.indexHtml = r.html;
+			} else {
+				var lang = state.target;
+				var max = 0;
+				Object.keys(state.model.jobs).forEach(function (n) { if (+n > max) { max = +n; } });
+				var next = C.addJobToDict(state.dicts[lang], max + 1, {});
+				if (next === null) { throw new Error('resume block not found in js/i18n.' + lang + '.js'); }
+				state.dicts[lang] = next;
+			}
+		});
+	}
+	function delJob(num) {
+		if (!window.confirm(t('admin.confirmDelete', 'Wirklich loeschen?'))) { return; }
+		refreshAfterStructureChange(function () {
+			if (state.target === 'source') {
+				var r = C.removeJob(state.indexHtml, num);
+				if (!r.removed) { throw new Error('Eintrag nicht gefunden'); }
+				state.indexHtml = r.html;
+			} else {
+				var lang = state.target;
+				var next = C.removeJobFromDict(state.dicts[lang], num);
+				if (next === null) { throw new Error('job' + num + ' not found'); }
+				state.dicts[lang] = next;
+			}
+		});
 	}
 
 	/* ---------- collecting edits ---------- */
@@ -395,5 +493,6 @@
 		});
 		$('acSave').addEventListener('click', function () { save(); });
 		$('acDownload').addEventListener('click', function () { download(); });
+		bindDelegates();
 	});
 })();
