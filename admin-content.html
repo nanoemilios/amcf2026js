@@ -62,11 +62,11 @@
 		</div>
 		<div class="admin-field" style="flex:0 0 auto">
 			<label>&nbsp;</label>
-			<button type="button" class="admin-btn" id="acSave" data-i18n="admin.save">Speichern</button>
+			<button type="button" class="admin-btn" id="acSave" data-i18n="admin.save" disabled>Speichern</button>
 		</div>
 		<div class="admin-field" style="flex:0 0 auto">
 			<label>&nbsp;</label>
-			<button type="button" class="admin-btn ghost" id="acDownload" data-i18n="admin.downloadFile">Dateien herunterladen</button>
+			<button type="button" class="admin-btn ghost" id="acDownload" data-i18n="admin.downloadFile" disabled>Dateien herunterladen</button>
 		</div>
 	</div>
 
@@ -94,9 +94,11 @@
 		<div id="acPanelProjects"></div>
 		<div id="acPanelJobs" class="admin-hidden"></div>
 		<div id="acPanelFacts" class="admin-hidden"></div>
-
-		<div class="ac-msg" id="acMsg"></div>
 	</div>
+
+	<!-- outside #acApp on purpose: before login the app is hidden, and a message
+	     written into a hidden element is invisible, which looks like "nothing happened" -->
+	<div class="ac-msg" id="acMsg"></div>
 
 </div>
 

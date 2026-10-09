@@ -76,6 +76,11 @@
 		return Promise.all(jobs).then(function () {
 			readModel();
 			renderAll();
+			// only now is saving meaningful
+			['acSave', 'acDownload'].forEach(function (id) {
+				var el = $(id);
+				if (el) { el.disabled = false; }
+			});
 			$('acMsg').className = 'ac-msg ok';
 			$('acMsg').textContent = 'Geladen: index.html + ' + LANGS.length + ' Übersetzungsdateien.';
 		}).catch(function (e) {
