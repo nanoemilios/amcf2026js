@@ -29,6 +29,9 @@
 .ac-msg.ok{background:#14301a;border:1px solid #2f6b3d;color:#9bd0a5;display:block;}
 .ac-msg.err{background:#301414;border:1px solid #6b2f2f;color:#ffb0a5;display:block;}
 .ac-hint{font-size:12px;color:#8f8f8f;margin:0 0 18px;}
+.ac-build{font-size:12px;color:#8f8f8f;text-align:center;margin:-10px 0 20px;font-family:Menlo,Consolas,monospace;}
+.ac-build.ok{color:#2f8b4a;}
+.ac-build.bad{color:#ff6a52;font-weight:bold;}
 .ac-imgs input[type=file]{font-size:12px;color:#8f8f8f;margin-top:6px;}
 .ac-imgrow{display:flex;gap:8px;margin-bottom:6px;}
 .ac-imgrow input[type=text]{flex:1;}
@@ -67,7 +70,9 @@
 		</div>
 	</div>
 
-	<div id="acLogin" class="admin-login">
+	<div id="acBuild" class="ac-build">Editor-Skript: wird geladen &hellip;</div>
+
+<div id="acLogin" class="admin-login">
 		<h2 data-i18n="admin.login">Anmeldung</h2>
 		<div class="admin-field">
 			<label for="acPw" data-i18n="admin.password">Passwort</label>
@@ -95,21 +100,33 @@
 
 </div>
 
-<script src="js/amcf-content.js?v=2"></script>
 <script>
-// Make any uncaught error visible instead of only in the console.
+function markBad(what) {
+  var b = document.getElementById('acBuild');
+  if (b) { b.className = 'ac-build bad'; b.textContent = 'Editor-Skript ' + what + ' — bitte Seite neu laden (Strg+F5).'; }
+}
+</script>
+<script src="js/amcf-content.js?v=3"
+        onerror="markBad('js/amcf-content.js nicht geladen (404?)')"></script>
+<script>
+// Make any uncaught error visible instead of only in the console, and report
+// scripts or stylesheets that failed to load (those fire no JS error at all).
 window.addEventListener('error', function (e) {
+  var el = e.target;
+  if (el && el.tagName === 'SCRIPT') { markBad(el.getAttribute('src') + ' nicht geladen (404?)'); return; }
+  if (el && el.tagName === 'LINK') { markBad(el.getAttribute('href') + ' nicht geladen (404?)'); return; }
   var m = document.getElementById('acMsg');
   if (m && (!e.message || m.textContent.indexOf(e.message) === -1)) {
     m.className = 'ac-msg err';
     m.textContent = 'Fehler: ' + (e.message || 'unknown') + (e.filename ? ' (' + e.filename + ':' + e.lineno + ')' : '');
   }
-});
+}, true);
 window.addEventListener('unhandledrejection', function (e) {
   var m = document.getElementById('acMsg');
   if (m) { m.className = 'ac-msg err'; m.textContent = 'Fehler: ' + (e.reason && e.reason.message ? e.reason.message : e.reason); }
 });
 </script>
-<script src="js/admin-content.js?v=2"></script>
+<script src="js/admin-content.js?v=3"
+        onerror="markBad('js/admin-content.js nicht geladen (404?)')"></script>
 </body>
 </html>

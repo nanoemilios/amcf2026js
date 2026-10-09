@@ -18,6 +18,7 @@
 </head>
 <body>
 <div id="out">RUNNING</div>
+<div id="acBuild" class="ac-build">loading</div>
 <div id="acLogin" class="admin-login">
 	<input type="password" id="acPw">
 	<button type="button" id="acLoginBtn">login</button>
@@ -65,6 +66,7 @@ window.addEventListener('unhandledrejection', function (e) {
 
 			setTimeout(function () {
 				try {
+					say('buildStamp', document.getElementById('acBuild').textContent);
 					say('appVisible', !document.getElementById('acApp').classList.contains('admin-hidden'));
 					say('projectsHtml', document.getElementById('acPanelProjects').innerHTML.length);
 					say('jobsHtml', document.getElementById('acPanelJobs').innerHTML.length);

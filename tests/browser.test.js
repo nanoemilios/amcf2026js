@@ -80,6 +80,8 @@ try {
   });
 
   ok(got.AMCFContent === 'object', 'AMCFContent is exported for the browser', got.AMCFContent);
+  ok(/geladen/.test(got.buildStamp || ''),
+     'admin-content.js reported that it loaded and wired up', got.buildStamp);
   ok(got.loginClicked === 'true', 'the login button was clicked');
   ok(got.appVisible === 'true', 'login succeeded and the app is visible', got.appVisible);
   ok(Number(got.projectsHtml) > 1000, 'the projects panel rendered', got.projectsHtml);

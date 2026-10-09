@@ -616,6 +616,12 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
+		// prove to the user that this script really loaded and wired up
+		var build = $('acBuild');
+		if (build) {
+			build.className = 'ac-build ok';
+			build.textContent = 'Editor-Skript: geladen (Build ' + (window.AMCF_ADMIN_BUILD || 'dev') + ')';
+		}
 		$('acLoginBtn').addEventListener('click', function () {
 			var v = $('acPw').value;
 			if (!v) { return; }
