@@ -773,20 +773,32 @@ function pbFill(newLang) {
 	}
 
 	var d = pbGetDict(newLang);
-	if (!d || !d.port || !d.port.items || !d.port.items[pbCurrent]) { return; }
-	var item = d.port.items[pbCurrent];
+	var dictItem = (d && d.port && d.port.items && d.port.items[pbCurrent]) ? d.port.items[pbCurrent] : {};
+
+	// The source language (index.html markup) carries the German project data.
+	// Fall back to the marker-delimited attributes on each project tile.
+	var $tile = $('#folio_container .folio-open[data-project="' + pbCurrent + '"]').closest('.box');
+	var item = {
+		desc: dictItem.desc || $tile.attr('data-desc') || '',
+		client: dictItem.client || $tile.attr('data-client') || '',
+		date: dictItem.date || $tile.attr('data-date') || '',
+		url: dictItem.url || $tile.attr('data-url') || ''
+	};
 	// apply admin override for existing project, if any
 	var ov = pbExistingOverride(pbCurrent);
 	if (ov) {
 		item = {
-			desc: ov.desc !== undefined ? ov.desc : item.desc,
-			client: ov.client !== undefined ? ov.client : item.client,
-			date: ov.date !== undefined ? ov.date : item.date,
-			url: ov.url !== undefined ? ov.url : item.url
+			desc: ov.desc !== undefined && ov.desc !== '' ? ov.desc : item.desc,
+			client: ov.client !== undefined && ov.client !== '' ? ov.client : item.client,
+			date: ov.date !== undefined && ov.date !== '' ? ov.date : item.date,
+			url: ov.url !== undefined && ov.url !== '' ? ov.url : item.url
 		};
 	}
-	var tags = (ov && ov.tags !== undefined ? ov.tags : (d.port.tags && d.port.tags[pbCurrent]) || '');
-	var lb = d.port.lightbox || {};
+	var markupTags = $tile.find('h6').first().text() || '';
+	var tags = (ov && ov.tags !== undefined && ov.tags !== '')
+		? ov.tags
+		: ((d.port && d.port.tags && d.port.tags[pbCurrent]) || markupTags);
+	var lb = (d.port && d.port.lightbox) || {};
 
 	var $light = $('#projectLightbox');
 	$light.find('.pb-title').text(pbName);
@@ -945,12 +957,20 @@ function rvResolveJob() {
 		});
 	}
 
+	// The source language (index.html markup) carries the German job data.
+	function holderText(key) {
+		var el = $holder.find('[data-i18n="' + key + '"], [data-i18n-html="' + key + '"]').first();
+		if (!el.length) { return ''; }
+		return String(el.html() || '').trim();
+	}
+	var base = 'resume.job' + num + '.';
+
 	return {
 		title: job.title || ($holder.find('.resume-head h3 span').first().text() || ''),
-		date: job.date || '',
-		text: job.text || '',
+		date: job.date || holderText(base + 'date'),
+		text: job.text || holderText(base + 'text'),
 		lis: RESUME_JOB_FIELDS_LITE.filter(function (f) { return f.indexOf('l') === 0; })
-			.map(function (f) { return job[f] || ''; })
+			.map(function (f) { return job[f] || holderText(base + f); })
 			.filter(function (v) { return String(v).trim() !== ''; }),
 		imgs: imgs
 	};

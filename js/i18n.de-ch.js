@@ -97,15 +97,18 @@
 			error: 'Bitte schriib e gültigi Email-Adress'
 		},
 		resume: {
+			title: 'Lebeslauf',
+			head: 'Fakte über mi',
+			download: 'CV abladade',
+			facts: {
+				name: 'Name:', address: 'Adress:', address2: '8500 Frauefeld',
+				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
+				birth: 'Geburtsdatum:', license: 'Füerusschii:', civil: 'Zivilstand:', permit: 'Usländeruuswiis:',
+				nationV: 'Spanier', civilV: 'Verhürotet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
+			},
             job1: {
 				date: '1997 - 1999',
 				title: 'Migros - Schwiiz (Lagerischti Lehri)',
-            facts: {
-                name: 'Name:', address: 'Adress:', address2: '8500 Frauefeld',
-                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationalität:',
-                birth: 'Geburtsdatum:', license: 'Füerusschii:', civil: 'Zivilstand:', permit: 'Usländeruuswiis:',
-                nationV: 'Spanier', civilV: 'Verhürotet', birthV: '2. April 1980', licenseV: 'Kat. B', permitV: 'C'
-            },
 				text: 'Bi de <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> ha ich mini Lehre als Lagerist agfange und während 2 Jahr erfolgriich absolviert.'
 			},
             job2: {
@@ -166,7 +169,6 @@
 				title: 'AS Lifte AG',
 				text: 'Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Lifte AG</a> ha ich mich als Servicetechniker Lift wiiter gfaltet. Als Feldtrainer cha ich zum Troubleshooter ufstiege und neu Lüt aarbeite.'
 			},
-download: 'CV abelade'
 		},
 		admin: {
 			heading: 'Projektverwaltung',

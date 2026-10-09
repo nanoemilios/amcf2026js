@@ -97,15 +97,18 @@
 			error: 'Please enter a valid email address'
 		},
 		resume: {
+			title: 'Resume',
+			head: 'Facts about me',
+			download: 'Download CV',
+			facts: {
+				name: 'Name:', address: 'Address:', address2: '8500 Frauenfeld',
+				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationality:',
+				birth: 'Date of birth:', license: 'Driving licence:', civil: 'Marital status:', permit: 'Residence permit:',
+				nationV: 'Spanish', civilV: 'Married', birthV: '2 April 1980', licenseV: 'Cat. B', permitV: 'C'
+			},
             job1: {
 				date: '1997 - 1999',
 				title: 'Migros - Switzerland (Warehouse Apprentice)',
-            facts: {
-                name: 'Name:', address: 'Address:', address2: '8500 Frauenfeld',
-                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nationality:',
-                birth: 'Date of birth:', license: 'Driving licence:', civil: 'Marital status:', permit: 'Residence permit:',
-                nationV: 'Spanish', civilV: 'Married', birthV: '2 April 1980', licenseV: 'Cat. B', permitV: 'C'
-            },
 				text: 'At <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> I started my apprenticeship as a warehouse worker and successfully completed it over 2 years.'
 			},
             job2: {
@@ -166,7 +169,6 @@
 				title: 'AS Lifts AG',
 				text: 'At <a href="https://www.lift.ch" target="_blank" class="company-color">AS Lifts AG</a> I further developed as a lift service technician. As a field trainer I advanced to troubleshooter and trained new employees.'
 			},
-download: 'Download CV'
 		},
 		admin: {
 			heading: 'Project Management',

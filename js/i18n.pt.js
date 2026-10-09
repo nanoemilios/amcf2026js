@@ -97,15 +97,18 @@
 			error: 'Por favor escreve um endereço de email válido'
 		},
 		resume: {
+			title: 'Currículo',
+			head: 'Fatos sobre mim',
+			download: 'Baixar CV',
+			facts: {
+				name: 'Nome:', address: 'Morada:', address2: '8500 Frauenfeld',
+				web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nacionalidade:',
+				birth: 'Data de nascimento:', license: 'Carta de condução:', civil: 'Estado civil:', permit: 'Permissão de residência:',
+				nationV: 'Espanhol', civilV: 'Casado', birthV: '2 de abril de 1980', licenseV: 'cat. B', permitV: 'C'
+			},
             job1: {
 				date: '1997 - 1999',
 				title: 'Migros - Suíça (Aprendiz de Armazém)',
-            facts: {
-                name: 'Nome:', address: 'Morada:', address2: '8500 Frauenfeld',
-                web: 'Web:', email: 'Email:', tel: 'Tel:', nation: 'Nacionalidade:',
-                birth: 'Data de nascimento:', license: 'Carta de condução:', civil: 'Estado civil:', permit: 'Permissão de residência:',
-                nationV: 'Espanhol', civilV: 'Casado', birthV: '2 de abril de 1980', licenseV: 'cat. B', permitV: 'C'
-            },
 				text: 'Na <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> comecei a minha aprendizagem como armazenista e concluí-la com sucesso em 2 anos.'
 			},
             job2: {
@@ -166,7 +169,6 @@
 				title: 'AS Elevadores AG',
 				text: 'Na <a href="https://www.lift.ch" target="_blank" class="company-color">AS Elevadores AG</a> desenvolvi-me mais como técnico de elevadores. Como formador de campo pude ascender a resolvedor de problemas e treinar novos funcionários.'
 			},
-download: 'Descarregar CV'
 		},
 		admin: {
 			heading: 'Gestão de Projetos',

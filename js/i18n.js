@@ -49,11 +49,14 @@ var LANGS = {
 		if (val !== undefined) { return val; }
 		var def = lookupPath(dict.de, key);
 		if (def !== undefined) { return def; }
-		return key;
+		// No translation anywhere: leave the existing markup alone.
+		// index.html carries the German source text between AMCF markers.
+		return null;
 	}
 
 	function applyText(el, key, lang) {
 		var val = t(key, lang);
+		if (val === null) { return; }
 		if (key === 'footer') {
 			val = val.replace('{year}', new Date().getFullYear());
 		}
@@ -76,7 +79,8 @@ var LANGS = {
 		}
 		var ph = document.querySelectorAll('[data-i18n-placeholder]');
 		for (var j = 0; j < ph.length; j++) {
-			ph[j].setAttribute('placeholder', t(ph[j].getAttribute('data-i18n-placeholder'), lang));
+			var pval = t(ph[j].getAttribute('data-i18n-placeholder'), lang);
+			if (pval !== null) { ph[j].setAttribute('placeholder', pval); }
 		}
 		var title = document.querySelector('title');
 		if (title && dict[lang] && dict[lang].metaTitle) { title.textContent = dict[lang].metaTitle; }
