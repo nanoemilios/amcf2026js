@@ -3,6 +3,16 @@
 (function () {
 	"use strict";
 
+	// js/amcf-content.js is a UMD module: it exports to module.exports under
+	// Node and to window.AMCFContent in the browser.
+	var C = window.AMCFContent;
+	if (!C) {
+		document.addEventListener('DOMContentLoaded', function () {
+			var m = document.getElementById('acMsg');
+			if (m) { m.className = 'ac-msg err'; m.textContent = 'js/amcf-content.js did not load.'; }
+		});
+	}
+
 	var PW_HASH = '6db70435647eeba1749000dfcb18e0bbe1af1997fd14ef0361e305f34b17ad6e';
 	var LANGS = ['de-ch', 'en', 'es', 'gl', 'pt'];
 	var JOB_FIELDS = ['date', 'title', 'text', 'l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7'];
@@ -91,9 +101,9 @@
 			state.model = null;
 			return;
 		}
-		var D = sandbox.window.AMCF_I18N_LANGS[lang] || {};
+		var D = (sandbox.window.AMCF_I18N_LANGS && sandbox.window.AMCF_I18N_LANGS[lang]) || {};
 		var base = C.parse(state.indexHtml);
-		var m = { projects: [], jobs: {}, facts: {}, isSource: false };
+		var m = { projects: [], jobs: {}, facts: {}, jobKeys: {}, isSource: false };
 		var items = (D.port && D.port.items) || [];
 		var tags = (D.port && D.port.tags) || [];
 		base.projects.forEach(function (p, i) {
@@ -115,6 +125,9 @@
 			var j = {};
 			JOB_FIELDS.forEach(function (f) { j[f] = dj[f] !== undefined ? dj[f] : ''; });
 			m.jobs[n] = j;
+			// remember which keys the dictionary already had, so clearing a
+			// field in the form clears it in the file instead of being skipped
+			m.jobKeys[n] = Object.keys(dj);
 		});
 		FACT_LABEL_KEYS.forEach(function (k) {
 			var f = (D.resume && D.resume.facts) || {};
@@ -127,6 +140,16 @@
 	function label(key, fallback) { return escHtml(t(key, fallback)); }
 
 	function renderAll() {
+		if (!state.model) {
+			$('acMsg').className = 'ac-msg err';
+			$('acMsg').textContent = t('admin.loadFailed', 'Laden fehlgeschlagen') +
+				': could not read ' + (state.target === 'source' ? 'index.html' : 'js/i18n.' + state.target + '.js');
+			['acPanelProjects', 'acPanelJobs', 'acPanelFacts'].forEach(function (id) {
+				var el = $(id);
+				if (el) { el.innerHTML = ''; }
+			});
+			return;
+		}
 		renderProjects();
 		renderJobs();
 		renderFacts();
@@ -211,7 +234,8 @@
 			? 'Die Werte stehen als data-fv in index.html.'
 			: 'Die Beschriftungen stehen als resume.facts.* in der Übersetzung.') + '</p><div class="admin-grid">';
 		keys.forEach(function (k) {
-			html += field(isSrc ? 'admin.facts.' + k : 'admin.facts.' + k, 'f_' + k, state.model.facts[k]);
+			// human fallback so a missing dictionary key never shows a raw key name
+			html += field('admin.facts.' + k, 'f_' + k, state.model.facts[k], { fallback: k });
 		});
 		html += '</div>';
 		host.innerHTML = html;
@@ -258,7 +282,13 @@
 			}));
 			Object.keys(model.jobs).forEach(function (n) {
 				JOB_FIELDS.forEach(function (f) {
-					if (model.jobs[n][f] !== '') { src = C.setJobField(src, n, f, model.jobs[n][f]); }
+					var existed = state.model.jobKeys && state.model.jobKeys[n] &&
+						state.model.jobKeys[n].indexOf(f) !== -1;
+					// write when it has a value, or when it already existed so that
+					// clearing a field actually clears it in the file
+					if (model.jobs[n][f] !== '' || existed) {
+						src = C.setJobField(src, n, f, model.jobs[n][f]);
+					}
 				});
 			});
 			FACT_LABEL_KEYS.forEach(function (k) {
@@ -271,8 +301,13 @@
 
 	/* ---------- saving ---------- */
 	function save() {
-		var files = buildFiles(collect());
 		var msg = $('acMsg');
+		if (!state.model) {
+			msg.className = 'ac-msg err';
+			msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': nothing loaded.';
+			return Promise.resolve();
+		}
+		var files = buildFiles(collect());
 		msg.className = 'ac-msg ok';
 		msg.textContent = t('admin.saving', 'Wird gespeichert ...');
 		return fetch('save-content.php', {
