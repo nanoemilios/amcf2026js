@@ -394,11 +394,106 @@
 		return src.slice(0, b.start) + src.slice(b.end);
 	}
 
+	/* ---------------- entry images ---------------- */
+	// Character range of the holder that contains resume.job<num>.*.
+	function jobHolderRange(regText, num) {
+		var anchor = regText.indexOf('resume.job' + num + '.');
+		if (anchor === -1) { return null; }
+		var head = lastTagBefore(regText, /<div class="resume-holder"/g, anchor);
+		if (head === -1) { return null; }
+		var el = sliceElement(regText, head, 'div');
+		return el ? { start: el.start, end: el.end } : null;
+	}
+
+	function allHolderRanges(regText) {
+		var re = /<div class="resume-holder"\s+data-rvnum="\d+"/g, out = [], m;
+		while ((m = re.exec(regText)) !== null) {
+			var el = sliceElement(regText, m.index, 'div');
+			if (el) { out.push(el); }
+		}
+		return out;
+	}
+
+	// Distinct image sources per entry, in document order.
+	function parseJobImages(html) {
+		var reg = regionSlice(html, 'RESUME');
+		var out = {};
+		if (!reg) { return out; }
+		allHolderRanges(reg.text).forEach(function (r) {
+			var num = /resume\.job(\d+)\./.exec(r.text);
+			if (!num) { return; }
+			var srcs = [], seen = {};
+			var imgRe = /<img[^>]*\ssrc="([^"]*)"/g, im;
+			while ((im = imgRe.exec(r.text)) !== null) {
+				var v = unesc(im[1]);
+				if (v && !seen[v]) { seen[v] = 1; srcs.push(v); }
+			}
+			out[num[1]] = srcs;
+		});
+		return out;
+	}
+
+	/*
+	 * Replace the images of each entry. Existing <img src> nodes are rewritten
+	 * positionally, so repeated copies of the same picture (the hover overlay,
+	 * the popup thumbnail) keep agreeing. Extra images are appended to the
+	 * slider when the entry has one; an entry without a slider keeps its
+	 * current image-popup shape.
+	 */
+	function writeJobImages(html, map) {
+		var reg = regionSlice(html, 'RESUME');
+		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
+		var body = reg.text;
+		var warnings = [];
+		Object.keys(map).forEach(function (num) {
+			var wanted = (map[num] || []).map(function (s) { return String(s || '').trim(); })
+				.filter(function (s) { return s !== ''; });
+			if (!wanted.length) {
+				warnings.push('job' + num + ': no image given, left unchanged');
+				return;
+			}
+			var range = jobHolderRange(body, num);
+			if (!range) { warnings.push('job' + num + ': holder not found'); return; }
+			var chunk = body.slice(range.start, range.end);
+
+			var i = 0;
+			chunk = chunk.replace(/(<img[^>]*\ssrc=")[^"]*(")/g, function (m, a, b) {
+				// repeats the last image so duplicate nodes stay consistent
+				var v = wanted[i < wanted.length ? i : wanted.length - 1];
+				i++;
+				return a + attrEsc(v) + b;
+			});
+			// the popup link points at the first image
+			chunk = chunk.replace(/(<a class="image-popup"[^>]*\shref=")[^"]*(")/g,
+				'$1' + attrEsc(wanted[0]) + '$2');
+
+			// append extras to the slider when there is one
+			if (wanted.length > i) {
+				var ulRe = /(<div class="resume-slider"[\s\S]*?<ul class="slides">)([\s\S]*?)(<\/ul>)/;
+				if (ulRe.test(chunk)) {
+					var extra = wanted.slice(i).map(function (src) {
+						return '\n\t\t\t\t\t\t\t\t\t\t\t<li><img src="' + attrEsc(src) + '" class="respimg" alt=""></li>';
+					}).join('');
+					chunk = chunk.replace(ulRe, function (m, open, inner, close) {
+						return open + inner.replace(/\s*$/, '') + extra + '\n\t\t\t\t\t\t\t\t\t\t' + close;
+					});
+				} else {
+					warnings.push('job' + num + ': only ' + i + ' image slot(s) available, ' +
+						(wanted.length - i) + ' image(s) not added');
+				}
+			}
+			body = body.slice(0, range.start) + chunk + body.slice(range.end);
+		});
+		return { html: html.slice(0, reg.start) + body + html.slice(reg.end), warnings: warnings };
+	}
+
 	return {
 		parse: parse, write: write,
 		parseProjects: parseProjects, writeProjects: writeProjects,
 		parseJobs: parseJobs, writeJobs: writeJobs,
 		parseFacts: parseFacts, writeFacts: writeFacts,
+		parseJobImages: parseJobImages, writeJobImages: writeJobImages,
+		jobHolderRange: jobHolderRange,
 		hasRegions: hasRegions, regionSlice: regionSlice,
 		addJob: addJob, removeJob: removeJob,
 		addProject: addProject, removeProject: removeProject,

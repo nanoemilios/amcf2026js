@@ -40,6 +40,13 @@ model.facts.name = 'Probe Name & Co';
 
 const newIndex = C.write(base, model);
 
+// also edit entry images, the way the admin does
+const imageEdits = {};
+imageEdits[10] = ['images/resume/e2e-a.jpg', 'images/resume/e2e-b.jpg'];
+imageEdits[1] = ['images/resume/e2e-migros.jpg'];
+const afterImages = C.writeJobImages(newIndex, imageEdits);
+ok(afterImages.warnings.length === 0, 'no image warnings', JSON.stringify(afterImages.warnings));
+
 let newEn = C.setPortTags(origEn, model.projects.map((p) => p.tags));
 newEn = C.setPortItems(newEn, model.projects.map((p) => ({
   desc: 'EN ' + p.name, client: 'EN Client', date: '2026', url: 'https://en.example/'
@@ -53,7 +60,7 @@ newEn = C.setFactLabel(newEn, 'permit', 'EN Permit');
     const res = await fetch(URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ files: { 'index.html': newIndex, 'js/i18n.en.js': newEn } })
+      body: JSON.stringify({ files: { 'index.html': afterImages.html, 'js/i18n.en.js': newEn } })
     });
     const json = await res.json();
     ok(res.ok && json.ok, 'save-content.php accepted the edit', JSON.stringify(json));
@@ -78,6 +85,14 @@ ok(m2.jobs[12].date === '2027', 'new entry date persisted', m2.jobs[12].date);
     ok(m2.facts.name === 'Probe Name & Co', 'fact persisted', m2.facts.name);
     ok(m2.facts.permitV === 'C', 'other facts untouched', m2.facts.permitV);
     ok(m2.jobs[1].text.indexOf('Migros') !== -1, 'job1 text intact after structural change');
+
+    // images must have reached disk too
+    const diskImgs = C.parseJobImages(diskIndex);
+    ok(diskImgs[10].length === 2, 'job10 has 2 images on disk', JSON.stringify(diskImgs[10]));
+    ok(diskImgs[10][0] === 'images/resume/e2e-a.jpg', 'job10 image 1 persisted', diskImgs[10][0]);
+    ok(diskImgs[10][1] === 'images/resume/e2e-b.jpg', 'job10 image 2 persisted', diskImgs[10][1]);
+    ok(diskImgs[1][0] === 'images/resume/e2e-migros.jpg', 'job1 image persisted', diskImgs[1][0]);
+    ok(diskImgs[11][0] === 'images/resume/AS.jpg', 'job11 image untouched', diskImgs[11][0]);
 
     // ---- verify en dict on disk ----
     const sandbox = { window: {} };

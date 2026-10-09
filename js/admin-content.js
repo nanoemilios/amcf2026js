@@ -89,6 +89,8 @@
 		if (state.target === 'source') {
 			state.model = C.parse(state.indexHtml);
 			state.model.isSource = true;
+			// entry images live in the markup, so they are only editable in the source
+			state.model.images = C.parseJobImages(state.indexHtml);
 			return;
 		}
 		var lang = state.target;
@@ -103,7 +105,7 @@
 		}
 		var D = (sandbox.window.AMCF_I18N_LANGS && sandbox.window.AMCF_I18N_LANGS[lang]) || {};
 		var base = C.parse(state.indexHtml);
-		var m = { projects: [], jobs: {}, facts: {}, jobKeys: {}, isSource: false };
+		var m = { projects: [], jobs: {}, facts: {}, images: {}, jobKeys: {}, isSource: false };
 		var items = (D.port && D.port.items) || [];
 		var tags = (D.port && D.port.tags) || [];
 		base.projects.forEach(function (p, i) {
@@ -177,8 +179,24 @@
 		var jHost = $('acPanelJobs');
 		if (jHost) {
 			jHost.addEventListener('click', function (e) {
-				var b = e.target.closest('[data-del-job]');
-				if (b) { delJob(parseInt(b.getAttribute('data-del-job'), 10)); }
+				var del = e.target.closest('[data-del-job]');
+				if (del) { delJob(parseInt(del.getAttribute('data-del-job'), 10)); return; }
+				var add = e.target.closest('[data-addimg]');
+				if (add) { addImageRow(add.getAttribute('data-addimg')); return; }
+				var rm = e.target.closest('[data-rmimg]');
+				if (rm) { removeImageRow(rm); }
+			});
+			jHost.addEventListener('change', function (e) {
+				if (e.target.matches('input[type=file][id^="acUp"]')) {
+					handleEntryUpload(e.target, e.target.id.replace('acUp', ''));
+				}
+			});
+		}
+		var pHost2 = $('acPanelProjects');
+		if (pHost2) {
+			pHost2.addEventListener('change', function (e) {
+				if (!e.target.matches('input[type=file][data-upproject]')) { return; }
+				handleProjectUpload(e.target, parseInt(e.target.getAttribute('data-upproject'), 10));
 			});
 		}
 	}
@@ -220,7 +238,8 @@
 			var body = '';
 			if (isSrc) {
 				body += field('admin.projectName', idp + '_name', p.name);
-				body += field('admin.imageUrl', idp + '_image', p.image);
+				body += field('admin.imageUrl', idp + '_image', p.image) +
+					'<input type="file" accept="image/*" data-upproject="' + p.index + '">';
 				body += '<div class="admin-field"><label for="' + idp + '_cat">' + label('admin.category', 'Kategorie') +
 					'</label><select id="' + idp + '_cat">' + CATEGORIES.map(function (c) {
 						return '<option value="' + c.v + '"' + (c.v === p.category ? ' selected' : '') + '>' +
@@ -257,9 +276,24 @@
 					escHtml(job['l' + i] || '') + '" placeholder="l' + i + '">';
 			}
 			body += '</div>';
+			if (isSrc) { body += imagesBlock(n, state.model.images[n] || []); }
 			html += '<div class="ac-item">' + head + '<div class="admin-grid">' + body + '</div></div>';
 		});
 		host.innerHTML = html;
+	}
+
+	function imagesBlock(num, list) {
+		var rows = (list && list.length ? list : ['']).map(function (src, i) {
+			return '<div class="ac-imgrow"><input type="text" data-imgjob="' + num +
+				'" value="' + escHtml(src) + '" placeholder="images/resume/bild.jpg">' +
+				'<button type="button" class="admin-btn ghost" data-rmimg="' + num + '|' + i +
+				'" title="remove">&times;</button></div>';
+		}).join('');
+		return '<div class="admin-field ac-imgs"><label>' + label('admin.images', 'Bilder') + '</label>' +
+			rows +
+			'<button type="button" class="admin-btn ghost" data-addimg="' + num + '">+ Bild</button> ' +
+			'<input type="file" id="acUp' + num + '" accept="image/*" multiple>' +
+			'</div>';
 	}
 
 	function renderFacts() {
@@ -339,6 +373,74 @@
 		});
 	}
 
+	/* ---------- images ---------- */
+	function setMsg(cls, text) {
+		var m = $('acMsg');
+		m.className = 'ac-msg ' + cls;
+		m.textContent = text;
+	}
+
+	// POST the picked files to upload.php and return the stored paths.
+	function uploadFiles(fileList, dir) {
+		var out = [], chain = Promise.resolve();
+		Array.prototype.forEach.call(fileList, function (f) {
+			chain = chain.then(function () {
+				var fd = new FormData();
+				fd.append('dir', dir);
+				fd.append('file', f);
+				return fetch('upload.php', { method: 'POST', body: fd })
+					.then(function (r) { return r.json(); })
+					.then(function (j) {
+						if (!j.ok) { throw new Error(j.error || 'upload failed'); }
+						out.push(j.path);
+					});
+			});
+		});
+		return chain.then(function () { return out; });
+	}
+
+	function handleEntryUpload(input, num) {
+		if (!input.files || !input.files.length) { return; }
+		setMsg('ok', t('admin.saving', '...') + ' …');
+		uploadFiles(input.files, 'resume').then(function (paths) {
+			state.model.images[num] = (state.model.images[num] || []).concat(paths);
+			renderJobs();
+			bindPanelActions();
+			setMsg('ok', paths.join(', '));
+		}).catch(function (e) {
+			setMsg('err', 'Upload fehlgeschlagen: ' + e.message);
+		});
+	}
+
+	function handleProjectUpload(input, index) {
+		if (!input.files || !input.files.length) { return; }
+		setMsg('ok', t('admin.saving', '...') + ' …');
+		uploadFiles(input.files, 'folio').then(function (paths) {
+			var el = $('p' + index + '_image');
+			if (el && paths.length) { el.value = paths[0]; }
+			setMsg('ok', paths.join(', '));
+		}).catch(function (e) {
+			setMsg('err', 'Upload fehlgeschlagen: ' + e.message);
+		});
+	}
+
+	function addImageRow(num) {
+		var host = $('acPanelJobs');
+		var input = host.querySelector('[data-imgjob="' + num + '"]');
+		if (input && input.parentNode) {
+			var row = document.createElement('div');
+			row.className = 'ac-imgrow';
+			row.innerHTML = '<input type="text" data-imgjob="' + num + '" value="">' +
+				'<button type="button" class="admin-btn ghost" data-rmimg="' + num + '|">&times;</button>';
+			input.parentNode.parentNode.insertBefore(row, input.parentNode.nextSibling);
+		}
+	}
+
+	function removeImageRow(btn) {
+		var row = btn.parentNode;
+		if (row && row.parentNode) { row.parentNode.removeChild(row); }
+	}
+
 	/* ---------- collecting edits ---------- */
 	function collect() {
 		var m = { projects: [], jobs: {}, facts: {} };
@@ -362,6 +464,16 @@
 			m.jobs[n] = j;
 		});
 		(isSrc ? FACT_VALUE_KEYS : FACT_LABEL_KEYS).forEach(function (k) { m.facts[k] = val('f_' + k); });
+		if (isSrc) {
+			// entry images, grouped by entry number
+			m.images = {};
+			document.querySelectorAll('[data-imgjob]').forEach(function (el) {
+				var n = el.getAttribute('data-imgjob');
+				var v = (el.value || '').trim();
+				if (!m.images[n]) { m.images[n] = []; }
+				if (v !== '') { m.images[n].push(v); }
+			});
+		}
 		return m;
 	}
 	function val(id) { var el = $(id); return el ? el.value : ''; }
@@ -370,7 +482,13 @@
 	function buildFiles(model) {
 		var files = {};
 		if (state.target === 'source') {
-			files['index.html'] = C.write(state.indexHtml, model);
+			var out = C.write(state.indexHtml, model);
+			if (model.images) {
+				var wi = C.writeJobImages(out, model.images);
+				out = wi.html;
+				if (wi.warnings.length) { state.warnings = wi.warnings; }
+			}
+			files['index.html'] = out;
 		} else {
 			var lang = state.target;
 			var src = state.dicts[lang];
@@ -418,6 +536,10 @@
 			if (res.ok && res.j && res.j.ok) {
 				msg.className = 'ac-msg ok';
 				msg.textContent = t('admin.saved', 'Gespeichert.') + ' ' + Object.keys(res.j.written || {}).join(', ');
+				if (state.warnings && state.warnings.length) {
+					msg.className = 'ac-msg err';
+					msg.textContent = 'Gespeichert, aber: ' + state.warnings.join(' | ');
+				}
 				if (files['index.html']) { state.indexHtml = files['index.html']; }
 				Object.keys(files).forEach(function (f) {
 					if (f.indexOf('js/i18n.') === 0) {

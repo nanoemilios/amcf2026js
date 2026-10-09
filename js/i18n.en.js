@@ -171,6 +171,7 @@
 			},
 		},
 		admin: {
+			upload: "Upload",
 			delete: 'Delete',
 			confirmDelete: 'Really delete? This only becomes final after saving.',
 			back: "Back to website",

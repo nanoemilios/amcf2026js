@@ -171,6 +171,7 @@
 			},
 		},
 		admin: {
+			upload: "Subir",
 			delete: 'Eliminar',
 			confirmDelete: 'Eliminar de verdade? Só é definitivo despois de gardar.',
 			back: "Voltar ao sitio web",

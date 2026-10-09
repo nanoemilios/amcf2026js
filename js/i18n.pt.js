@@ -171,6 +171,7 @@
 			},
 		},
 		admin: {
+			upload: "Carregar",
 			delete: 'Excluir',
 			confirmDelete: 'Excluir mesmo? Só é definitivo depois de salvar.',
 			back: "Voltar ao site",
