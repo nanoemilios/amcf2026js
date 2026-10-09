@@ -444,6 +444,11 @@ function holderJobNum($holder) {
 }
 
 function applyResumeOverrides() {
+	// Legacy: this used to overwrite the resume in index.html with values from
+	// data/projects.js and localStorage. index.html is the German source now,
+	// so an override here would silently undo every edit made in the admin.
+	return;
+	/* eslint-disable no-unreachable */
 	var rd = getResumeData();
 	// facts
 	var facts = rd.facts || {};
@@ -513,6 +518,7 @@ function applyResumeOverrides() {
 			line.parentNode.insertBefore(wrap, line.nextSibling);
 		}
 	}
+	/* eslint-enable no-unreachable */
 }
 
 function buildResumeBlock(job, leftSide) {
@@ -577,6 +583,10 @@ function getExistingEdits() {
 }
 
 function applyExistingOverrides() {
+	// Legacy: the old admin kept project overrides in localStorage and forced
+	// them over the markup. index.html is the source now, so nothing wins over it.
+	return;
+	/* eslint-disable no-unreachable */
 	LOCAL_EDITS = getExistingEdits();
 	var keys = Object.keys(LOCAL_EDITS);
 	if (!keys.length) { return; }
@@ -602,9 +612,15 @@ function applyExistingOverrides() {
 			$h6.text(e.tags).removeAttr('data-i18n');
 		}
 	});
+	/* eslint-enable no-unreachable */
 }
 
 function loadLocalProjects() {
+	// Legacy: appended projects from data/projects.js and localStorage on top of
+	// the markup tiles. Projects are defined in index.html now, so this only
+	// produced duplicates and index collisions.
+	return;
+	/* eslint-disable no-unreachable */
 	var running = [];
 	var siteProjects = getSiteData().projects || [];
 	var keyFor = function (p) { return (p.name || '') + '|' + (p.image || ''); };
@@ -647,6 +663,7 @@ function loadLocalProjects() {
 			'</div></div></a></li>');
 		$grid.append($li);
 	});
+	/* eslint-enable no-unreachable */
 }
 		
 function initPortfolio() {
@@ -767,6 +784,11 @@ function pbClose() {
 }
 
 function pbExistingOverride(idx) {
+	// Legacy: the old admin stored project overrides in localStorage, which used
+	// to win over the markup. index.html is now the source of truth for the
+	// German site, so nothing overrides it any more.
+	return null;
+	/* eslint-disable no-unreachable */
 	if (!LOCAL_EDITS) { LOCAL_EDITS = getExistingEdits(); }
 	var e = LOCAL_EDITS[idx];
 	if (!e) { return null; }
