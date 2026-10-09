@@ -516,6 +516,13 @@
 		return files;
 	}
 
+	function showError(prefix, e) {
+		var msg = $('acMsg');
+		if (!msg) { return; }
+		msg.className = 'ac-msg err';
+		msg.textContent = prefix + ': ' + (e && e.message ? e.message : String(e));
+	}
+
 	/* ---------- saving ---------- */
 	function save() {
 		var msg = $('acMsg');
@@ -524,7 +531,20 @@
 			msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': nothing loaded.';
 			return Promise.resolve();
 		}
-		var files = buildFiles(collect());
+		// collect() and buildFiles() run before the request. If either throws the
+		// click handler would die silently, so report it instead.
+		var files;
+		try {
+			files = buildFiles(collect());
+		} catch (e) {
+			showError(t('admin.saveFailed', 'Speichern fehlgeschlagen'), e);
+			return Promise.resolve();
+		}
+		if (!files || !Object.keys(files).length) {
+			msg.className = 'ac-msg err';
+			msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': nothing to write.';
+			return Promise.resolve();
+		}
 		msg.className = 'ac-msg ok';
 		msg.textContent = t('admin.saving', 'Wird gespeichert ...');
 		return fetch('save-content.php', {
@@ -532,7 +552,11 @@
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ files: files })
 		}).then(function (r) {
-			return r.json().then(function (j) { return { ok: r.ok, j: j }; });
+			return r.text().then(function (txt) {
+				var j = null;
+				try { j = JSON.parse(txt); } catch (e) { /* reported below */ }
+				return { ok: r.ok, j: j, raw: txt };
+			});
 		}).then(function (res) {
 			if (res.ok && res.j && res.j.ok) {
 				msg.className = 'ac-msg ok';
@@ -550,17 +574,21 @@
 			} else {
 				msg.className = 'ac-msg err';
 				msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': ' +
-					((res.j && res.j.error) || 'unknown');
+					((res.j && res.j.error) || res.raw || 'unknown');
 			}
 		}).catch(function (e) {
-			msg.className = 'ac-msg err';
-			msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': ' + e.message +
-				' – stattdessen Datei herunterladen.';
+			showError(t('admin.saveFailed', 'Speichern fehlgeschlagen'), e);
 		});
 	}
 
 	function download() {
-		var files = buildFiles(collect());
+		var files;
+		try {
+			files = buildFiles(collect());
+		} catch (e) {
+			showError('Download fehlgeschlagen', e);
+			return;
+		}
 		Object.keys(files).forEach(function (name, i) {
 			var blob = new Blob([files[name]], { type: 'text/plain;charset=utf-8' });
 			var a = document.createElement('a');

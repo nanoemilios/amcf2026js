@@ -96,6 +96,20 @@
 </div>
 
 <script src="js/amcf-content.js"></script>
+<script>
+// Make any uncaught error visible instead of only in the console.
+window.addEventListener('error', function (e) {
+  var m = document.getElementById('acMsg');
+  if (m && (!e.message || m.textContent.indexOf(e.message) === -1)) {
+    m.className = 'ac-msg err';
+    m.textContent = 'Fehler: ' + (e.message || 'unknown') + (e.filename ? ' (' + e.filename + ':' + e.lineno + ')' : '');
+  }
+});
+window.addEventListener('unhandledrejection', function (e) {
+  var m = document.getElementById('acMsg');
+  if (m) { m.className = 'ac-msg err'; m.textContent = 'Fehler: ' + (e.reason && e.reason.message ? e.reason.message : e.reason); }
+});
+</script>
 <script src="js/admin-content.js"></script>
 </body>
 </html>

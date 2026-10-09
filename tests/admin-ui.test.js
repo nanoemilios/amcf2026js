@@ -127,7 +127,7 @@ ok(typeof sandbox.AMCFContent === 'object' && typeof sandbox.AMCFContent.parse =
 // expose the IIFE internals for testing without changing production code
 const adminSrc = fs.readFileSync(path.join(root, 'js', 'admin-content.js'), 'utf8');
 const hooked = adminSrc.replace(/\}\)\(\);\s*$/,
-  'window.__t = { state, readModel, renderAll, renderJobs, renderProjects, renderFacts, collect, buildFiles, imagesBlock }; })();');
+  'window.__t = { state, readModel, renderAll, renderJobs, renderProjects, renderFacts, collect, buildFiles, imagesBlock, save, download, showError }; })();');
 ok(hooked !== adminSrc, 'test hook injected into admin-content.js');
 if (hooked === adminSrc) { process.exit(1); }
 
@@ -211,5 +211,36 @@ attempt('imagesBlock handles an entry with no images', () => {
   if (html.indexOf('data-imgjob="7"') === -1) { throw new Error('no empty row offered'); }
 });
 
-console.log(fail ? '\n' + fail + ' FAILURE(S)' : '\nall passed');
-process.exit(fail ? 1 : 0);
+// ---------- a failing save must report itself, not die silently ----------
+// This is the "nothing happens when I click Speichern" failure mode: an
+// exception before the fetch leaves the user with no feedback at all.
+(async () => {
+  // 1) buildFiles blows up -> the message bar must say so
+  const goodHtml = T.state.indexHtml;
+  T.state.indexHtml = '<html>no AMCF markers at all</html>';
+  try { T.readModel(); } catch (e) { ok(false, 'readModel on marker-less html', e.message); }
+  T.state.model = { projects: [], jobs: {}, facts: {}, images: {} };
+  byId('acMsg').textContent = '';
+  await T.save();
+  const m1 = byId('acMsg');
+  ok(/fehlgeschlagen|Failed/i.test(m1.textContent),
+     'save() reports a buildFiles failure instead of failing silently', m1.textContent);
+  ok(m1.className.indexOf('err') !== -1, 'the message bar is styled as an error', m1.className);
+
+  // 2) nothing loaded -> explicit message
+  T.state.model = null;
+  byId('acMsg').textContent = '';
+  await T.save();
+  ok(/nothing loaded/i.test(byId('acMsg').textContent),
+     'save() reports an unloaded model', byId('acMsg').textContent);
+
+  // 3) download must not throw either
+  T.state.indexHtml = goodHtml;
+  T.state.model = null;
+  let threw = null;
+  try { T.download(); } catch (e) { threw = e; }
+  ok(!threw, 'download() does not throw when there is no model', threw && threw.message);
+
+  console.log(fail ? '\n' + fail + ' FAILURE(S)' : '\nall passed');
+  process.exit(fail ? 1 : 0);
+})();

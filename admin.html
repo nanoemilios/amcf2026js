@@ -11,6 +11,8 @@
 	<style>
 		.admin-page{background:#101010;color:#e0e0e0;min-height:100vh;font-family:'Open Sans',sans-serif;}
 		.admin-wrap{max-width:860px;margin:0 auto;padding:40px 20px 60px;}
+		.admin-legacy{background:#301414;border:1px solid #6b2f2f;color:#ffb0a5;padding:14px 16px;margin-bottom:20px;font-size:13px;line-height:1.5;}
+		.admin-legacy a{color:#fff;font-weight:bold;}
 		.admin-head{text-align:center;margin-bottom:30px;}
 		.admin-head h1{font-family:'Oswald',sans-serif;font-size:30px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px;}
 		.admin-head p{font-size:14px;color:#8f8f8f;margin:0;}
@@ -55,6 +57,13 @@
 <body class="admin-page">
 	<div class="admin-wrap">
 		<a href="index.html" class="admin-back">&larr; Zur&uuml;ck zur Website</a>
+
+		<div class="admin-legacy">
+			<strong>Legacy-Editor.</strong> Diese Seite speichert weiterhin nach <code>data/projects.js</code>.
+			Die Website liest ihre Inhalte inzwischen aus <code>index.html</code> &ndash; &Auml;nderungen hier
+			erscheinen deshalb nicht mehr auf der Seite. Bitte
+			<a href="admin-content.html">admin-content.html</a> benutzen.
+		</div>
 
 		<div class="admin-head">
 			<h1 data-i18n="admin.heading">Projektverwaltung</h1>
