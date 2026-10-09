@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inhalte bearbeiten – AMCF</title>
+<link rel="stylesheet" href="css/style.css?v=16">
+<script src="js/i18n.de.js"></script>
+<script src="js/i18n.de-ch.js"></script>
+<script src="js/i18n.en.js"></script>
+<script src="js/i18n.es.js"></script>
+<script src="js/i18n.gl.js"></script>
+<script src="js/i18n.pt.js"></script>
+<script src="js/i18n.js"></script>
+<style>
+.ac-wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px;}
+.ac-head{text-align:center;margin-bottom:26px;}
+.ac-head h1{font-family:'Oswald',sans-serif;font-size:30px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0 0 6px;}
+.ac-head p{font-size:14px;color:#8f8f8f;margin:0;}
+.ac-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:22px;}
+.ac-bar .admin-field{margin:0;min-width:230px;}
+.ac-tabs{display:flex;gap:0;border-bottom:1px solid #2a2a2b;margin-bottom:22px;flex-wrap:wrap;}
+.ac-tab{background:none;border:none;border-bottom:2px solid transparent;color:#8f8f8f;font-family:'Oswald',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:12px 20px;cursor:pointer;}
+.ac-tab.on{color:#f54f36;border-bottom-color:#f54f36;}
+.ac-item{background:#141414;border:1px solid #2a2a2b;padding:20px;margin-bottom:16px;}
+.ac-item-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;border-bottom:1px solid #2a2a2b;padding-bottom:10px;}
+.ac-item-head h3{font-family:'Oswald',sans-serif;font-size:16px;color:#fff;text-transform:uppercase;letter-spacing:1px;margin:0;}
+.ac-msg{margin-top:14px;padding:12px 14px;font-size:14px;display:none;}
+.ac-msg.ok{background:#14301a;border:1px solid #2f6b3d;color:#9bd0a5;display:block;}
+.ac-msg.err{background:#301414;border:1px solid #6b2f2f;color:#ffb0a5;display:block;}
+.ac-hint{font-size:12px;color:#8f8f8f;margin:0 0 18px;}
+</style>
+</head>
+<body class="admin-page">
+<div class="ac-wrap">
+
+	<a href="index.html" class="admin-back">&larr; <span data-i18n="admin.back">Zur&uuml;ck zur Website</span></a>
+
+	<div class="ac-head">
+		<h1 data-i18n="admin.heading">Inhalte bearbeiten</h1>
+		<p data-i18n="admin.resumeHelp">Projekte, Lebenslauf und Fakten &ndash; gespeichert wird direkt in <code>index.html</code> bzw. in die &Uuml;bersetzungsdateien.</p>
+	</div>
+
+	<div class="ac-bar">
+		<div class="admin-field" style="flex:1">
+			<label for="acTarget" data-i18n="admin.target">Bereich</label>
+			<select id="acTarget">
+				<option value="source" data-i18n="admin.sourceFile">index.html (Deutsch)</option>
+				<option value="de-ch">Deutsch (Schweiz)</option>
+				<option value="en">English</option>
+				<option value="es">Espa&ntilde;ol</option>
+				<option value="gl">Galego</option>
+				<option value="pt">Portugu&ecirc;s</option>
+			</select>
+		</div>
+		<div class="admin-field" style="flex:0 0 auto">
+			<label>&nbsp;</label>
+			<button type="button" class="admin-btn" id="acSave" data-i18n="admin.save">Speichern</button>
+		</div>
+		<div class="admin-field" style="flex:0 0 auto">
+			<label>&nbsp;</label>
+			<button type="button" class="admin-btn ghost" id="acDownload" data-i18n="admin.downloadFile">Dateien herunterladen</button>
+		</div>
+	</div>
+
+	<div id="acLogin" class="admin-login">
+		<h2 data-i18n="admin.login">Anmeldung</h2>
+		<div class="admin-field">
+			<label for="acPw" data-i18n="admin.password">Passwort</label>
+			<input type="password" id="acPw">
+		</div>
+		<button type="button" class="admin-btn" id="acLoginBtn" data-i18n="admin.loginBtn">Anmelden</button>
+		<div class="ac-msg" id="acLoginMsg"></div>
+	</div>
+
+	<div id="acApp" class="admin-hidden">
+		<p class="ac-hint" id="acHint"></p>
+
+		<div class="ac-tabs">
+			<button type="button" class="ac-tab on" data-panel="projects" data-i18n="port.head">Portfolio</button>
+			<button type="button" class="ac-tab" data-panel="jobs" data-i18n="admin.resume">Lebenslauf</button>
+			<button type="button" class="ac-tab" data-panel="facts" data-i18n="admin.factsSection">Fakten</button>
+		</div>
+
+		<div id="acPanelProjects"></div>
+		<div id="acPanelJobs" class="admin-hidden"></div>
+		<div id="acPanelFacts" class="admin-hidden"></div>
+
+		<div class="ac-msg" id="acMsg"></div>
+	</div>
+
+</div>
+
+<script src="js/amcf-content.js"></script>
+<script src="js/admin-content.js"></script>
+</body>
+</html>
