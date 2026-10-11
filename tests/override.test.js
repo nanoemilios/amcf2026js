@@ -92,10 +92,12 @@ async function session() {
       const fs = require('fs');
       const f = ${JSON.stringify(indexFile)};
       const src = fs.readFileSync(f, 'utf8');
-      const m = C.parse(src);
+          const m = C.parse(src);
       m.projects[0].name = 'PERSISTED NAME';
       m.jobs[11].title = 'PERSISTED TITLE';
       m.facts.name = 'PERSISTED FACT';
+      // the reported case: a bullet on an entry that has none in the markup
+      m.jobs[1].l1 = 'Lagerverwaltung';
       fetch('http://localhost:8000/save-content.php', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ files: { 'index.html': C.write(src, m) } })
@@ -118,6 +120,10 @@ async function session() {
     ok(title.val === 'PERSISTED TITLE', 'entry title survives the reload', title.val);
     ok(fact.val === 'PERSISTED FACT', 'fact value survives the reload', fact.val);
     ok(tiles.val === 8, 'still 8 tiles, no duplicates from the legacy loader', tiles.val);
+
+    // the bullet added to job1 must actually render after the reload
+    const bullet = await s.evaluate("(function(){var li=document.querySelector('[data-i18n=\"resume.job1.l1\"]');return li?li.textContent.trim():'(none)';})()");
+    ok(bullet.val === 'Lagerverwaltung', 'a bullet added to job1 survives the reload', bullet.val);
     await s.close();
   } catch (e) {
     ok(false, 'the run completed', e.message);

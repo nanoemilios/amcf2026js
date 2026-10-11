@@ -117,13 +117,90 @@
 		});
 	}
 
+		// Insert a keyed element that does not exist yet, so an entry can gain a
+	// bullet or a description it never had.
+	function insertKeyedElement(chunk, num, field, val) {
+		var key = 'resume.job' + num + '.' + field;
+		var li = field.indexOf('l') === 0;
+		var attr = li ? 'data-i18n' : 'data-i18n-html';
+		var tag = li ? 'li' : 'p';
+		var node = '<' + tag + ' ' + attr + '="' + key + '">' +
+			(li ? esc(val) : val) + '</' + tag + '>';
+
+		if (li) {
+			// append into the list that already holds this entry's bullets
+			var ownRe = new RegExp('<ul(?![^>]*slides)[^>]*>(?:(?!</ul>)[\\s\\S])*?' +
+				'data-i18n="resume\\.job' + num + '\\.l[\\s\\S]*?</ul>');
+			var own = ownRe.exec(chunk);
+			if (own) {
+				var closeAt = own.index + own[0].length - '</ul>'.length;
+				return chunk.slice(0, closeAt) + node + '\n\t\t\t\t\t\t\t  ' + chunk.slice(closeAt);
+			}
+			// otherwise any text list in this entry (never the image slider)
+			var anyRe = /<ul(?![^>]*slides)[^>]*>/;
+			var any = anyRe.exec(chunk);
+			if (any) {
+				var endRe = /<\/ul>/g;
+				endRe.lastIndex = any.index;
+				var e = endRe.exec(chunk);
+				if (e) {
+					return chunk.slice(0, e.index) + node + '\n\t\t\t\t\t\t\t  ' + chunk.slice(e.index);
+				}
+			}
+			// no list yet: create one after the description paragraph
+			var pRe = new RegExp('(<p[^>]*data-i18n(?:-html)?="resume\\.job' + num + '\\.text"[^>]*>[\\s\\S]*?</p>)');
+			var pm = pRe.exec(chunk);
+			var ul = '<ul style="text-align:left; padding-left:2em; list-style:inside circle;">\n' +
+				'\t\t\t\t\t\t\t  ' + node + '\n\t\t\t\t\t\t\t</ul>';
+			if (pm) {
+				return chunk.slice(0, pm.index + pm[0].length) + ul + chunk.slice(pm.index + pm[0].length);
+			}
+		}
+
+		// fall back to the end of the entry's content container
+		var last = chunk.lastIndexOf('</div>');
+		var second = last === -1 ? -1 : chunk.lastIndexOf('</div>', last - 1);
+		var at = second === -1 ? chunk.length : second;
+		return chunk.slice(0, at) + '\n\t\t\t\t\t\t\t  ' + node + chunk.slice(at);
+	}
+
+	// Drop a keyed element whose value was cleared in the form.
+	function removeKeyedElement(chunk, num, field) {
+		var key = 'resume\\.job' + num + '\\.' + field;
+		var re = new RegExp('[ \\t\\r\\n]*<(li|p)\\b[^>]*data-i18n(?:-html)?="' + key + '"[^>]*>[\\s\\S]*?</\\1>', 'g');
+		return chunk.replace(re, '');
+	}
+
 	function writeJobs(html, jobs) {
 		var reg = regionSlice(html, 'RESUME');
 		if (!reg) { throw new Error('AMCF:RESUME region not found'); }
-		var body = writeJobFieldsInBlock(reg.text, jobs);
+		var body = reg.text;
+		Object.keys(jobs).forEach(function (num) {
+			var job = jobs[num];
+			var range = jobHolderRange(body, num);
+			if (!range) { return; }
+			var chunk = body.slice(range.start, range.end);
+			var one = {};
+			one[num] = job;
+			chunk = writeJobFieldsInBlock(chunk, one);
+
+			// fields that gained a value need an element, fields that lost one
+			// should not keep an empty element behind
+			['text'].concat(['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7']).forEach(function (f) {
+				if (job[f] === undefined) { return; }
+				var val = String(job[f] === null ? '' : job[f]).trim();
+				var has = new RegExp('data-i18n(?:-html)?="resume\\.job' + num + '\\.' + f + '"').test(chunk);
+				if (val && !has) { chunk = insertKeyedElement(chunk, num, f, val); }
+				else if (!val && has) { chunk = removeKeyedElement(chunk, num, f); }
+			});
+
+			// a bullet list that lost its last item should go away with it
+			chunk = chunk.replace(/<ul(?![^>]*slides)[^>]*>(\s*)<\/ul>/g, '');
+
+			body = body.slice(0, range.start) + chunk + body.slice(range.end);
+		});
 		return html.slice(0, reg.start) + body + html.slice(reg.end);
 	}
-
 	/* ---------------- facts ---------------- */
 	var FV_RE = /<(\w+)([^>]*?)\sdata-fv="([A-Za-z0-9_]+)"([^>]*)>([\s\S]*?)<\/\1>/g;
 
