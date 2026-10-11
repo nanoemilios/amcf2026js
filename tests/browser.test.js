@@ -51,9 +51,21 @@ const original = fs.readFileSync(indexFile, 'utf8');
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'cdp-real-'));
 let chrome = null;
 
+function killTree(child) {
+  if (!child || !child.pid) { return; }
+  try {
+    if (process.platform === 'win32') {
+      spawnSync('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' });
+    } else {
+      process.kill(-child.pid, 'SIGKILL');
+    }
+  } catch (e) { /* already gone */ }
+}
+
 function cleanup() {
   try { fs.writeFileSync(indexFile, original, 'utf8'); } catch (e) {}
   for (const p of [indexFile + '.bak']) { try { if (fs.existsSync(p)) fs.unlinkSync(p); } catch (e) {} }
+  killTree(chrome);
   try { if (chrome) chrome.kill(); } catch (e) {}
   try { fs.rmSync(profile, { recursive: true, force: true }); } catch (e) {}
 }

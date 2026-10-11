@@ -7,7 +7,6 @@ const path = require('path');
 const C = require(path.join(__dirname, '..', 'js', 'amcf-content.js'));
 
 const root = path.join(__dirname, '..');
-const orig = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
 let fail = 0;
 const ok = (c, m, e) => {
@@ -16,9 +15,18 @@ const ok = (c, m, e) => {
 };
 const jobs = (h) => C.parseJobs(h);
 
-// --- the starting point: job1 has no bullets and no text list
-ok(jobs(orig)[1].l1 === undefined, 'job1 starts without bullets', jobs(orig)[1].l1);
-ok(jobs(orig)[3].text === undefined, 'job3 starts without a description', jobs(orig)[3].text);
+// Build our own starting point instead of relying on the live index.html, which
+// changes as soon as the owner edits anything. Strip job1's bullets and job3's
+// description so the "entry has neither" scenario is reproducible.
+const EMPTY = ['text', 'l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7'];
+const strip = {};
+strip[1] = {}; strip[3] = {};
+EMPTY.forEach((f) => { strip[1][f] = ''; strip[3][f] = ''; });
+const orig = C.write(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), { jobs: strip });
+
+// --- the starting point: job1 has no bullets, job3 no description
+ok(jobs(orig)[1].l1 === undefined, 'fixture: job1 has no bullets', jobs(orig)[1].l1);
+ok(jobs(orig)[3].text === undefined, 'fixture: job3 has no description', jobs(orig)[3].text);
 
 // --- add a bullet to job1 (the reported case)
 let m = jobs(orig);
