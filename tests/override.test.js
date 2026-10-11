@@ -98,25 +98,22 @@ async function session() {
     await s.close();
     ok(true, 'planted stale legacy localStorage overrides');
 
-    // ---- 2. edit through the admin and save ----
-    const adminRes = spawnSync(process.execPath, ['-e', `
+    // ---- 2. write the edits the way the editor does ----
+    const writeRes = spawnSync(process.execPath, ['-e', `
       const C = require(${JSON.stringify(path.join(root, 'js', 'amcf-content.js'))});
       const fs = require('fs');
       const f = ${JSON.stringify(indexFile)};
       const src = fs.readFileSync(f, 'utf8');
-          const m = C.parse(src);
+      const m = C.parse(src);
       m.projects[0].name = 'PERSISTED NAME';
       m.jobs[11].title = 'PERSISTED TITLE';
       m.facts.name = 'PERSISTED FACT';
       // the reported case: a bullet on an entry that has none in the markup
       m.jobs[1].l1 = 'Lagerverwaltung';
-      fetch('http://localhost:8000/save-content.php', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ files: { 'index.html': C.write(src, m) } })
-      }).then(r => r.json()).then(j => { console.log(JSON.stringify(j)); process.exit(0); })
-        .catch(e => { console.log('ERR ' + e.message); process.exit(1); });
+      fs.writeFileSync(f, C.write(src, m), 'utf8');
+      console.log('written');
     `], { encoding: 'utf8' });
-    ok(/\"ok\":true/.test(adminRes.stdout || ''), 'the save succeeded', (adminRes.stdout || adminRes.stderr || '').trim());
+    ok(/written/.test(writeRes.stdout || ''), 'the files were written', (writeRes.stdout || writeRes.stderr || '').trim());
 
     // ---- 3. reload the public page and read what it renders ----
     chrome.kill();

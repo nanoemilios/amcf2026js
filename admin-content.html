@@ -66,9 +66,16 @@
 		</div>
 		<div class="admin-field" style="flex:0 0 auto">
 			<label>&nbsp;</label>
+			<button type="button" class="admin-btn ghost" id="acFolder">Ordner wählen</button>
+		</div>
+		<div class="admin-field" style="flex:0 0 auto">
+			<label>&nbsp;</label>
 			<button type="button" class="admin-btn ghost" id="acDownload" data-i18n="admin.downloadFile" disabled>Dateien herunterladen</button>
 		</div>
 	</div>
+
+	<p class="ac-hint" id="acFolderHint">Speichern schreibt direkt in die Dateien auf diesem Rechner &ndash; es gibt bewusst
+		keinen Server-Endpunkt. Beim ersten Mal bitte den Projektordner wählen; danach merkt sich der Browser ihn.</p>
 
 	<div id="acBuild" class="ac-build">Editor-Skript: wird geladen &hellip;</div>
 
@@ -128,7 +135,7 @@ window.addEventListener('unhandledrejection', function (e) {
   if (m) { m.className = 'ac-msg err'; m.textContent = 'Fehler: ' + (e.reason && e.reason.message ? e.reason.message : e.reason); }
 });
 </script>
-<script src="js/admin-content.js?v=3"
+<script src="js/admin-content.js?v=4"
         onerror="markBad('js/admin-content.js nicht geladen (404?)')"></script>
 </body>
 </html>

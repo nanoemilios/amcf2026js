@@ -1,5 +1,6 @@
-/* End-to-end: edit -> save-content.php -> verify on disk -> restore.
-   Requires the PHP dev server on http://localhost:8000.
+/* End-to-end: edit -> write the files the way the editor does -> verify ->
+   restore. There is no server endpoint any more; the editor writes straight to
+   the project folder, so the test writes the same bytes directly.
    Run from the repo root:  node tests/e2e-save.test.js                */
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +10,6 @@ const C = require(path.join(__dirname, '..', 'js', 'amcf-content.js'));
 const root = path.join(__dirname, '..');
 const indexFile = path.join(root, 'index.html');
 const enFile = path.join(root, 'js', 'i18n.en.js');
-const URL = 'http://localhost:8000/save-content.php';
 
 let fail = 0;
 const ok = (c, m, e) => {
@@ -57,14 +57,12 @@ newEn = C.setFactLabel(newEn, 'permit', 'EN Permit');
 
 (async () => {
   try {
-    const res = await fetch(URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ files: { 'index.html': afterImages.html, 'js/i18n.en.js': newEn } })
-    });
-    const json = await res.json();
-    ok(res.ok && json.ok, 'save-content.php accepted the edit', JSON.stringify(json));
-    ok(Object.keys(json.written || {}).length === 2, 'both files written', JSON.stringify(json.written));
+    // write exactly what the editor would write into the granted folder
+    const files = { 'index.html': afterImages.html, 'js/i18n.en.js': newEn };
+    for (const rel of Object.keys(files)) {
+      fs.writeFileSync(path.join(root, rel), files[rel], 'utf8');
+    }
+    ok(Object.keys(files).length === 2, 'both files written', Object.keys(files).join(', '));
 
     // ---- verify index.html on disk ----
     const diskIndex = fs.readFileSync(indexFile, 'utf8');
@@ -112,7 +110,7 @@ ok(m2.jobs[12].date === '2027', 'new entry date persisted', m2.jobs[12].date);
   } finally {
     fs.writeFileSync(indexFile, origIndex, 'utf8');
     fs.writeFileSync(enFile, origEn, 'utf8');
-    for (const f of [indexFile + '.bak', enFile + '.bak']) {
+    for (const f of []) {
       if (fs.existsSync(f)) fs.unlinkSync(f);
     }
     const restored = fs.readFileSync(indexFile, 'utf8') === origIndex &&

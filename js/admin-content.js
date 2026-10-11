@@ -386,23 +386,20 @@
 		m.textContent = text;
 	}
 
-	// POST the picked files to upload.php and return the stored paths.
+	// Copy the picked files into the granted project folder, e.g. images/resume/.
 	function uploadFiles(fileList, dir) {
-		var out = [], chain = Promise.resolve();
-		Array.prototype.forEach.call(fileList, function (f) {
-			chain = chain.then(function () {
-				var fd = new FormData();
-				fd.append('dir', dir);
-				fd.append('file', f);
-				return fetch('upload.php', { method: 'POST', body: fd })
-					.then(function (r) { return r.json(); })
-					.then(function (j) {
-						if (!j.ok) { throw new Error(j.error || 'upload failed'); }
-						out.push(j.path);
-					});
+		var out = [];
+		return ensureFolder(true).then(function (h) {
+			var chain = Promise.resolve();
+			Array.prototype.forEach.call(fileList, function (f) {
+				chain = chain.then(function () {
+					var safe = String(f.name).replace(/[^A-Za-z0-9._-]+/g, '-').slice(-60);
+					var rel = 'images/' + dir + '/' + (safe || 'bild');
+					return writeIntoFolder(h, rel, f).then(function () { out.push(rel); });
+				});
 			});
-		});
-		return chain.then(function () { return out; });
+			return chain;
+		}).then(function () { return out; });
 	}
 
 	function handleEntryUpload(input, num) {
@@ -412,9 +409,9 @@
 			state.model.images[num] = (state.model.images[num] || []).concat(paths);
 			renderJobs();
 			bindPanelActions();
-			setMsg('ok', paths.join(', '));
+			setMsg('ok', 'Hochgeladen: ' + paths.join(', '));
 		}).catch(function (e) {
-			setMsg('err', 'Upload fehlgeschlagen: ' + e.message);
+			setMsg('err', 'Hochladen nicht möglich: ' + e.message + ' — bitte Ordner wählen.');
 		});
 	}
 
@@ -424,9 +421,9 @@
 		uploadFiles(input.files, 'folio').then(function (paths) {
 			var el = $('p' + index + '_image');
 			if (el && paths.length) { el.value = paths[0]; }
-			setMsg('ok', paths.join(', '));
+			setMsg('ok', 'Hochgeladen: ' + paths.join(', '));
 		}).catch(function (e) {
-			setMsg('err', 'Upload fehlgeschlagen: ' + e.message);
+			setMsg('err', 'Hochladen nicht möglich: ' + e.message + ' — bitte Ordner wählen.');
 		});
 	}
 
@@ -528,7 +525,90 @@
 		msg.textContent = prefix + ': ' + (e && e.message ? e.message : String(e));
 	}
 
-	/* ---------- saving ---------- */
+	/* ---------- writing files directly (no server) ----------
+   There is deliberately no PHP endpoint here. The site is deployed as static
+   files, so a server write endpoint could never work on the live site, and on a
+   public repository it would be an unauthenticated way for anyone to overwrite
+   index.html.
+
+   Instead the browser writes the real files on this machine, after the owner
+   grants access to the project folder once. Browsers without that API fall back
+   to downloading the files, which the owner then puts in place. */
+	var DB_NAME = 'amcf-editor';
+	var STORE_NAME = 'handles';
+
+	function idbOpen() {
+		return new Promise(function (resolve, reject) {
+			var req = indexedDB.open(DB_NAME, 1);
+			req.onupgradeneeded = function () { req.result.createObjectStore(STORE_NAME); };
+			req.onsuccess = function () { resolve(req.result); };
+			req.onerror = function () { reject(req.error); };
+		});
+	}
+	function idbPut(key, val) {
+		return idbOpen().then(function (db) {
+			return new Promise(function (resolve, reject) {
+				var tx = db.transaction(STORE_NAME, 'readwrite');
+				tx.objectStore(STORE_NAME).put(val, key);
+				tx.oncomplete = function () { resolve(); };
+				tx.onerror = function () { reject(tx.error); };
+			});
+		});
+	}
+	function idbGet(key) {
+		return idbOpen().then(function (db) {
+			return new Promise(function (resolve, reject) {
+				var tx = db.transaction(STORE_NAME, 'readonly');
+				var r = tx.objectStore(STORE_NAME).get(key);
+				r.onsuccess = function () { resolve(r.result || null); };
+				r.onerror = function () { reject(r.error); };
+			});
+		}).catch(function () { return null; });
+	}
+
+	function hasFSA() {
+		return typeof window.showDirectoryPicker === 'function';
+	}
+
+	// Ask for (or reuse) permission to the project folder.
+	function ensureFolder(ask) {
+		if (state.dirHandle && !ask) { return Promise.resolve(state.dirHandle); }
+		if (!hasFSA()) {
+			return Promise.reject(new Error('Browser ohne Dateizugriff (File System Access API)'));
+		}
+		return window.showDirectoryPicker({ mode: 'readwrite', id: 'amcf-site', startIn: 'documents' })
+			.then(function (h) {
+				state.dirHandle = h;
+				return idbPut('dir', h).catch(function () {});
+			})
+			.then(function () { return state.dirHandle; });
+	}
+
+	function writeIntoFolder(handle, relPath, data) {
+		var parts = relPath.split('/');
+		var name = parts.pop();
+		return parts.reduce(function (p, seg) {
+			return p.then(function (d) { return d.getDirectoryHandle(seg, { create: true }); });
+		}, Promise.resolve(handle)).then(function (dir) {
+			return dir.getFileHandle(name, { create: true });
+		}).then(function (fh) {
+			return fh.createWritable();
+		}).then(function (w) {
+			return w.write(data).then(function () { return w.close(); });
+		});
+	}
+
+	function saveToFolder(files) {
+		return ensureFolder(false).then(function (h) {
+			var chain = Promise.resolve();
+			Object.keys(files).forEach(function (rel) {
+				chain = chain.then(function () { return writeIntoFolder(h, rel, files[rel]); });
+			});
+			return chain.then(function () { return Object.keys(files); });
+		});
+	}
+
+	// ---------- saving ----------
 	function save() {
 		var msg = $('acMsg');
 		if (!state.model) {
@@ -536,8 +616,8 @@
 			msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': nothing loaded.';
 			return Promise.resolve();
 		}
-		// collect() and buildFiles() run before the request. If either throws the
-		// click handler would die silently, so report it instead.
+		// collect() and buildFiles() run before anything is written. If either
+		// throws the click handler would die silently, so report it.
 		var files;
 		try {
 			files = buildFiles(collect());
@@ -552,37 +632,27 @@
 		}
 		msg.className = 'ac-msg ok';
 		msg.textContent = t('admin.saving', 'Wird gespeichert ...');
-		return fetch('save-content.php', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ files: files })
-		}).then(function (r) {
-			return r.text().then(function (txt) {
-				var j = null;
-				try { j = JSON.parse(txt); } catch (e) { /* reported below */ }
-				return { ok: r.ok, j: j, raw: txt };
+
+		return saveToFolder(files).then(function (written) {
+			if (files['index.html']) { state.indexHtml = files['index.html']; }
+			Object.keys(files).forEach(function (f) {
+				if (f.indexOf('js/i18n.') === 0) { state.dicts[f.slice(7, -3)] = files[f]; }
 			});
-		}).then(function (res) {
-			if (res.ok && res.j && res.j.ok) {
-				msg.className = 'ac-msg ok';
-				msg.textContent = t('admin.saved', 'Gespeichert.') + ' ' + Object.keys(res.j.written || {}).join(', ');
-				if (state.warnings && state.warnings.length) {
-					msg.className = 'ac-msg err';
-					msg.textContent = 'Gespeichert, aber: ' + state.warnings.join(' | ');
-				}
-				if (files['index.html']) { state.indexHtml = files['index.html']; }
-				Object.keys(files).forEach(function (f) {
-					if (f.indexOf('js/i18n.') === 0) {
-						state.dicts[f.slice(7, -3)] = files[f];
-					}
-				});
-			} else {
+			msg.className = 'ac-msg ok';
+			if (state.warnings && state.warnings.length) {
 				msg.className = 'ac-msg err';
-				msg.textContent = t('admin.saveFailed', 'Speichern fehlgeschlagen') + ': ' +
-					((res.j && res.j.error) || res.raw || 'unknown');
+				msg.textContent = 'Gespeichert in ' + written.join(', ') + ' – aber: ' + state.warnings.join(' | ');
+			} else {
+				msg.textContent = 'Gespeichert: ' + written.join(', ');
 			}
+			state.dirty = false;
 		}).catch(function (e) {
-			showError(t('admin.saveFailed', 'Speichern fehlgeschlagen'), e);
+			// No folder granted, permission denied, or no File System Access API.
+			// Offer the files instead, then explain why, so the reason is not lost.
+			download();
+			msg.className = 'ac-msg err';
+			msg.textContent = 'Direktes Speichern nicht möglich (' + e.message + '). ' +
+				'Ordner wählen oder die heruntergeladenen Dateien einsetzen.';
 		});
 	}
 
@@ -655,6 +725,29 @@
 		});
 		$('acSave').addEventListener('click', function () { save(); });
 		$('acDownload').addEventListener('click', function () { download(); });
+		$('acFolder').addEventListener('click', function () {
+			ensureFolder(true).then(function () {
+				var hint = $('acFolderHint');
+				hint.textContent = 'Ordner merkt sich der Browser. Speichern schreibt direkt dorthin.';
+				setMsg('ok', 'Ordner gewählt.');
+			}).catch(function (e) {
+				setMsg('err', 'Ordner nicht verfügbar: ' + e.message);
+			});
+		});
+		// reuse a previously granted folder, if the browser kept the handle
+		idbGet('dir').then(function (h) {
+			if (!h) { return null; }
+			return h.queryPermission({ mode: 'readwrite' }).then(function (p) {
+				if (p !== 'granted') { return null; }
+				state.dirHandle = h;
+				return h;
+			});
+		}).then(function (h) {
+			if (h) {
+				var hint = $('acFolderHint');
+				if (hint) { hint.textContent = 'Projektordner verbunden – Speichern schreibt direkt in die Dateien.'; }
+			}
+		}).catch(function () {});
 		bindDelegates();
 	});
 })();

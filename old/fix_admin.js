@@ -1,5 +1,5 @@
 const fs = require('fs');
-const content = fs.readFileSync('C:\\Users\\nanoe\\OneDrive\\CODDING\\AMCF\\2026\\js\\admin.js', 'utf8');
+const content = fs.readFileSync('<project-root>/js/admin.js', 'utf8');
 
 // Fix 1: Update RESUME_JOBS to 11 entries
 let newContent = content.replace(
@@ -107,5 +107,5 @@ adminTranslationCode + `
 })();`
 );
 
-fs.writeFileSync('C:\\Users\\nanoe\\OneDrive\\CODDING\\AMCF\\2026\\js\\admin.js', newContent, 'utf8');
+fs.writeFileSync('<project-root>/js/admin.js', newContent, 'utf8');
 console.log('Done');

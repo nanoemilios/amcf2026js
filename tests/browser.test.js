@@ -148,7 +148,11 @@ const getJSON = (url) => new Promise((res, rej) => {
     ok(await step('Speichern starts disabled', "document.getElementById('acSave').disabled") === true,
        'Speichern is disabled before loading');
 
-    await step('submit the password', "(function(){document.getElementById('acPw').value='AMCF2026';document.getElementById('acLoginBtn').click();return 'ok';})()");
+    // The admin password is not stored in the repo. Pass it in:
+    //   AMCF_ADMIN_PASSWORD=... node tests/browser.test.js
+    const pw = process.env.AMCF_ADMIN_PASSWORD;
+    ok(!!pw, 'AMCF_ADMIN_PASSWORD is set (not hardcoded in the repo)');
+    await step('submit the password', "(function(){document.getElementById('acPw').value=" + JSON.stringify(pw || '') + ";document.getElementById('acLoginBtn').click();return 'ok';})()");
     await sleep(3000);
 
     const loginMsg = await step('no login error', "document.getElementById('acLoginMsg').textContent");
@@ -165,19 +169,31 @@ const getJSON = (url) => new Promise((res, rej) => {
     ok(await step('Speichern enabled after load', "document.getElementById('acSave').disabled") === false,
        'Speichern is enabled once loaded');
 
-    await step('edit the first project name', "(function(){document.getElementById('p0_name').value='REALPAGE TEST';return 'ok';})()");
-    await step('edit a fact', "(function(){document.getElementById('f_name').value='REALPAGE FACT';return 'ok';})()");
-    await step('click Speichern', "(function(){document.getElementById('acSave').click();return 'ok';})()");
-    await sleep(3000);
+    // Saving writes straight to the project folder through the File System
+    // Access API, which needs a real user gesture, so it cannot be driven
+    // headlessly. Assert instead that no PHP write endpoint is referenced
+    // anywhere in what the server serves, and that the fields are editable.
+    const served = await (await fetch(TARGET_URL)).text();
+    const servedJs = await (await fetch(new URL('js/admin-content.js', TARGET_URL))).text();
+    ok(!/save-content\.php|upload\.php/.test(served + servedJs),
+       'no PHP write endpoint is referenced by the served admin');
 
-    const saved = await step('save message', "document.getElementById('acMsg').textContent");
-    ok(/Gespeichert/.test(saved || ''), 'saving reported success', saved);
-    const cls = await step('save message styling', "document.getElementById('acMsg').className");
-    ok(/ac-msg ok/.test(cls || ''), 'the save message is styled as success', cls);
+    const canWrite = await step('File System Access API presence',
+      "typeof window.showDirectoryPicker");
+    console.log('       (showDirectoryPicker is "' + canWrite.val + '" in this browser)');
 
-    const disk = fs.readFileSync(indexFile, 'utf8');
-    ok(disk.includes('REALPAGE TEST'), 'the project edit reached index.html on disk');
-    ok(disk.includes('REALPAGE FACT'), 'the fact edit reached index.html on disk');
+    const waitFor = async (expr, tries) => {
+      for (let i = 0; i < (tries || 20); i++) {
+        const r = await evaluate(expr);
+        if (r.val) { return r.val; }
+        await sleep(250);
+      }
+      return null;
+    };
+    const nameOk = await waitFor("(function(){var el=document.getElementById('p0_name');if(!el)return null;el.value='REALPAGE TEST';return el.value;})()");
+    ok(nameOk === 'REALPAGE TEST', 'the project name field is editable', nameOk);
+    const factOk = await waitFor("(function(){var el=document.getElementById('f_name');if(!el)return null;el.value='REALPAGE FACT';return el.value;})()");
+    ok(factOk === 'REALPAGE FACT', 'the fact field is editable', factOk);
 
     ok(errors.length === 0, 'no uncaught errors or console errors', errors.join(' | '));
 
@@ -188,8 +204,7 @@ const getJSON = (url) => new Promise((res, rej) => {
     cleanup();
   }
 
-  ok(fs.readFileSync(indexFile, 'utf8') === original, 'index.html was restored after the test');
-  ok(!fs.existsSync(indexFile + '.bak'), 'the .bak written by save-content.php was removed');
+  ok(fs.readFileSync(indexFile, 'utf8') === original, 'index.html was untouched by the test');
 
   console.log(fail ? '\n' + fail + ' FAILURE(S)' : '\nall passed');
   process.exit(fail ? 1 : 0);
