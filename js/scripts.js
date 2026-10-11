@@ -378,9 +378,10 @@ function initAmcf() {
 
 // Ajax portfolio   ----------------------------------------
 
-// local projects from admin (localStorage + static data/projects.js)  --------
+// Local projects are no longer loaded: projects live in index.html and are
+// edited through admin-content.html. Kept only so the lightbox guards below
+// still have a defined (always empty) collection.
 var LOCAL_PROJECTS = [];
-var LOCAL_EDITS = {};
 
 // get the committed public data (data/projects.js) if present
 function getSiteData() {
@@ -443,239 +444,8 @@ function holderJobNum($holder) {
 	return jobNumFromKeys($holder.attr('data-rvnum'), keys);
 }
 
-function applyResumeOverrides() {
-	// Legacy: this used to overwrite the resume in index.html with values from
-	// data/projects.js and localStorage. index.html is the German source now,
-	// so an override here would silently undo every edit made in the admin.
-	return;
-	/* eslint-disable no-unreachable */
-	var rd = getResumeData();
-	// facts
-	var facts = rd.facts || {};
-	Object.keys(facts).forEach(function (k) {
-		var el = document.querySelector('[data-fv="' + k + '"]');
-		if (el && facts[k]) { el.textContent = facts[k]; el.removeAttribute('data-i18n'); }
-	});
-	// jobs
-	var jobs = rd.jobs || {};
-	Object.keys(jobs).forEach(function (num) {
-		var job = jobs[num];
-		if (!job) { return; }
-		var $jobHolder = $();
-		RESUME_JOB_FIELDS_LITE.forEach(function (f) {
-			if (job[f] == null || job[f] === '') { return; }
-			var key = 'resume.job' + num + '.' + f;
-			var htmlMode = (f === 'text');
-			var sel = htmlMode ? '[data-i18n-html="' + key + '"]' : '[data-i18n="' + key + '"]';
-			var el = document.querySelector(sel);
-			if (!el) { return; }
-			// capture the holder before the data-i18n attributes are stripped
-			if (!$jobHolder.length) { $jobHolder = $(el).closest('.resume-holder'); }
-			if (htmlMode) { el.innerHTML = job[f]; } else { el.textContent = job[f]; }
-			el.removeAttribute('data-i18n');
-			el.removeAttribute('data-i18n-html');
-		});
-		// replacement images (admin-provided) for existing entries
-		if (Array.isArray(job.imgs) && job.imgs.length) {
-			// resolve the holder by job number, never by data-rvnum
-			var $holder = $jobHolder.length ? $jobHolder :
-				$('[data-i18n*="resume.job' + num + '."], [data-i18n-html*="resume.job' + num + '."]')
-					.first().closest('.resume-holder');
-			if ($holder.length && !$holder.find('.resume-slider[data-injected]').length) {
-				var slides = '<div class="resume-slider" data-injected="1"><ul class="slides">';
-				job.imgs.forEach(function (s) {
-					s = String(s);
-					slides += '<li><img src="' + s.replace(/&/g, '&amp;').replace(/"/g, '&quot;') + '" class="respimg" alt=""></li>';
-				});
-				slides += '</ul></div>';
-				var $existing = $holder.find('.resume-slider').first();
-				if ($existing.length) { $existing.replaceWith(slides); }
-				else {
-					var $grid = $holder.find('.grid-full.transition.resume').first();
-					var $head = $holder.find('.resume-head').first();
-					if ($grid.length && $head.length) { $head[0].insertAdjacentHTML('afterend', '<div class="clear"></div>' + slides); }
-					else if ($grid.length) { $grid.append(slides); }
-				}
-			}
-		}
-	});
-	// new (user-added) entries rendered at the top of the timeline
-	var newJobs = rd.newJobs || [];
-	if (newJobs.length) {
-		var line = document.querySelector('.resume-line');
-		if (line && line.parentNode) {
-			// replace previous rendering to avoid duplicates on language switch
-			var prev = line.parentNode.querySelector('.resume-newblocks');
-			if (prev) { prev.parentNode.removeChild(prev); }
-			var html = '';
-			var n = newJobs.length;
-			for (var i = 0; i < n; i++) {
-				html += buildResumeBlock(newJobs[i], (n - i) % 2 === 1);
-			}
-			var wrap = document.createElement('div');
-			wrap.className = 'resume-newblocks';
-			wrap.innerHTML = html;
-			line.parentNode.insertBefore(wrap, line.nextSibling);
-		}
-	}
-	/* eslint-enable no-unreachable */
-}
-
-function buildResumeBlock(job, leftSide) {
-	var d = (job.date || '').replace(/</g, '&lt;');
-	var t = (job.title || '').replace(/</g, '&lt;');
-	var txt = job.text || '';
-	var ico = leftSide ? 'fa-briefcase' : 'fa-book';
-	var boxCls = leftSide ? 'resume-box animaper' : 'resume-box right right-box animaper';
-	var circCls = leftSide ? 'resume-circle-holder right-circle' : 'resume-circle-holder left-circle';
-	var dateCls = leftSide ? 'resume-date right-date' : 'resume-date left-date';
-	var headCls = leftSide ? 'resume-head right-head-arrow' : 'resume-head left-head-arrow';
-	var lis = '';
-	RESUME_JOB_FIELDS_LITE.forEach(function (f) {
-		if (f.indexOf('l') !== 0) { return; }
-		var v = job[f];
-		if (v == null || String(v).trim() === '') { return; }
-		lis += '<li>' + String(v).replace(/</g, '&lt;') + '</li>';
-	});
-	var list = lis ? '<ul style="text-align:left; padding-left:2em; list-style:inside circle;">' + lis + '</ul>' : '';
-	var imgs = Array.isArray(job.imgs) ? job.imgs.filter(function (s) { return String(s).trim() !== ''; }) : [];
-	var slides = '';
-	if (imgs.length) {
-		slides = '<div class="resume-slider"><ul class="slides">';
-		imgs.forEach(function (s) {
-			slides += '<li><img src="' + String(s).replace(/"/g, '&quot;') + '" class="respimg" alt=""></li>';
-		});
-		slides += '</ul></div>';
-	}
-	var rv = JSON.stringify({
-		title: job.title || '', date: job.date || '', text: job.text || '',
-		lis: RESUME_JOB_FIELDS_LITE.filter(function (f) { return f.indexOf('l') === 0; })
-			.map(function (f) { return job[f] || ''; })
-			.filter(function (v) { return String(v).trim() !== ''; })
-	}).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-	return '<div class="resume-holder">' +
-		'<div class="' + boxCls + '">' +
-		'<div class="' + circCls + '"><div class="resume-circle"><div class="' + dateCls + '"><span></span><span>' + d + '</span></div></div></div>' +
-		'<div class="grid-full transition resume  left-arrow">' +
-		'<div class="' + headCls + '" data-rv=\'' + rv + '\'><h3><span>' + t + '</span></h3><div class="resume-icon"><i class="fa ' + ico + '"></i></div></div>' +
-		'<div class="clear"></div>' +
-		slides +
-		'<p>' + txt + '</p>' + list +
-		'</div></div></div>';
-}
-
-function getExistingEdits() {
-	var base = getSiteData().edits || {};
-	try {
-		var raw = localStorage.getItem('amcf_local_edits');
-		var local = raw ? JSON.parse(raw) : {};
-		// localStorage (admin's working set) wins over committed site data
-		for (var k in local) { if (Object.prototype.hasOwnProperty.call(local, k)) { base[k] = local[k]; } }
-	} catch (e) { /* ignore */ }
-	// drop empty overrides
-	var out = {};
-	for (var key in base) {
-		if (Object.prototype.hasOwnProperty.call(base, key) && base[key] && typeof base[key] === 'object') {
-			out[key] = base[key];
-		}
-	}
-	return out;
-}
-
-function applyExistingOverrides() {
-	// Legacy: the old admin kept project overrides in localStorage and forced
-	// them over the markup. index.html is the source now, so nothing wins over it.
-	return;
-	/* eslint-disable no-unreachable */
-	LOCAL_EDITS = getExistingEdits();
-	var keys = Object.keys(LOCAL_EDITS);
-	if (!keys.length) { return; }
-	var $grid = $('#folio_container');
-	if (!$grid.length) { return; }
-	keys.forEach(function (k) {
-		var idx = parseInt(k, 10);
-		var e = LOCAL_EDITS[k] || {};
-		if (e.hidden) {
-			$grid.find('.folio-open[data-project="' + idx + '"]').closest('.box').remove();
-			return;
-		}
-		var $a = $grid.find('.folio-open[data-project="' + idx + '"]');
-		if (!$a.length) { return; }
-		if (e.image) { $a.find('img').attr('src', e.image); }
-		if (e.category) {
-			$a.closest('.box').removeClass('category_1 category_2 category_3 category_4')
-				.addClass(e.category);
-		}
-		if (e.name) { $a.find('h4').text(e.name); }
-		if (e.tags) {
-			var $h6 = $a.find('h6');
-			$h6.text(e.tags).removeAttr('data-i18n');
-		}
-	});
-	/* eslint-enable no-unreachable */
-}
-
-function loadLocalProjects() {
-	// Legacy: appended projects from data/projects.js and localStorage on top of
-	// the markup tiles. Projects are defined in index.html now, so this only
-	// produced duplicates and index collisions.
-	return;
-	/* eslint-disable no-unreachable */
-	var running = [];
-	var siteProjects = getSiteData().projects || [];
-	var keyFor = function (p) { return (p.name || '') + '|' + (p.image || ''); };
-	var seenNew = {};
-	// committed public projects first (dedupe within the file too)
-	for (var si = 0; si < siteProjects.length; si++) {
-		var sp = siteProjects[si];
-		if (!sp || sp._deleted) { continue; }
-		var sk = keyFor(sp);
-		if (seenNew[sk]) { continue; }
-		seenNew[sk] = true;
-		running.push(sp);
-	}
-	// then admin's working projects from localStorage (dedupe)
-	try {
-		var raw = localStorage.getItem('amcf_local_projects');
-		var local = raw ? JSON.parse(raw) : [];
-		for (var j = 0; j < local.length; j++) {
-			var p = local[j];
-			if (!p) { continue; }
-			var k = keyFor(p);
-			if (seenNew[k]) { continue; }
-			seenNew[k] = true;
-			running.push(p);
-		}
-	} catch (e) { /* ignore */ }
-	LOCAL_PROJECTS = running;
-	if (!LOCAL_PROJECTS.length) { return; }
-	var $grid = $('#folio_container');
-	if (!$grid.length) { return; }
-	LOCAL_PROJECTS.forEach(function (p, i) {
-		var idx = 8 + i;
-		var $li = $('<li class="box mix ' + (p.category || 'category_1') + ' mix_all">' +
-			'<a href="#" class="folio-open" data-project="' + idx + '">' +
-			'<img src="' + p.image + '" class="respimg" alt="" title="">' +
-			'<div class="folio-name clear"><div class="folio-overlay">' +
-			'<span class="overlay red"></span>' +
-			'<h4>' + $('<span>').text(p.name || '').html() + '</h4>' +
-			'<h6>' + $('<span>').text(p.tags || '').html() + '</h6>' +
-			'</div></div></a></li>');
-		$grid.append($li);
-	});
-	/* eslint-enable no-unreachable */
-}
-		
-function initPortfolio() {
-	"use strict";
-
-	loadLocalProjects();
-	applyExistingOverrides();
-}
 	$(document).ready(function(){
-		initPortfolio();
-		applyResumeOverrides();
-		initAmcf();		
+		initAmcf();
 	});
 
 //  definition of mobile browser------------------
@@ -783,22 +553,6 @@ function pbClose() {
 	$('body').css('overflow', '');
 }
 
-function pbExistingOverride(idx) {
-	// Legacy: the old admin stored project overrides in localStorage, which used
-	// to win over the markup. index.html is now the source of truth for the
-	// German site, so nothing overrides it any more.
-	return null;
-	/* eslint-disable no-unreachable */
-	if (!LOCAL_EDITS) { LOCAL_EDITS = getExistingEdits(); }
-	var e = LOCAL_EDITS[idx];
-	if (!e) { return null; }
-	if (e.hidden) { return { hidden: true }; }
-	return {
-		name: e.name, tags: e.tags, desc: e.desc, client: e.client,
-		date: e.date, url: e.url
-	};
-}
-
 function pbFill(newLang) {
 	if (pbCurrent === null) { return; }
 	// local project (from admin localStorage)
@@ -833,20 +587,9 @@ function pbFill(newLang) {
 		date: dictItem.date || $tile.attr('data-date') || '',
 		url: dictItem.url || $tile.attr('data-url') || ''
 	};
-	// apply admin override for existing project, if any
-	var ov = pbExistingOverride(pbCurrent);
-	if (ov) {
-		item = {
-			desc: ov.desc !== undefined && ov.desc !== '' ? ov.desc : item.desc,
-			client: ov.client !== undefined && ov.client !== '' ? ov.client : item.client,
-			date: ov.date !== undefined && ov.date !== '' ? ov.date : item.date,
-			url: ov.url !== undefined && ov.url !== '' ? ov.url : item.url
-		};
-	}
+	// tags come from the dictionary when translated, otherwise from the markup
 	var markupTags = $tile.find('h6').first().text() || '';
-	var tags = (ov && ov.tags !== undefined && ov.tags !== '')
-		? ov.tags
-		: ((d.port && d.port.tags && d.port.tags[pbCurrent]) || markupTags);
+	var tags = ((d.port && d.port.tags && d.port.tags[pbCurrent]) || markupTags);
 	var lb = (d.port && d.port.lightbox) || {};
 
 	var $light = $('#projectLightbox');
@@ -1094,7 +837,6 @@ $(function () {
 // re-fill open lightbox on language change
 $(document).on('AMCF_I18N_RENDER', function (e, lang) {
 	pbFill(lang);
-	applyResumeOverrides();
 	addResumeMainImages();
 	rvFill();
 });

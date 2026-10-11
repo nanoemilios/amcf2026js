@@ -1,0 +1,7 @@
+# editor backups written by save-content.php on every save
+*.bak
+# local tool config
+.opencode/
+# OS noise
+.DS_Store
+Thumbs.db
