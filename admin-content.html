@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inhalte bearbeiten – AMCF</title>
 <link rel="stylesheet" href="css/style.css?v=16">
-<script src="js/i18n.de.js?v=2"></script>
-<script src="js/i18n.de-ch.js?v=2"></script>
-<script src="js/i18n.en.js?v=2"></script>
-<script src="js/i18n.es.js?v=2"></script>
-<script src="js/i18n.gl.js?v=2"></script>
-<script src="js/i18n.pt.js?v=2"></script>
-<script src="js/i18n.js?v=2"></script>
+<script src="js/i18n.de.js?v=3"></script>
+<script src="js/i18n.de-ch.js?v=3"></script>
+<script src="js/i18n.en.js?v=3"></script>
+<script src="js/i18n.es.js?v=3"></script>
+<script src="js/i18n.gl.js?v=3"></script>
+<script src="js/i18n.pt.js?v=3"></script>
+<script src="js/i18n.js?v=3"></script>
 <style>
 .ac-wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px;}
 .ac-head{text-align:center;margin-bottom:26px;}
@@ -79,6 +79,10 @@
 
 	<div id="acBuild" class="ac-build">Editor-Skript: wird geladen &hellip;</div>
 
+	<!-- Meldungen stehen direkt unter dem Build-Hinweis, damit sie oben sichtbar sind.
+	     Bewusst außerhalb von #acApp: vor dem Login ist die App versteckt. -->
+	<div class="ac-msg" id="acMsg"></div>
+
 <div id="acLogin" class="admin-login">
 		<h2 data-i18n="admin.login">Anmeldung</h2>
 		<div class="admin-field">
@@ -102,10 +106,6 @@
 		<div id="acPanelJobs" class="admin-hidden"></div>
 		<div id="acPanelFacts" class="admin-hidden"></div>
 	</div>
-
-	<!-- outside #acApp on purpose: before login the app is hidden, and a message
-	     written into a hidden element is invisible, which looks like "nothing happened" -->
-	<div class="ac-msg" id="acMsg"></div>
 
 </div>
 
