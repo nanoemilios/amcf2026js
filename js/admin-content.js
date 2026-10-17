@@ -570,6 +570,21 @@
 		return typeof window.showDirectoryPicker === 'function';
 	}
 
+	// Turn a File System Access error into a readable hint. An aborted folder
+	// picker is not a failure, and in embedded/preview browsers the dialog is
+	// often not shown at all - so point at the real-browser and download routes.
+	function fsaReason(e) {
+		var name = (e && e.name) || '';
+		if (name === 'AbortError') {
+			return 'Die Ordnerwahl wurde abgebrochen. In eingebetteten Vorschau-Browsern erscheint dabei oft gar kein ' +
+				'Dialog – dann die Seite in Chrome oder Edge öffnen oder „Dateien herunterladen“ verwenden.';
+		}
+		if (name === 'NotAllowedError' || name === 'SecurityError') {
+			return 'Der Ordnerzugriff wurde nicht erlaubt. Bitte erneut versuchen und im Dialog zulassen.';
+		}
+		return (e && e.message) ? e.message : String(e);
+	}
+
 	// Ask for (or reuse) permission to the project folder.
 	function ensureFolder(ask) {
 		if (state.dirHandle && !ask) { return Promise.resolve(state.dirHandle); }
@@ -647,11 +662,18 @@
 			}
 			state.dirty = false;
 		}).catch(function (e) {
+			// An aborted folder picker is not a save failure: do not force a
+			// download of six files just because the dialog was dismissed.
+			if (e && e.name === 'AbortError') {
+				msg.className = 'ac-msg info';
+				msg.textContent = fsaReason(e);
+				return;
+			}
 			// No folder granted, permission denied, or no File System Access API.
 			// Offer the files instead, then explain why, so the reason is not lost.
 			download();
 			msg.className = 'ac-msg err';
-			msg.textContent = 'Direktes Speichern nicht möglich (' + e.message + '). ' +
+			msg.textContent = 'Direktes Speichern nicht möglich (' + fsaReason(e) + '). ' +
 				'Ordner wählen oder die heruntergeladenen Dateien einsetzen.';
 		});
 	}
@@ -731,7 +753,11 @@
 				hint.textContent = 'Ordner merkt sich der Browser. Speichern schreibt direkt dorthin.';
 				setMsg('ok', 'Ordner gewählt.');
 			}).catch(function (e) {
-				setMsg('err', 'Ordner nicht verfügbar: ' + e.message);
+				if (e && e.name === 'AbortError') {
+					setMsg('info', fsaReason(e));
+					return;
+				}
+				setMsg('err', 'Ordner nicht verfügbar: ' + fsaReason(e));
 			});
 		});
 		// reuse a previously granted folder, if the browser kept the handle
