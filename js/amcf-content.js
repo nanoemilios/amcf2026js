@@ -48,8 +48,8 @@
 				index: idxM ? parseInt(idxM[1], 10) : out.length,
 				category: catM ? 'category_' + catM[1] : 'category_1',
 				image: (/<img[^>]*\ssrc="([^"]*)"/.exec(body) || [, ''])[1],
-				name: unesc((/<h4[^>]*>([\s\S]*?)<\/h4>/.exec(body) || [, ''])[1]),
-				tags: unesc((/<h6[^>]*>([\s\S]*?)<\/h6>/.exec(body) || [, ''])[1]),
+				name: unesc((/<h3[^>]*class="folio-title"[^>]*>([\s\S]*?)<\/h3>/.exec(body) || [, ''])[1]),
+				tags: unesc((/<span[^>]*class="folio-tag"[^>]*>([\s\S]*?)<\/span>/.exec(body) || [, ''])[1]),
 				desc: unesc((/data-desc="([^"]*)"/.exec(attrs) || [, ''])[1]),
 				client: unesc((/data-client="([^"]*)"/.exec(attrs) || [, ''])[1]),
 				date: unesc((/data-date="([^"]*)"/.exec(attrs) || [, ''])[1]),
@@ -83,8 +83,8 @@
 				.replace(/data-date="[^"]*"/, 'data-date="' + attrEsc(p.date) + '"')
 				.replace(/data-url="[^"]*"/, 'data-url="' + attrEsc(p.url) + '"')
 				.replace(/(<img[^>]*\ssrc=")[^"]*(")/, '$1' + attrEsc(p.image) + '$2')
-				.replace(/(<h4[^>]*>)[\s\S]*?(<\/h4>)/, '$1' + esc(p.name) + '$2')
-				.replace(/(<h6[^>]*>)[\s\S]*?(<\/h6>)/, '$1' + esc(p.tags) + '$2');
+				.replace(/(<h3[^>]*class="folio-title"[^>]*>)[\s\S]*?(<\/h3>)/, '$1' + esc(p.name) + '$2')
+				.replace(/(<span[^>]*class="folio-tag"[^>]*>)[\s\S]*?(<\/span>)/, '$1' + esc(p.tags) + '$2');
 			return newWhole;
 		});
 		return html.slice(0, reg.start) + body + html.slice(reg.end);
@@ -417,7 +417,7 @@
 		'<img src="__IMAGE__" class="respimg" alt="" title="">' +
 		'<div class="folio-name clear"><div class="folio-overlay">' +
 		'<span class="overlay red"></span>' +
-		'<h4>__NAME__</h4><h6>__TAGS__</h6>' +
+		'<h3 class="folio-title">__NAME__</h3><span class="folio-tag">__TAGS__</span>' +
 		'</div></div></a></li>';
 
 	function addProject(html, project) {

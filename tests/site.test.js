@@ -20,6 +20,8 @@ const ok = (c, m, e) => {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const CHROME = [process.env.CHROME_PATH,
+  process.env.HOME && process.env.HOME + '/.local/opt/chrome-headless-shell/chrome-headless-shell',
+  '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser',
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe']
   .filter(Boolean).find((p) => fs.existsSync(p));
@@ -101,7 +103,7 @@ const getJSON = (u) => new Promise((res, rej) => {
        'the portfolio renders 8 tiles', (await ev("document.querySelectorAll('#folio_container li.box').length")).val);
     ok((await ev("document.querySelectorAll('.resume-holder[data-rvnum]').length")).val === 11,
        'the resume renders 11 entries');
-    const name = (await ev("(function(){var h=document.querySelector('#folio_container .folio-open[data-project=\"0\"] h4');return h?h.textContent.trim():'';})()")).val;
+    const name = (await ev("(function(){var h=document.querySelector('#folio_container .folio-open[data-project=\"0\"] .folio-title');return h?h.textContent.trim():'';})()")).val;
     ok(!!name && name !== 'undefined', 'the first project name renders', JSON.stringify(name));
     const jobTitle = (await ev("(function(){var h=document.querySelector('[data-i18n=\"resume.job11.title\"]');return h?h.textContent.trim():'';})()")).val;
     ok(!!jobTitle && jobTitle.indexOf('resume.job11') === -1,

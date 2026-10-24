@@ -1,0 +1,14 @@
+# AMCF – albertocosta.info
+User-agent: *
+Allow: /
+
+# Der Editor ist nur für den Besitzer gedacht und hat keinen Server-Endpunkt.
+Disallow: /admin-content.html
+
+# Entwicklungsdateien und Altbestand gehören nicht in den Index.
+Disallow: /tests/
+Disallow: /old/
+Disallow: /README.md
+Disallow: /.htaccess
+
+Sitemap: https://albertocosta.info/sitemap.xml

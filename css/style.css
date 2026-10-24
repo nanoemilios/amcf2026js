@@ -45,6 +45,18 @@ body{
 	clear:both;
 	float:none;
 }
+/* Visually hidden, still read by screen readers and search engines. */
+.sr-only{
+	position:absolute !important;
+	width:1px;
+	height:1px;
+	padding:0;
+	margin:-1px;
+	overflow:hidden;
+	clip:rect(0,0,0,0);
+	white-space:nowrap;
+	border:0;
+}
 
 @-o-viewport {
 	width: device-width;
@@ -101,7 +113,7 @@ h6 {
 	font-family: 'Oswald', sans-serif;
 }
 .sections-head{
-	opacity:0.9;
+	opacity:1;
 }
 
 /* ====================
@@ -210,7 +222,7 @@ Color styles - add you color here
 #jpreBar,.patern span,.red,.nav-button span,.inner-overlay,.skillbar-bar,.serviseslider h3 span,.icon-holder,.subscriptionForm input#submitButton,#loadingProgress,.sepcolor,.quote-icon,.skillbar-bar,#clientlist,#contact_form textarea:focus,#contact_form input:focus, .owl-theme .owl-controls .owl-page.active span,.owl-theme .owl-controls .clickable .owl-page:hover span,.slides-pagination a.current,.slides-pagination a:hover,.submit_btn:hover,.resume-head,.resume-line,.resume-date,.download-resume , .pagination a.current-page, .pagination a:hover , .project-details a {
 	background:#E75B00;
 }
-.ajl,.bigtext,.sections-head,.slides-container h1 span,.error,#options li:hover,#options li.actcat,.social-list ul li a:hover,.num,.project-description h3,.project-details h3,.smallicon:hover,.footer,.company-color , .controls button:hover, .share-options a:hover{
+.ajl,.bigtext,.sections-head,.slides-container h1 span,.slides-container h2 span,.error,#options li:hover,#options li.actcat,.social-list ul li a:hover,.num,.project-description h3,.project-details h3,.smallicon:hover,.footer,.company-color , .controls button:hover, .share-options a:hover{
 	color:#E75B00;
 }
 #options li.back,#subscribe .content{
@@ -498,9 +510,12 @@ Intro
 .slides-container .container{
 	top:25%;
 }
-.slides-container h1 {
+.slides-container h1, .slides-container h2 {
 	margin-bottom:20px;
 	letter-spacing: 0.10em;
+	font-size: 4.46666666667em;
+	font-weight: 400;
+	line-height: 1.17em;
 }
 .start{
 	position:absolute;
@@ -792,20 +807,28 @@ About
 	z-index:-1;
 	opacity:0.7;
 }
-.box  a h4{
+.box  a .folio-title{
 	width:100%;
 	position:absolute;
 	top:30%;
 	text-transform:uppercase;
 	font-size:18px;
 	font-weight:100;
+	letter-spacing:normal;
+	margin:0;
+	color:#fff;
 }
-.box  a h6{
+.box  a .folio-tag{
 	letter-spacing:1px;
 	width:100%;
 	position:absolute;
 	top:45%;
 	font-family: 'Oswald', sans-serif;
+	font-size:0.6em;
+	font-weight:200;
+	text-transform:uppercase;
+	margin:0;
+	color:#fff;
 }
 
 /* ====================
@@ -1157,6 +1180,10 @@ Prising
 	width:100%;
 	color:#fff;
 	position:relative;
+	background:#A63E00;
+}
+.resume-date {
+	background:#A63E00;
 }
 .right-head-arrow:before {
 	left: 100%;
@@ -1327,9 +1354,21 @@ Prising
 	border-radius:6px;
 	box-shadow: 0px 22px 23px 0px rgba(0,0,0,0.2);
 	font-family: 'Oswald', sans-serif;
+	background:#A63E00;
+}
+.download-resume:hover{
+	background:#C24A00;
 }
 .download-resume:hover span{
-	opacity:0.5
+	opacity:1;
+}
+/* Slide kickers are paragraphs, not headings: the slide title is the h2. */
+.slide-kicker{
+	margin:0;
+	font-size:1em;
+	font-weight:200;
+	letter-spacing:0.20em;
+	text-transform:uppercase;
 }
 /* ====================
 Clients
@@ -2438,7 +2477,7 @@ Resume timeline: compact list (open details in lightbox)
 .resume ul,
 .resume .image-popup{display:none;}
 .resume .resume-head{cursor:pointer;}
-.resume .resume-head:hover{background:#f54f36;}
+.resume .resume-head:hover{background:#C24A00;}
 .resume .resume-head:hover h3 span{color:#fff;}
 .resume .resume-head:hover .resume-icon{background:#e64922;border-left-color:#fff;}
 .resume .resume-main-img{
@@ -2757,3 +2796,24 @@ About: versteckter Slider dauerhaft sichtbar
 }
 /* sauberer Umbruch nach dem Bild, damit das Spalten-Grid in der naechsten Zeile beginnt */
 #about #owl-demo .item + .item{ clear:both; }
+/* Section labels and slide kickers used to be <h3>; they are <p> now so the
+   document has a clean heading outline. Keep the original h3 typography and
+   neutralise the generic .container p rules (max-width, padding, colour). */
+.container .sections-head,
+.container .slide-kicker {
+	font-size:1em;
+	font-weight:200;
+	max-width:none;
+	padding:0;
+	margin:0;
+	line-height:normal;
+}
+.container .sections-head{
+	color:#A63E00;
+}
+body.dark .container .sections-head{
+	color:#E75B00;
+}
+.container .slide-kicker{
+	color:#fff;
+}

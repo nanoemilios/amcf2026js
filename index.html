@@ -8,7 +8,30 @@
 	<meta name="description" content="CV / Alberto Manuel Costa Ferreiro">
 	<meta name="author" content="Alberto Manuel Costa Ferreiro">
 	<meta name="keywords" content="Alberto, Manuel, Costa, Ferreiro, nano, nanoemilios, cv, resume, lebenslauf, curriculum, vitae, curriculo, personal,">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="index, follow">
+	<meta name="theme-color" content="#101012">
+	<link rel="canonical" href="https://albertocosta.info/">
+
+<!--=============== social preview  ===============-->
+
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="Alberto M. Costa">
+	<meta property="og:title" content="Alberto M. Costa &ndash; Lebenslauf und Portfolio">
+	<meta property="og:description" content="Lebenslauf, Portfolio und Kontakt von Alberto M. Costa &ndash; Webdesigner, IT-Spezialist und Multimediaspezialist in Frauenfeld.">
+	<meta property="og:url" content="https://albertocosta.info/">
+	<meta property="og:image" content="https://albertocosta.info/images/og-cover.jpg">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:locale" content="de_CH">
+	<meta property="og:locale:alternate" content="en_US">
+	<meta property="og:locale:alternate" content="es_ES">
+	<meta property="og:locale:alternate" content="pt_PT">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Alberto M. Costa &ndash; Lebenslauf und Portfolio">
+	<meta name="twitter:description" content="Lebenslauf, Portfolio und Kontakt von Alberto M. Costa &ndash; Webdesigner, IT-Spezialist und Multimediaspezialist in Frauenfeld.">
+	<meta name="twitter:image" content="https://albertocosta.info/images/og-cover.jpg">
+
 	
 <!--=============== css  ===============-->	
     <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -18,7 +41,7 @@
 	<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="css/magnific-popup.css" media="all">
 	<link rel="stylesheet" href="css/superslides.css" type="text/css" media="screen">
-	<link rel="stylesheet" href="css/style.css?v=16" type="text/css" media="screen">
+	<link rel="stylesheet" href="css/style.css?v=17" type="text/css" media="screen">
 	
 <!--=============== fonts  ===============-->
 
@@ -37,6 +60,33 @@
 	<link rel="shortcut icon" href="images/favicon.ico">
 	<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 
+<!--=============== structured data  ===============-->
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"name": "Alberto Manuel Costa Ferreiro",
+		"alternateName": "Alberto M. Costa",
+		"url": "https://albertocosta.info/",
+		"image": "https://albertocosta.info/images/og-cover.jpg",
+		"jobTitle": "Webdesigner und IT-Spezialist",
+		"email": "mailto:info@albertocosta.info",
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Frauenfeld",
+			"postalCode": "8500",
+			"addressCountry": "CH"
+		},
+		"sameAs": [
+			"https://www.facebook.com/nanoemilios",
+			"https://www.twitter.com/nanoemilios",
+			"https://ch.linkedin.com/pub/alberto-m-costa-ferreiro/13/327/baa",
+			"https://github.com/nanoemilios"
+		]
+	}
+	</script>
+
 </head>
 
 <body>
@@ -49,13 +99,15 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 
 <div id="main">
 
+
+<h1 class="sr-only">Alberto M. Costa &ndash; Lebenslauf und Portfolio</h1>
 <!--=============== navigation ===============-->
 
 	<div class="navigation isDown">
 	
 		<div class="nav-overlay"></div>
 		
-		<div class="nav-button transition">
+		<div class="nav-button transition" role="button" tabindex="0" aria-label="Men&uuml;" aria-expanded="false">
 			<span></span>
 			<span></span>
 			<span></span>
@@ -63,26 +115,26 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 		
 		<div class="lang-selector" id="langSelector">
 			<div class="lang-current">
-				<img class="lang-flag" src="images/flags/de.svg" alt="Deutsch">
+				<img loading="lazy" decoding="async" class="lang-flag" src="images/flags/de.svg" alt="Deutsch">
 				<span class="lang-current-name">Deutsch</span>
-				<i class="fa fa-caret-down lang-caret"></i>
+				<i aria-hidden="true" class="fa fa-caret-down lang-caret"></i>
 			</div>
 			<div class="lang-list">
-				<a class="lang-item active" href="#" data-lang="de"><img src="images/flags/de.svg" alt="Deutsch">Deutsch</a>
-				<a class="lang-item" href="#" data-lang="de-ch"><img src="images/flags/ch.svg" alt="Schwiizerd&uuml;tsch">Schwiizerd&uuml;tsch</a>
-				<a class="lang-item" href="#" data-lang="en"><img src="images/flags/gb.svg" alt="English">English</a>
-				<a class="lang-item" href="#" data-lang="es"><img src="images/flags/es.svg" alt="Espa&ntilde;ol">Espa&ntilde;ol</a>
-				<a class="lang-item" href="#" data-lang="gl"><img src="images/flags/gl.svg" alt="Galego">Galego</a>
-				<a class="lang-item" href="#" data-lang="pt"><img src="images/flags/pt.svg" alt="Portugu&ecirc;s">Portugu&ecirc;s</a>
+				<a class="lang-item active" href="#" data-lang="de"><img loading="lazy" decoding="async" src="images/flags/de.svg" alt="Deutsch">Deutsch</a>
+				<a class="lang-item" href="#" data-lang="de-ch"><img loading="lazy" decoding="async" src="images/flags/ch.svg" alt="Schwiizerd&uuml;tsch">Schwiizerd&uuml;tsch</a>
+				<a class="lang-item" href="#" data-lang="en"><img loading="lazy" decoding="async" src="images/flags/gb.svg" alt="English">English</a>
+				<a class="lang-item" href="#" data-lang="es"><img loading="lazy" decoding="async" src="images/flags/es.svg" alt="Espa&ntilde;ol">Espa&ntilde;ol</a>
+				<a class="lang-item" href="#" data-lang="gl"><img loading="lazy" decoding="async" src="images/flags/gl.svg" alt="Galego">Galego</a>
+				<a class="lang-item" href="#" data-lang="pt"><img loading="lazy" decoding="async" src="images/flags/pt.svg" alt="Portugu&ecirc;s">Portugu&ecirc;s</a>
 			</div>
 		</div>
 		
 		<div class="dm-toggle">
 			<label class="dm-switch" aria-label="Dark mode">
-				<i class="fa fa-sun-o dm-icon-left" aria-hidden="true"></i>
+				<i aria-hidden="true" class="fa fa-sun-o dm-icon-left"></i>
 				<input type="checkbox" id="dmSwitch" role="switch">
 				<span class="dm-track"></span>
-				<i class="fa fa-moon-o dm-icon-right" aria-hidden="true"></i>
+				<i aria-hidden="true" class="fa fa-moon-o dm-icon-right"></i>
 			</label>
 		</div>
 		
@@ -96,7 +148,7 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					<li><a href="#portfolio" class="scroll-link" data-i18n="nav.portfolio">Portfolio</a></li>
 					<li><a href="#resume" class="scroll-link" data-i18n="nav.resume">Lebenslauf</a></li>
 					<li><a href="#contacts" class="scroll-link" data-i18n="nav.contacts">Kontakt</a></li>
-					<li><a href="admin.html">Admin</a></li>
+					<li><a href="admin-content.html">Admin</a></li>
 				</ul>
 			</div>
 		</div>
@@ -104,9 +156,9 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 		<div class="social-list">
 			
 			<ul>
-				<li><a href="https://www.facebook.com/nanoemilios"  target="_blank"><i class="fa fa-facebook fa-2x"></i></a></li>
-				<li><a href="https://www.twitter.com/nanoemilios"  target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
-				<li><a href="https://ch.linkedin.com/pub/alberto-m-costa-ferreiro/13/327/baa"  target="_blank"><i class="fa fa-linkedin fa-2x"></i></a></li>	
+				<li><a href="https://www.facebook.com/nanoemilios" target="_blank" rel="noopener" aria-label="Facebook"><i aria-hidden="true" class="fa fa-facebook fa-2x"></i></a></li>
+				<li><a href="https://www.twitter.com/nanoemilios" target="_blank" rel="noopener" aria-label="Twitter"><i aria-hidden="true" class="fa fa-twitter fa-2x"></i></a></li>
+				<li><a href="https://ch.linkedin.com/pub/alberto-m-costa-ferreiro/13/327/baa" target="_blank" rel="noopener" aria-label="LinkedIn"><i aria-hidden="true" class="fa fa-linkedin fa-2x"></i></a></li>
 			</ul>
 						
 		</div>	
@@ -132,9 +184,9 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					<li>
 						<div class="rester"></div>
 							<div class="container">
-								<h3 data-i18n="slide1.kicker">Willkommen zu</h3>
-								<h1 class="white" data-i18n-html="slide1.h1">Meinen Lebenslauf <br/> 
-                                <span>Alberto M. Costa</span></h1>
+								<p class="slide-kicker" data-i18n="slide1.kicker">Willkommen zu</p>
+								<h2 class="white" data-i18n-html="slide1.h1">Meinen Lebenslauf <br/>
+                                <span>Alberto M. Costa</span></h2>
 								<div class="patern clear"><span></span></div>
     					        <h3 data-i18n="slide1.sub">Scrolle nach unten für mehr Details</h3>
 							</div>
@@ -147,8 +199,8 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					<li>
 						<div class="rester"></div>
 							<div class="container">
-								<h3 data-i18n="slide2.kicker">Lebenslauf</h3>				
-								<h1 class="white" data-i18n-html="slide2.h1"><span>Das bin </span> Ich</h1>
+								<p class="slide-kicker" data-i18n="slide2.kicker">Lebenslauf</p>
+								<h2 class="white" data-i18n-html="slide2.h1"><span>Das bin </span> Ich</h2>
 								<div class="patern clear"><span class="right"></span></div>
                                 <h3 class="white" data-i18n="slide2.sub">Meine Design's und Web's</h3>
 							</div>
@@ -161,8 +213,8 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					<li>
 						<div class="rester"></div>
 							<div class="container ">
-								<h3 data-i18n="slide3.kicker">International</h3>					
-								<h1 class="white" data-i18n="slide3.title"> World Wide Welcomme</h1>
+								<p class="slide-kicker" data-i18n="slide3.kicker">International</p>
+								<h2 class="white" data-i18n="slide3.title"> World Wide Welcomme</h2>
 								<div class="patern clear"><span></span></div>
                                 <h3 class="white" data-i18n="slide3.sub">From nowbody to AMCF</h3>
 							</div>
@@ -172,12 +224,12 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 				</ul>
 
 				<div class="slides-navigation">
-				  <a href="#" class="prev"><i class="fa fa-long-arrow-left fa-2x"></i></a>
-				  <a href="#" class="next"><i class="fa fa-long-arrow-right fa-2x"></i></a>
+				  <a href="#" class="prev" aria-label="Vorheriger Slide"><i aria-hidden="true" class="fa fa-long-arrow-left fa-2x"></i></a>
+				  <a href="#" class="next" aria-label="N&auml;chster Slide"><i aria-hidden="true" class="fa fa-long-arrow-right fa-2x"></i></a>
 				</div>
 				
   			</div>
-			<a href="#about" class="start"><img src="images/start.png" alt="" title=""></a>
+			<a href="#about" class="start" aria-label="Zu &Uuml;ber Mich"><img src="images/start.png" alt="" title=""></a>
 			
 		</div> 
 		
@@ -189,7 +241,7 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 	<div id="about" class="sections ws">
 		<div class="content">
 			<div class="container">
-			<h3 class="sections-head" data-i18n="about.head">Wer ich bin</h3>
+			<p class="sections-head" data-i18n="about.head">Wer ich bin</p>
 				<h2 data-i18n="about.title">Über Mich</h2>
 				
 					<div id="owl-demo" class="owl-carousel">
@@ -198,7 +250,7 @@ if (_amcfDm === '1') { document.body.className += ' dark'; }
 					
 					  <div class="item fist-slide">
 					  <div class="small-separator"></div>
-					  <p style="text-align:left;" data-i18n-html="about.introHtml"><img src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Ich konnte während 7 Jahre in Spanien als Webdesigner und PC-Supporter arbeiten und wertvolle Erfahrungen in der Kundenakquisition und –Beratung im B2B/B2C-Umfeld sammeln. Durch der vielfallt von Kunden und deren Anforderungen habe ich mich mit fast allen Systemen und Konfigurationen vertraut gemacht. Mit dem Thema Suchmaschinenoptimierung habe ich mich eingehend befasst und bin mit der Websiteoptimierung bestens vertraut. Die Beratung, der Verkauf und die Installation von Soft- und Hardware gehörten zu meinem Alltag genauso wie das Entwerfen und verwalten neuer Design- und Kommunikationsstrategien.</br>
+					  <p style="text-align:left;" data-i18n-html="about.introHtml"><img loading="lazy" decoding="async" src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Ich konnte während 7 Jahre in Spanien als Webdesigner und PC-Supporter arbeiten und wertvolle Erfahrungen in der Kundenakquisition und –Beratung im B2B/B2C-Umfeld sammeln. Durch der vielfallt von Kunden und deren Anforderungen habe ich mich mit fast allen Systemen und Konfigurationen vertraut gemacht. Mit dem Thema Suchmaschinenoptimierung habe ich mich eingehend befasst und bin mit der Websiteoptimierung bestens vertraut. Die Beratung, der Verkauf und die Installation von Soft- und Hardware gehörten zu meinem Alltag genauso wie das Entwerfen und verwalten neuer Design- und Kommunikationsstrategien.</br>
 Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu führen und dabei zu Höchstleistung zu motivieren. Unter anderem gehörten das Bestücken und die Wartung der Reaktoren zu meiner Verantwortung. Ebenso die Verwaltung des Wareneingang und ausgangs, Maschinenführung und Transportsicherung. Die Sicherstellung der vorgegebenen Qualitätsanforderungen war ein wesentlicher Bestandteil meiner Aufgaben.</p>
 					
 					  
@@ -292,7 +344,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 	
 		<div class="content">
 		
-			<div class="quote-icon"><i class="fa fa-cogs"></i></div>
+			<div class="quote-icon"><i aria-hidden="true" class="fa fa-cogs"></i></div>
 			<div class="rester"></div>
 			<div class="rester red"></div>
 			
@@ -328,7 +380,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 								<li>
 								
 									<div class="icon-holder">
-										<i class="fa fa-heart-o fa-2x"></i>
+										<i aria-hidden="true" class="fa fa-heart-o fa-2x"></i>
 									</div>
 									
 									<h3><span></span><span data-i18n="services.s1title">IT Dienstleistungen</span><span></span></h3>
@@ -344,7 +396,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 								<li>
 								
 									<div class="icon-holder">
-										<i class="fa fa-trophy fa-2x"></i>
+										<i aria-hidden="true" class="fa fa-trophy fa-2x"></i>
 									</div>
 									
 									<h3><span></span><span data-i18n="services.s2title">Web Design</span><span></span></h3>
@@ -359,7 +411,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 								<li>
 								
 									<div class="icon-holder">
-										<i class="fa fa-pencil fa-2x"></i>
+										<i aria-hidden="true" class="fa fa-pencil fa-2x"></i>
 									</div>
 									
 									<h3><span></span><span data-i18n="services.s3title">Print Design</span><span></span></h3>
@@ -383,7 +435,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 
 	<div id="testimonials" class="sections">
 		<div class="content">
-			<div class="quote-icon"><i class="fa fa-quote-right"></i></div>
+			<div class="quote-icon"><i aria-hidden="true" class="fa fa-quote-right"></i></div>
 			<div class="rester"></div>
 			<div class="rester black"></div>
 			
@@ -434,9 +486,9 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 	
 		<div class="content">
 		
-			<div class="quote-icon"><i class="fa fa-suitcase"></i></div>
+			<div class="quote-icon"><i aria-hidden="true" class="fa fa-suitcase"></i></div>
 			<div class="container grid1">
-				<h3 class="sections-head" data-i18n="port.head">Portfolio</h3>
+				<p class="sections-head" data-i18n="port.head">Portfolio</p>
 				<h2 data-i18n="port.title">Meine Arbeiten</h2>
 				
 				<div class="small-separator"></div>	
@@ -471,12 +523,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box  mix category_2 mix_all" data-desc="X&amp;T war ein Sehr anspruchsvollen Projekt wo wir verschiedene Webseiten für verschiedene Produkten und Dienstleistungen erstellt haben. von Verkleidungen, über Personalisierte T-Shirts bis hin zu Partyzubehör." data-client="Tiendas X&amp;T " data-date="" data-url="">
 						<a href="#" class="folio-open" data-project="0">
-							<img src="images/folio/xyt.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/xyt.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>X&amp;T</h4>							
-									<h6 data-i18n="port.tags.0">eCommerce / design / web</h6>
+									<h3 class="folio-title">X&amp;T</h3>
+									<span class="folio-tag" data-i18n="port.tags.0">eCommerce / design / web</span>
 								</div>
 							</div>
 						</a>
@@ -487,12 +539,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 					
 					<li class="box mix category_3 mix_all" data-desc="" data-client="" data-date="" data-url="https://kalamos.ch">
 						<a href="#" class="folio-open" data-project="1">
-							<img src="images/folio/kalamos.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/kalamos.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>Kalamos GmbH</h4>
-									<h6 data-i18n="port.tags.1">design / web</h6>
+									<h3 class="folio-title">Kalamos GmbH</h3>
+									<span class="folio-tag" data-i18n="port.tags.1">design / web</span>
 								</div>
 							</div>
 						</a>	
@@ -502,12 +554,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box  mix category_4 mix_all" data-desc="" data-client="" data-date="" data-url="">
 						<a href="#" class="folio-open" data-project="2">
-							<img src="images/folio/tunight.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/tunight.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>Tunight</h4>
-									<h6 data-i18n="port.tags.2">branding / video</h6>
+									<h3 class="folio-title">Tunight</h3>
+									<span class="folio-tag" data-i18n="port.tags.2">branding / video</span>
 								</div>
 							</div>
 						</a>
@@ -517,12 +569,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 					
 					<li class="box  mix category_2 mix_all" data-desc="" data-client="" data-date="" data-url="">
 						<a href="#" class="folio-open" data-project="3">
-							<img src="images/folio/omundodote.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/omundodote.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>O Mundo do Té</h4>
-									<h6 data-i18n="port.tags.3">eCommerce / branding / Web</h6>
+									<h3 class="folio-title">O Mundo do Té</h3>
+									<span class="folio-tag" data-i18n="port.tags.3">eCommerce / branding / Web</span>
 								</div>
 							</div>
 						</a>
@@ -532,12 +584,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box mix category_1 mix_all" data-desc="" data-client="" data-date="" data-url="">
 						<a href="#" class="folio-open" data-project="4">
-							<img src="images/folio/reperanet.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/reperanet.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>Repera.net</h4>
-									<h6 data-i18n="port.tags.4">EcoLocal / eCommerce / web</h6>
+									<h3 class="folio-title">Repera.net</h3>
+									<span class="folio-tag" data-i18n="port.tags.4">EcoLocal / eCommerce / web</span>
 								</div>
 							</div>
 						</a>
@@ -547,12 +599,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box mix category_3 mix_all" data-desc="" data-client="" data-date="" data-url="">
 						<a href="#" class="folio-open" data-project="5">
-							<img src="images/folio/royalhaus.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/royalhaus.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>Royal Haus</h4>
-									<h6 data-i18n="port.tags.5">branding / design / IT Dienstleistungen</h6>
+									<h3 class="folio-title">Royal Haus</h3>
+									<span class="folio-tag" data-i18n="port.tags.5">branding / design / IT Dienstleistungen</span>
 								</div>
 							</div>
 						</a>	
@@ -562,12 +614,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box mix category_3 mix_all" data-desc="" data-client="" data-date="" data-url="https://finellicaffe.ch">
 						 <a href="#" class="folio-open" data-project="6">
-							<img src="images/folio/ifc.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/ifc.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>IFC</h4>
-									<h6 data-i18n="port.tags.6">eCommerce / branding / web</h6>
+									<h3 class="folio-title">IFC</h3>
+									<span class="folio-tag" data-i18n="port.tags.6">eCommerce / branding / web</span>
 								</div>
 							</div>
 						</a>	
@@ -577,12 +629,12 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 					<li class="box mix category_1 mix_all" data-desc="" data-client="" data-date="" data-url="https://naturania.es">
 						<a href="#" class="folio-open" data-project="7">
-							<img src="images/folio/naturania.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/folio/naturania.jpg" class="respimg" alt="" title="">
 							<div class="folio-name clear">
 								<div class="folio-overlay">
 									<span class="overlay red"></span>
-									<h4>Naturania.es</h4>
-									<h6 data-i18n="port.tags.7">Web / design / branding / IT Dienstleistungen</h6>
+									<h3 class="folio-title">Naturania.es</h3>
+									<span class="folio-tag" data-i18n="port.tags.7">Web / design / branding / IT Dienstleistungen</span>
 								</div>
 							</div>
 						</a>	
@@ -599,44 +651,15 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 
 	</div>	<!--===============  section portfolio end ===============-->
 		
-<!--=============== section subscribe ===============-->
 
-	<div id="subscribe" class="sections hidden-section">
-		<div class="content">
-		<div class="quote-icon"><i class="fa fa-rss"></i></div>
-			<div class="rester"></div>
-			<div class="rester black"></div>
-			<div class="container">
-					
-				<h3 class="sections-head" data-i18n="sub.head">Anmelden</h3>
-				<div class="small-separator ws"></div>
-				<p data-i18n="sub.text">Melde dich bei meinem Newsletter an.</p>
-				<div class="clear"></div>
-							
-				<div class="subcribe">
-					<span class="overlay suboverlay"></span>
-					<fieldset>
-						<form class="subscriptionForm" method="post">
-							<input id="subscriptionForm" data-i18n-placeholder="sub.placeholder" class="inputForm" type="text" value="Enter Your Email Address" onFocus="if (this.value=='Enter Your Email Address') this.value=''" onBlur="if (this.value==''){this.value='Enter Your Email Address'}" />
-							<input type="submit" id="submitButton" class="transition" value="Send">
-						</form>
-						
-						<div id="success" data-i18n="sub.success">Vielen Dank</div>
-						<div id="error" data-i18n="sub.error">Bitte schreiben Sie eine gültige Email-adresse</div>
-						
-					</fieldset>
-				</div> 										
-			</div>
-		</div>	
-	</div>	<!--===============  section subscribe end ===============-->
 
 <!--=============== section resume ===============-->	
 
 	<div id="resume" class="sections ws">
 		<div class="content">
-		<div class="quote-icon"><i class="fa fa-tasks"></i></div>
+		<div class="quote-icon"><i aria-hidden="true" class="fa fa-tasks"></i></div>
 			<div class="container">
-			<h3 class="sections-head" data-i18n="resume.head">Fakten über mich</h3>
+			<p class="sections-head" data-i18n="resume.head">Fakten über mich</p>
 				<h2 data-i18n="resume.title">Lebenslauf</h2>
 				
 				<div class="small-separator"></div>
@@ -671,16 +694,16 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job11.title">AS Aufzüge AG</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/AS.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/AS.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>
 								
-							  <p data-i18n-html="resume.job11.text">Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Aufzüge AG</a> habe ich mich als Servicetechniker Lift weiter entwickelt. Als Feldtrainer konnte ich zum Troubelshooter aufsteigen und neue Mittarbeiter einarbeiten.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+							  <p data-i18n-html="resume.job11.text">Bei der <a href="https://www.lift.ch" target="_blank" rel="noopener" class="company-color">AS Aufzüge AG</a> habe ich mich als Servicetechniker Lift weiter entwickelt. Als Feldtrainer konnte ich zum Troubelshooter aufsteigen und neue Mittarbeiter einarbeiten.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job11.l1">Unterhalt und Wartung von Aufzügen aller Marken</li>
 							<li data-i18n="resume.job11.l2">Feltrainer</li>
 							  <li data-i18n="resume.job11.l3">Stellvertretter Teamchef</li>
@@ -702,20 +725,20 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
 									<h3><span data-i18n="resume.job10.title">Garaventa Lift AG</span></h3>
-									<div class="resume-icon"><i class="fa fa-book"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/garaventa.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/garaventa1.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/garaventa2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/garaventa3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/garaventa4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/garaventa.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/garaventa1.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/garaventa2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/garaventa3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/garaventa4.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job10.text">Bei der Garaventa Lift AG  (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bin ich für den Unterhalt und Reparaturen an Homelifte und Hebebühnen zuständig. Eine Abwechslungsreiche Tätigkeit die viele Herausforderungen mit sich bringt.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+								<p data-i18n-html="resume.job10.text">Bei der Garaventa Lift AG  (<a href="https://www.garaventalift.ch" target="_blank" rel="noopener" class="company-color">Garaventa</a>) bin ich für den Unterhalt und Reparaturen an Homelifte und Hebebühnen zuständig. Eine Abwechslungsreiche Tätigkeit die viele Herausforderungen mit sich bringt.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job10.l1">Unterhalt und Wartung von Aufzügen und Plattformen</li>
 							</ul>
 							
@@ -734,19 +757,19 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job9.title">Schindler Aufzüge AG</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/schindler.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/schindler2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/schindler3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/schindler4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/schindler.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/schindler2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/schindler3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/schindler4.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>
 								
-							  <p data-i18n-html="resume.job9.text">Bei der <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und auch in den Letzten Jahre diese Arbeit ausgeübt</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+							  <p data-i18n-html="resume.job9.text">Bei der <a href="https://www.schindler.ch" target="_blank" rel="noopener" class="company-color">Schindler Aufzüge AG</a> habe ich mich als Servicetechniker Lift ausbilden lassen und auch in den Letzten Jahre diese Arbeit ausgeübt</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job9.l1">Unterhalt und Wartung von Aufzügen</li>
 							<li data-i18n="resume.job9.l2">Reinigen</li>
 							  <li data-i18n="resume.job9.l3">Kundenbetreung</li>
@@ -769,20 +792,20 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
 									<h3><span data-i18n="resume.job8.title">Die Schweizerische Post</span></h3>
-									<div class="resume-icon"><i class="fa fa-book"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/post.png" class="respimg" alt=""></li>
-										<li><img src="images/resume/post2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/post3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/post4.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/post5.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/post.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/post2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/post3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/post4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/post5.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job8.text">Bei der Schweizerische Post im Paketzentrum Frauenfeld  (<a href="https://www.post.ch" target="_blank" class="company-color">Post</a>) war ich für das Codieren der Pakete und das Sortiren von Sperrgut zuständig.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+								<p data-i18n-html="resume.job8.text">Bei der Schweizerische Post im Paketzentrum Frauenfeld  (<a href="https://www.post.ch" target="_blank" rel="noopener" class="company-color">Post</a>) war ich für das Codieren der Pakete und das Sortiren von Sperrgut zuständig.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job8.l1">Codieren von nicht lesbaren Pakete</li>
 							<li data-i18n="resume.job8.l2">Verteilen und Sortieren von Paketen</li>
 							  </ul>
@@ -802,19 +825,19 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job7.title">Hug Engineering AG</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/hug.png" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug.png" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug4.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>
 							
-							  <p data-i18n-html="resume.job7.text">Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter wieder die körperliche Stärke, und der Seelenfrieden geholt die ich brauche um meine aufgaben zu meistern.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+							  <p data-i18n-html="resume.job7.text">Bei der <a href="https://hug-engineering.com" target="_blank" rel="noopener" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter wieder die körperliche Stärke, und der Seelenfrieden geholt die ich brauche um meine aufgaben zu meistern.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job7.l1">Produktionsmittarbeiter</li>
 							<li data-i18n="resume.job7.l2">Zusammenbau von Filterwaben</li>
 							  </ul>
@@ -835,19 +858,19 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
 									<h3><span data-i18n="resume.job6.title">Bipresent.com</span></h3>
-									<div class="resume-icon"><i class="fa fa-book"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/bipresent.png" class="respimg" alt=""></li>
-										<li><img src="images/resume/bipresent2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/bipresent3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/bipresent4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/bipresent.png" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/bipresent2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/bipresent3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/bipresent4.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job6.text">Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> habe ich sehr viele erfahrungen und kentnisse gesammelt in alle diese Bereichen:</p>
+								<p data-i18n-html="resume.job6.text">Meine selbständige Tätigkeit als Webdesigner und Informatiker. Bei Bipresent.com habe ich sehr viele erfahrungen und kentnisse gesammelt in alle diese Bereichen:</p>
 								<ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 								  <li data-i18n="resume.job6.l1">Webdesign</li>
 								  <li data-i18n="resume.job6.l2">IT-Beratung</li>
@@ -872,13 +895,13 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 						  <div class="grid-full transition resume left-arrow">
 							<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job5.title">Diplomierter Webdesigner (EU Norm)</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 							  </div>
 							  <a class="image-popup" href="images/resume/cfcambre.jpg" title="">
 								  <span></span>
-       							  <img src="images/resume/cfcambre.jpg" class="respimg" alt="">
+								  <img loading="lazy" decoding="async" src="images/resume/cfcambre.jpg" class="respimg" alt="">
     							  </a>
-						    <p data-i18n-html="resume.job5.text">Centro Municipal de Formación, Cambre, A Coruña. Da habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a>   A Coruña - Spanien.</p>
+						    <p data-i18n-html="resume.job5.text">Centro Municipal de Formación, Cambre, A Coruña. Da habe ich mit über 300 Stunden mein Diplom als Webdesigner und Multimedia geholt. <a href="https://cambre.es" target="_blank" rel="noopener" class="company-color">Cambre.es</a>   A Coruña - Spanien.</p>
 							  <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							    <li data-i18n="resume.job5.l1">Webdesign und Multimedia</li>
 							    <li data-i18n="resume.job5.l2">HTML – CSS – JS – PHP - SQL</li>
@@ -899,11 +922,11 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 						  <div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
 									<h3><span data-i18n="resume.job4.title">BVS Winterthur (PC Master)</span></h3>
-									<div class="resume-icon"><i class="fa fa-book"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-book"></i></div>
 								</div>
 								 <a class="image-popup" href="images/resume/ECDL.jpg" title="">
 								  <span></span>
-       							  <img src="images/resume/ECDL.jpg" class="respimg" alt="">
+								  <img loading="lazy" decoding="async" src="images/resume/ECDL.jpg" class="respimg" alt="">
     							  </a>
                                 <p data-i18n-html="resume.job4.text">PC Master Kurs absolviert wo ich mich mit dem PC auseinandergesetzt habe und die Grundkenntnisse für meine Passion gelernt.</p>
                 <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
@@ -926,18 +949,18 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 						  <div class="grid-full transition resume left-arrow">
 								<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job3.title">Hug Engineering AG (Gruppenleiter)</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 								</div>
 								<div class="clear"></div>								
 							<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/hug.png" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug3.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/hug4.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug.png" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/hug4.jpg" class="respimg" alt=""></li>
 									</ul>
 							    </div>
-							  <p data-i18n-html="resume.job3.text">Bei der <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter vom schlimmsten Job bis zum Leiter Reaktorbau auf gearbeitet. Die Chemie gelernt, den Zusammenbau und am Schluss im Service den Unterhalt. Europaweit gereist und Reaktoren und Katalysatoren wie auch Russpartikel Filter gewartet.</p>
+							  <p data-i18n-html="resume.job3.text">Bei der <a href="https://hug-engineering.com" target="_blank" rel="noopener" class="company-color">Hug Engineering AG</a> habe ich mich als Produktionsmitarbeiter vom schlimmsten Job bis zum Leiter Reaktorbau auf gearbeitet. Die Chemie gelernt, den Zusammenbau und am Schluss im Service den Unterhalt. Europaweit gereist und Reaktoren und Katalysatoren wie auch Russpartikel Filter gewartet.</p>
                 <ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 								  <li data-i18n-html="resume.job3.l1">Fabrikation, Instandsetzung und Service von Katalysatoren und Russpartikel Filter.</li>
 								  <li data-i18n="resume.job3.l2">Qualitätskontrolle</li>
@@ -958,18 +981,18 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 							<div class="grid-full transition resume  left-arrow">
 								<div class="resume-head left-head-arrow">
 									<h3><span data-i18n="resume.job2.title">Coop – Suisse (Verkäufer)</span></h3>
-									<div class="resume-icon"><i class="fa fa-book"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-book"></i></div>
 								</div>
 								<div class="clear"></div>
 								<div class="resume-slider">
 									<ul class="slides">
-										<li><img src="images/resume/coop.png" class="respimg" alt=""></li>
-										<li><img src="images/resume/coop2.jpg" class="respimg" alt=""></li>
-										<li><img src="images/resume/coop3.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/coop.png" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/coop2.jpg" class="respimg" alt=""></li>
+										<li><img loading="lazy" decoding="async" src="images/resume/coop3.jpg" class="respimg" alt=""></li>
 									</ul>
 								  </div>								
 	
-								<p data-i18n-html="resume.job2.text">Bei <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schweiz</a> habe ich eine sehr leerreiche zeit erlebt und vieles über den Alltag im Arbeitsleben gelernt.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+								<p data-i18n-html="resume.job2.text">Bei <a href="https://www.coop.ch" target="_blank" rel="noopener" class="company-color">Coop Schweiz</a> habe ich eine sehr leerreiche zeit erlebt und vieles über den Alltag im Arbeitsleben gelernt.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job2.l1">Kasse</li>
 							<li data-i18n="resume.job2.l2">Getränkeabteilung</li>
 							  <li data-i18n="resume.job2.l3">Weinverkauf</li>
@@ -990,16 +1013,16 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 						  <div class="grid-full transition resume left-arrow">
 							<div class="resume-head right-head-arrow">
 									<h3><span data-i18n="resume.job1.title">Migros - Schweiz (Logistiker Lehre)</span></h3>
-									<div class="resume-icon"><i class="fa fa-briefcase"></i></div>
+									<div class="resume-icon"><i aria-hidden="true" class="fa fa-briefcase"></i></div>
 							  </div>
 							  <a class="image-popup" href="images/resume/migros.jpg" title="">
 							  <span></span></a>
-						    <p data-i18n-html="resume.job1.text">Bei der <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a>  habe ich meien Lehre al Lageristen angefangen und während 2 Jahren erfolgreich absolviert.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
+						    <p data-i18n-html="resume.job1.text">Bei der <a href="https://www.migros.ch" target="_blank" rel="noopener" class="company-color">Migros</a>  habe ich meien Lehre al Lageristen angefangen und während 2 Jahren erfolgreich absolviert.</p><ul style="text-align:left; padding-left:2em; list-style:inside circle;">
 							  <li data-i18n="resume.job1.l1">Lagerverwaltung</li>
 							<li data-i18n="resume.job1.l2">Transportverwaltung</li>
 							  <li data-i18n="resume.job1.l3">Staplerprüfung</li>
 							  </ul>
-					        <a class="image-popup" href="images/resume/migros.jpg" title=""><img src="images/resume/migros.jpg" class="respimg" alt=""></a>
+					        <a class="image-popup" href="images/resume/migros.jpg" title=""><img loading="lazy" decoding="async" src="images/resume/migros.jpg" class="respimg" alt=""></a>
 							 
 							
 						  </div>
@@ -1010,7 +1033,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 				
 				
 				<div class="clear"></div>
-				<a href="/CV_AMCF-de.pdf" class="download-resume"><span class="transition" data-i18n="resume.download">CV Runterladen</span></a>
+				<a href="CV_AMCF-de.pdf" class="download-resume"><span class="transition" data-i18n="resume.download">CV Runterladen</span></a>
 				
 			</div>
 				  <!--AMCF:RESUME:END-->
@@ -1028,27 +1051,27 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 					<div id="client-carusel" class="client-marquee">
 					
 						<div class="item">
-							<img src="images/clients/1.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/1.png" class="respimg" alt="" title="">
 						</div>
 						
 						<div class="item">
-							<img src="images/clients/2.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/2.png" class="respimg" alt="" title="">
 						</div>
 						
 						<div class="item">
-							<img src="images/clients/3.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/3.png" class="respimg" alt="" title="">
 						</div>
 						
 						<div class="item">
-							<img src="images/clients/4.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/4.png" class="respimg" alt="" title="">
 						</div>
 						
 						<div class="item">
-							<img src="images/clients/5.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/5.png" class="respimg" alt="" title="">
 						</div>
 						
 						<div class="item">
-							<img src="images/clients/6.png" class="respimg" alt="" title="">
+							<img loading="lazy" decoding="async" src="images/clients/6.png" class="respimg" alt="" title="">
 						</div>
 						
 					</div>
@@ -1063,23 +1086,23 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 
 	<div id="contacts" class="sections">
 		<div class="content">
-			<a href="#topSlide" class="quote-icon to-top" title="Nach oben"><i class="fa fa-angle-up"></i></a>
+			<a href="#topSlide" class="quote-icon to-top" title="Nach oben"><i aria-hidden="true" class="fa fa-angle-up"></i></a>
 			<div class="container">
 			
 				<div class="contact-details">
 		
 					<div class="grid-2">
-						<div class="smallicon animaper"><i class="fa fa-mobile fa-2x"></i></div>
+						<div class="smallicon animaper"><i aria-hidden="true" class="fa fa-mobile fa-2x"></i></div>
 						<span>+41 (0) 76 537 29 19</span>
 					</div>
 						
 					<div class="grid-2">
-						<div class="smallicon animaper"><i class="fa fa-envelope-o fa-2x"></i></div>
+						<div class="smallicon animaper"><i aria-hidden="true" class="fa fa-envelope-o fa-2x"></i></div>
 						<a href="mailto:info@albertocosta.info">info@albertocosta.info</a>
 					</div>
 						
 					<div class="grid-2">
-						<div class="smallicon animaper"><i class="fa fa-home fa-2x"></i></div>
+						<div class="smallicon animaper"><i aria-hidden="true" class="fa fa-home fa-2x"></i></div>
 						<span data-i18n-html="contacts.address">8500 Frauenfeld</span>
 					</div>
 						
@@ -1111,7 +1134,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 			<button type="button" class="pb-close">Schliessen</button>
 			<div class="pb-body">
 				<div class="pb-image">
-					<img src="" alt="" class="pb-img">
+					<img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" class="pb-img" decoding="async">
 				</div>
 				<div class="pb-content">
 					<h4 class="pb-title"></h4>
@@ -1136,7 +1159,7 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 			<button type="button" class="pb-close">Schliessen</button>
 			<div class="pb-body">
 				<div class="pb-image">
-					<img src="" alt="" class="pb-img">
+					<img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" class="pb-img" decoding="async">
 				</div>
 				<div class="pb-content">
 					<h4 class="pb-title"></h4>
@@ -1167,14 +1190,14 @@ Bei meiner Aufgabe als Gruppenleiter bei Hug Engineering hatte ich ein Team zu f
 	
 	<script type="text/javascript" src="js/jquery.hammer.min.js"></script>
 	<script type="text/javascript" src="js/jquery.magnific-popup.min.js"></script>
-	<script type="text/javascript" src="js/i18n.de.js"></script>
-	<script type="text/javascript" src="js/i18n.de-ch.js"></script>
-	<script type="text/javascript" src="js/i18n.gl.js"></script>
-	<script type="text/javascript" src="js/i18n.es.js"></script>
-	<script type="text/javascript" src="js/i18n.pt.js"></script>
-	<script type="text/javascript" src="js/i18n.en.js"></script>
+	<script type="text/javascript" src="js/i18n.de.js?v=2"></script>
+	<script type="text/javascript" src="js/i18n.de-ch.js?v=2"></script>
+	<script type="text/javascript" src="js/i18n.gl.js?v=2"></script>
+	<script type="text/javascript" src="js/i18n.es.js?v=2"></script>
+	<script type="text/javascript" src="js/i18n.pt.js?v=2"></script>
+	<script type="text/javascript" src="js/i18n.en.js?v=2"></script>
 	<script type="text/javascript" src="js/i18n.js"></script>
-	<script type="text/javascript" src="js/scripts.js"></script>
+	<script type="text/javascript" src="js/scripts.js?v=2"></script>
 	<script type="text/javascript">initAmcf();</script>
 </body>
 </html>

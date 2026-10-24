@@ -22,6 +22,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const CHROME = [
   process.env.CHROME_PATH,
+  process.env.HOME && process.env.HOME + '/.local/opt/chrome-headless-shell/chrome-headless-shell',
+  '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser',
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
 ].filter(Boolean).find((p) => fs.existsSync(p));
@@ -120,7 +122,7 @@ async function session() {
     await sleep(800);
     s = await session();
     await sleep(4000);
-    const name = await s.evaluate("(function(){var h=document.querySelector('#folio_container .folio-open[data-project=\"0\"] h4');return h?h.textContent.trim():'(none)';})()");
+    const name = await s.evaluate("(function(){var h=document.querySelector('#folio_container .folio-open[data-project=\"0\"] .folio-title');return h?h.textContent.trim():'(none)';})()");
     const title = await s.evaluate("(function(){var h=document.querySelector('[data-i18n=\"resume.job11.title\"]');return h?h.textContent.trim():'(none)';})()");
     const fact = await s.evaluate("(function(){var h=document.querySelector('[data-fv=\"name\"]');return h?h.textContent.trim():'(none)';})()");
     const tiles = await s.evaluate("document.querySelectorAll('#folio_container li.box').length");

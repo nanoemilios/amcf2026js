@@ -131,10 +131,13 @@
 			var dj = (D.resume && D.resume['job' + n]) || {};
 			var j = {};
 			JOB_FIELDS.forEach(function (f) { j[f] = dj[f] !== undefined ? dj[f] : ''; });
+			// CV entry titles are language-neutral: always show the German
+			// source title from index.html, never a translated one.
+			j.title = (base.jobs[n] && base.jobs[n].title) || '';
 			m.jobs[n] = j;
 			// remember which keys the dictionary already had, so clearing a
 			// field in the form clears it in the file instead of being skipped
-			m.jobKeys[n] = Object.keys(dj);
+			m.jobKeys[n] = Object.keys(dj).filter(function (k) { return k !== 'title'; });
 		});
 		FACT_LABEL_KEYS.forEach(function (k) {
 			var f = (D.resume && D.resume.facts) || {};
@@ -209,7 +212,8 @@
 		var isSrc = state.target === 'source';
 		$('acHint').textContent = isSrc
 			? 'Bearbeitest index.html – dies ist die deutsche Quelle. Änderungen gelten für Besucher ohne Übersetzung.'
-			: 'Bearbeitest die Übersetzung "' + state.target + '" in js/i18n.' + state.target + '.js.';
+			: 'Bearbeitest die Übersetzung "' + state.target + '" in js/i18n.' + state.target + '.js. ' +
+				'Die Titel der Lebenslauf-Einträge bleiben deutsch und sind hier nicht editierbar.';
 	}
 
 	function field(labelKey, id, value, opts) {
@@ -220,7 +224,9 @@
 				'</label><textarea id="' + id + '" rows="' + (opts.rows || 4) + '">' + v + '</textarea></div>';
 		}
 		return '<div class="admin-field"><label for="' + id + '">' + label(labelKey, opts.fallback || labelKey) +
-			'</label><input type="text" id="' + id + '" value="' + v + '"></div>';
+			(opts.readonly ? ' <span class="ac-ro">(nicht &uuml;bersetzt)</span>' : '') +
+			'</label><input type="text" id="' + id + '" value="' + v + '"' +
+			(opts.readonly ? ' readonly' : '') + '></div>';
 	}
 
 	function renderProjects() {
@@ -274,7 +280,7 @@
 				'<button type="button" class="admin-btn ghost" data-del-job="' + n +
 				'" data-i18n="admin.delete">L&ouml;schen</button></div>';
 			var body = field('admin.period', idj + '_date', job.date);
-			body += field('admin.title', idj + '_title', job.title);
+			body += field('admin.title', idj + '_title', job.title, isSrc ? {} : { readonly: true });
 			body += field('admin.resumeDescription', idj + '_text', job.text, { multiline: true, rows: 5 });
 			body += '<div class="admin-field"><label>' + label('admin.item1', 'Aufzählung') + '</label>';
 			for (var i = 1; i <= 7; i++) {
@@ -501,6 +507,9 @@
 			}));
 			Object.keys(model.jobs).forEach(function (n) {
 				JOB_FIELDS.forEach(function (f) {
+					// Titles are deliberately not translated: they stay in
+					// index.html and are identical in every language.
+					if (f === 'title') { return; }
 					var existed = state.model.jobKeys && state.model.jobKeys[n] &&
 						state.model.jobKeys[n].indexOf(f) !== -1;
 					// write when it has a value, or when it already existed so that

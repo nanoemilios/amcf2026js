@@ -23,7 +23,7 @@ function initAmcf() {
 // show menu ------------------	
 
 	function showmenu(){
-		$(".nav-button").addClass('nav-rotade');
+		$(".nav-button").addClass('nav-rotade').attr('aria-expanded', 'true');
 		ino.animate({"left":'0'},al);          
 		ino.removeClass("isDown");
 		bo.fadeIn();		
@@ -38,7 +38,7 @@ function initAmcf() {
 // hide menu ------------------
 
 	function hidemenu(){
-		$(".nav-button").removeClass('nav-rotade');
+		$(".nav-button").removeClass('nav-rotade').attr('aria-expanded', 'false');
 		ino.animate({"left":'-200px'},al);   
 		ino.addClass("isDown");
 		bo.fadeOut();		
@@ -75,6 +75,12 @@ function initAmcf() {
 		} else {
 			hidemenu();
 		}	
+	});
+	$(".nav-button").on('keydown', function(e) {
+		if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+			e.preventDefault();
+			$(this).trigger('click');
+		}
 	});
 	
 // navigation links ------------------
@@ -306,75 +312,7 @@ function initAmcf() {
 
 });
 
-// Subscribe   ----------------------------------------
-
-	$('.subscriptionForm').submit(function(){		
-		var email = $('#subscriptionForm').val();
-		$.ajax({
-			url:'php/subscription.php',
-			type :'POST',
-			dataType:'json',
-			data: {'email': email},success: function(data){
-				if(data.error){
-					$('#error').fadeIn()
-				}
-				else{
-					$('#success').fadeIn();
-					$("#error").hide();}
-				}
-			});
-		return false
-	});
-	
-	$('#subscriptionForm').focus(function(){
-		$('#error').fadeOut();
-		$('#success').fadeOut();	
-	});
-	
-	$('#subscriptionForm').keydown(function(){	
-		$('#error').fadeOut();
-		$('#success').fadeOut();		
-	});	 	
-				
 };
-
-// Contact submit  ----------------------------------------
-
-	$("#submit_btn").click(function(){		
-		var user_name=$('input[name=name]').val();
-		var user_email=$('input[name=email]').val();
-		var user_message=$('textarea[name=message]').val();
-		var proceed=true;
-			if(user_name==""){
-				$('input[name=name]').css('border','1px solid #E75B00');
-				proceed=false
-			}
-			if(user_email==""){
-				$('input[name=email]').css('border','1px solid #E75B00');
-				proceed=false
-			}
-			if(user_message==""){
-				$('textarea[name=message]').css('border','1px solid #E75B00');
-				proceed=false
-			}
-			if(proceed){
-				post_data={'userName':user_name,'userEmail':user_email,'userMessage':user_message};
-				$.post('php/contact_me.php',
-				post_data,
-				function(data){
-					$("#result").hide().html('<div class="success">'+data+'</div>').slideDown(500);
-					$('#contact_form input').val('');
-					$('#contact_form textarea').val('')}).fail(
-						function(err){
-							$("#result").hide().html('<div class="error">'+err.statusText+'</div>').fadeIn(1500)
-					});
-			}
-	});
-	
-	$("#contact_form input, #contact_form textarea").keyup(function(){		
-			$("#contact_form input, #contact_form textarea").css('border','1px solid #101011');
-			$("#result").fadeOut(1500)			
-	});
 
 // Ajax portfolio   ----------------------------------------
 
@@ -531,7 +469,7 @@ function pbGetDict(lang) {
 function pbOpen(idx, $link) {
 	pbCurrent = idx;
 	pbTrigger = ($link && $link.get) ? $link.get(0) || null : null;
-	pbName = $link.find('h4').text().trim() || '';
+	pbName = $link.find('.folio-title').text().trim() || '';
 	var img = $link.find('img').attr('src') || '';
 	$('#projectLightbox').find('.pb-img').attr('src', img).attr('alt', pbName);
 	pbFill();
@@ -588,7 +526,7 @@ function pbFill(newLang) {
 		url: dictItem.url || $tile.attr('data-url') || ''
 	};
 	// tags come from the dictionary when translated, otherwise from the markup
-	var markupTags = $tile.find('h6').first().text() || '';
+	var markupTags = $tile.find('.folio-tag').first().text() || '';
 	var tags = ((d.port && d.port.tags && d.port.tags[pbCurrent]) || markupTags);
 	var lb = (d.port && d.port.lightbox) || {};
 

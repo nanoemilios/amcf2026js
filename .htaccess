@@ -1,0 +1,76 @@
+# AMCF – statische Website (albertocosta.info)
+# Benötigt: mod_rewrite, mod_headers, mod_expires, mod_deflate
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+DirectoryIndex index.html
+
+# ============================================================
+# HTTPS + alte Pfade
+# ============================================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Die frühere Staging-URL auf die Root-Seite umleiten.
+    RewriteRule ^2026(/.*)?$ / [R=301,L]
+
+    # Interne Dateien und alte Schreibendpunkte nie ausliefern, auch wenn sie
+    # versehentlich auf dem Server zurückbleiben.
+    RewriteRule ^(tests|old)/ - [R=404,L]
+    RewriteRule ^(save\.php|admin\.html|php/|data/) - [R=404,L]
+</IfModule>
+
+# ============================================================
+# Sicherheits-Header
+# ============================================================
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
+    # HSTS erst aktivieren, wenn HTTPS dauerhaft sauber läuft:
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# ============================================================
+# Caching & Kompression
+# ============================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/json application/javascript application/xml image/svg+xml
+</IfModule>
+
+# ============================================================
+# Sensible Dateien sperren
+# ============================================================
+<FilesMatch "(^\.|\.bak$|\.md$|\.py$|\.sh$|\.log$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

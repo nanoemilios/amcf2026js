@@ -21,6 +21,7 @@ const load = (src) => {
 for (const lang of ['de-ch', 'en', 'es', 'gl', 'pt']) {
   const read = () => fs.readFileSync(path.join(dir, 'i18n.' + lang + '.js'), 'utf8');
   let s = read();
+  ok(!/job\d+\s*:\s*\{[^}]*\btitle\s*:/.test(s), lang + ': job titles are not translated');
 
   const tags = ['Web / Test', "It's a 'quoted' tag", 'ÄÖÜ / ñ'];
   s = C.setPortTags(s, tags);
@@ -39,11 +40,11 @@ for (const lang of ['de-ch', 'en', 'es', 'gl', 'pt']) {
   ok(L[lang].port.items[0].client === items[0].client, lang + ': item client round trips', L[lang].port.items[0].client);
   ok(L[lang].port.items[0].url === items[0].url, lang + ': item url round trips', L[lang].port.items[0].url);
 
-  s = C.setJobField(read(), 3, 'title', 'Neuer Titel <x> & Co');
+  s = C.setJobField(read(), 3, 'date', 'Neuer Zeitraum');
   ok(s !== null, lang + ': setJobField returned a result');
   s = C.setJobField(s, 2, 'l7', 'Neuer Aufzaehlungspunkt');
   L = load(s);
-  ok(L[lang].resume.job3.title === 'Neuer Titel <x> & Co', lang + ': job3 title', L[lang].resume.job3.title);
+  ok(L[lang].resume.job3.date === 'Neuer Zeitraum', lang + ': job3 date', L[lang].resume.job3.date);
   ok(L[lang].resume.job2.l7 === 'Neuer Aufzaehlungspunkt', lang + ': job2 l7 inserted', L[lang].resume.job2.l7);
   ok(L[lang].resume.job2.text.indexOf('coop.ch') !== -1, lang + ': job2 text untouched');
   ok(L[lang].resume.job1.text.indexOf('Migros') !== -1, lang + ': job1 text still intact');

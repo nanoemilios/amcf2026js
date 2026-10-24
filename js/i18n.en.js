@@ -19,7 +19,7 @@
 			head: 'Who I am',
 			title: 'About Me',
 			intro: 'I am a motivated web designer with experience in all possible fields of IT.',
-			introHtml: '<img src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">I was able to work as a web designer and PC supporter in Spain for 7 years and gathered valuable experience in customer acquisition and consulting in a B2B/B2C environment. Thanks to the variety of customers and their requirements, I became familiar with almost all systems and configurations. I have studied search engine optimisation in depth and am thoroughly familiar with website optimisation. Consulting, selling and installing software and hardware were part of my daily routine, as were designing and managing new design and communication strategies.<br>In my role as team leader at Hug Engineering I had to lead a team and motivate it to peak performance. Among other things, loading and maintaining the reactors was part of my responsibility, as were managing goods in/out, machine operation and transport securing. Ensuring the specified quality requirements was an essential part of my duties.',
+			introHtml: '<img loading="lazy" decoding="async" src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">I was able to work as a web designer and PC supporter in Spain for 7 years and gathered valuable experience in customer acquisition and consulting in a B2B/B2C environment. Thanks to the variety of customers and their requirements, I became familiar with almost all systems and configurations. I have studied search engine optimisation in depth and am thoroughly familiar with website optimisation. Consulting, selling and installing software and hardware were part of my daily routine, as were designing and managing new design and communication strategies.<br>In my role as team leader at Hug Engineering I had to lead a team and motivate it to peak performance. Among other things, loading and maintaining the reactors was part of my responsibility, as were managing goods in/out, machine operation and transport securing. Ensuring the specified quality requirements was an essential part of my duties.',
 			next: 'next',
 			philTitle: 'My Philosophy',
 			philText: 'Be a good person. This sentence has followed me throughout my life and shaped my way of acting.',
@@ -108,24 +108,20 @@
 			},
             job1: {
 				date: '1997 - 1999',
-				title: 'Migros - Switzerland (Warehouse Apprentice)',
-				text: 'At <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> I started my apprenticeship as a warehouse worker and successfully completed it over 2 years.'
+				text: 'At <a href="https://www.migros.ch" target="_blank" rel="noopener" class="company-color">Migros</a> I started my apprenticeship as a warehouse worker and successfully completed it over 2 years.'
 			},
             job2: {
 				date: '1999-2002',
-				title: 'Coop - Suisse (Salesperson)',
-				text: 'At <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Switzerland</a> I had a very educational time and learned a lot about everyday working life.'
+				text: 'At <a href="https://www.coop.ch" target="_blank" rel="noopener" class="company-color">Coop Switzerland</a> I had a very educational time and learned a lot about everyday working life.'
 			},
             job3: {
 				date: '06.2002 - 05.2007',
-				title: 'Hug Engineering AG (Team Leader)',
 				l1: 'Manufacturing, repair and service of catalysts and particulate filters.',
 				l2: 'Quality control',
 				l3: 'Goods in/out administration'
 			},
             job4: {
 				date: '2003 - 2005',
-				title: 'BVS Winterthur (PC Master)',
 				l1: 'Installing and repairing hardware and software',
 				l2: 'Installation and administration of networks',
 				l3: 'Introduction to web design HTML – CSS – JS',
@@ -133,41 +129,34 @@
 			},
             job5: {
 				date: '2005',
-				title: 'Certified Web Designer (EU Standard)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. With over 300 hours there I earned my diploma as web designer and multimedia professional. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spain.',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. With over 300 hours there I earned my diploma as web designer and multimedia professional. <a href="https://cambre.es" target="_blank" rel="noopener" class="company-color">Cambre.es</a> A Coruña - Spain.',
 				l1: 'Web design and multimedia',
 				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
             job6: {
 				date: '08.2008 - 12.2013',
-				title: 'Bipresent.com',
-				text: 'My self-employment as web designer and IT specialist. At <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> I gathered a great deal of experience and knowledge in all of these areas:',
+				text: 'My self-employment as web designer and IT specialist. At Bipresent.com I gathered a great deal of experience and knowledge in all of these areas:',
 				l1: 'Web Design', l2: 'IT Consulting', l3: 'Cash Register Systems', l4: 'eCommerce', l5: 'Branding', l6: 'PC Support', l7: '...'
 			},
             job7: {
 				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'At <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> I regained the physical strength and peace of mind as a production worker that I need to master my tasks.'
+				text: 'At <a href="https://hug-engineering.com" target="_blank" rel="noopener" class="company-color">Hug Engineering AG</a> I regained the physical strength and peace of mind as a production worker that I need to master my tasks.'
 			},
             job8: {
 				date: '07.2014 - 12.2014',
-				title: 'Swiss Post',
-				text: 'At <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> I was responsible for coding parcels and sorting bulk goods in the Frauenfeld parcel centre.'
+				text: 'At <a href="https://www.post.ch" target="_blank" rel="noopener" class="company-color">Post</a> I was responsible for coding parcels and sorting bulk goods in the Frauenfeld parcel centre.'
 			},
             job9: {
 				date: '07.2015 - 04.2019',
-				title: 'Schindler Elevator AG',
-				text: 'At <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Elevator AG</a> I trained as an elevator service technician and have carried out this work in recent years.'
+				text: 'At <a href="https://www.schindler.ch" target="_blank" rel="noopener" class="company-color">Schindler Elevator AG</a> I trained as an elevator service technician and have carried out this work in recent years.'
 			},
             job10: {
 				date: '04.2019 - 09.2020',
-				title: 'Garaventa Lift AG',
-				text: 'At Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) I am responsible for the maintenance and repair of home lifts and lifting platforms. A varied job that brings many challenges.'
+				text: 'At Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" rel="noopener" class="company-color">Garaventa</a>) I am responsible for the maintenance and repair of home lifts and lifting platforms. A varied job that brings many challenges.'
 			},
             job11: {
 				date: '09.2020 - Present',
-				title: 'AS Lifts AG',
-				text: 'At <a href="https://www.lift.ch" target="_blank" class="company-color">AS Lifts AG</a> I further developed as a lift service technician. As a field trainer I advanced to troubleshooter and trained new employees.'
+				text: 'At <a href="https://www.lift.ch" target="_blank" rel="noopener" class="company-color">AS Lifts AG</a> I further developed as a lift service technician. As a field trainer I advanced to troubleshooter and trained new employees.'
 			},
 		},
 		admin: {
@@ -234,13 +223,7 @@
 			item7: 'Item 7',
 			saveEntry: 'Save Entry',
 			cancel: 'Cancel',
-			publish: 'Publish (for all visitors)',
-			publishInfo: 'Every saved change is automatically written to <code>data/projects.js</code> on the server via <code>save.php</code> – all visitors see it on the next page load. (Requires PHP hosting, e.g. Apache/XAMPP. Does not work on purely static hosts like GitHub Pages.)',
-			publishFallback: 'If automatic saving fails (admin message), download the file manually and replace <code>2026/data/projects.js</code>.',
 			downloadFile: 'Download files (index.html + translations)',
-			exportCode: 'Export Code (for dictionaries)',
-			generateCode: 'Generate Code',
-			exportInfo: 'Alternatively: Copy this code into each <code>js/i18n.*.js</code> in the <code>port.items</code> array so the project permanently appears for all visitors (see comment in code).',
 			facts: {
 				name: 'Name:',
 				street: 'Street / No.:',

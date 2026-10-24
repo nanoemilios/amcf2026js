@@ -151,13 +151,7 @@
 			item7: 'Aufzählung Punkt 7',
 			saveEntry: 'Eintrag speichern',
 			cancel: 'Abbrechen',
-			publish: 'Veröffentlichen (für alle Besucher)',
-			publishInfo: 'Jede gespeicherte Änderung wird automatisch über <code>save.php</code> in <code>data/projects.js</code> auf dem Server geschrieben – alle Besucher sehen sie beim nächsten Seitenaufruf. (Voraussetzung: PHP-Hosting, z. B. Apache/XAMPP. Funktioniert nicht auf rein statischen Hosts wie GitHub Pages.)',
-			publishFallback: 'Falls die automatische Speicherung fehlschlägt (Meldung im Admin), lade die Datei manuell herunter und ersetze <code>2026/data/projects.js</code>.',
 			downloadFile: 'Dateien herunterladen (index.html + Übersetzungen)',
-			exportCode: 'Export-Code (für die Wörterbücher)',
-			generateCode: 'Code erzeugen',
-			exportInfo: 'Alternativ: Kopiere diesen Code in jedes <code>js/i18n.*.js</code> in das <code>port.items</code>-Array, damit das Projekt dauerhaft für alle Besucher erscheint (siehe Kommentar im Code).',
 			facts: {
 				name: 'Name:',
 				street: 'Strasse / Hausnr.:',

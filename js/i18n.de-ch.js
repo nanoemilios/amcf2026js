@@ -19,7 +19,7 @@
 			head: 'Wer ich bi',
 			title: 'Über Mich',
 			intro: 'Ich bi en motivierter Webdesigner mit Erfahrig i allne mögleche Bereiche vo de Informatik.',
-			introHtml: '<img src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Ich han während 7 Jahr z\u0027 Spanie als Webdesigner und PC-Supporter chönne schaffe und wärtvolli Erfahrige bi de Kundeakquise und –Beratig im B2B/B2C-Umfeld gsammlet. Dur d Vielfalt vo de Kunde und ihri Aaforderige bi mir mi mit fascht allne System und Konfiguratione vertraut gmacht. Mit em Thema Suchmaschinenoptimierig han ich mich eifach vertieft und bin mit de Websiteoptimierig bestens vertraut. D Beratig, de Verchauf und d Installation vo Soft- und Hardware sind zu mim Alltag worde, genau wie d Entwicklig und d Verwaltig vo nöje Design- und Kommunikationsstrategie.<br>Bi mim Uftrag als Gruppenleiter bi de Hug Engineering han ich es Team müesse füere und debi zu Höchstleischtig motiviere. Unter anderem hei d Bestückig und d Wartig vo de Reaktore zu miner Verantwortig ghört. Au d Verwaltig vom Wareiigang und -usgang, Maschinefüerig und Transportsicherig. D Sicherstellig vo de vorgebne Qualitätsaaforderige isch en wäsentliche Bestandteil vo mine Ufgabe gsi.',
+			introHtml: '<img loading="lazy" decoding="async" src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Ich han während 7 Jahr z\u0027 Spanie als Webdesigner und PC-Supporter chönne schaffe und wärtvolli Erfahrige bi de Kundeakquise und –Beratig im B2B/B2C-Umfeld gsammlet. Dur d Vielfalt vo de Kunde und ihri Aaforderige bi mir mi mit fascht allne System und Konfiguratione vertraut gmacht. Mit em Thema Suchmaschinenoptimierig han ich mich eifach vertieft und bin mit de Websiteoptimierig bestens vertraut. D Beratig, de Verchauf und d Installation vo Soft- und Hardware sind zu mim Alltag worde, genau wie d Entwicklig und d Verwaltig vo nöje Design- und Kommunikationsstrategie.<br>Bi mim Uftrag als Gruppenleiter bi de Hug Engineering han ich es Team müesse füere und debi zu Höchstleischtig motiviere. Unter anderem hei d Bestückig und d Wartig vo de Reaktore zu miner Verantwortig ghört. Au d Verwaltig vom Wareiigang und -usgang, Maschinefüerig und Transportsicherig. D Sicherstellig vo de vorgebne Qualitätsaaforderige isch en wäsentliche Bestandteil vo mine Ufgabe gsi.',
 			next: 'wiiter',
 			philTitle: 'Mini Philosophy',
 			philText: 'Syg e gute Mensch. D\u00e4 Satz het mi mis ganz Läbe begleitet und mini Handl\u00e4ngsweis prägt.',
@@ -108,24 +108,20 @@
 			},
             job1: {
 				date: '1997 - 1999',
-				title: 'Migros - Schwiiz (Lagerischti Lehri)',
-				text: 'Bi de <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> ha ich mini Lehre als Lagerist agfange und während 2 Jahr erfolgriich absolviert.'
+				text: 'Bi de <a href="https://www.migros.ch" target="_blank" rel="noopener" class="company-color">Migros</a> ha ich mini Lehre als Lagerist agfange und während 2 Jahr erfolgriich absolviert.'
 			},
             job2: {
 				date: '1999-2002',
-				title: 'Coop - Suisse (Verkäufer)',
-				text: 'Bi <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Schwiiz</a> ha ich e sehr lehrriichi Zit erläbt und vil über de Alltag im Arbetäsläbe glehrt.'
+				text: 'Bi <a href="https://www.coop.ch" target="_blank" rel="noopener" class="company-color">Coop Schwiiz</a> ha ich e sehr lehrriichi Zit erläbt und vil über de Alltag im Arbetäsläbe glehrt.'
 			},
             job3: {
 				date: '06.2002 - 05.2007',
-				title: 'Hug Engineering AG (Gruppeliiter)',
 				l1: 'Fabrikation, Instandsetzig und Service vo Katalysatore und Russpartikelfilter.',
 				l2: 'Qualitätskontrolle',
 				l3: 'Ware i-/usgang Verwaltig'
 			},
             job4: {
 				date: '2003 - 2005',
-				title: 'BVS Winterthur (PC Master)',
 				l1: 'Installiere und repariere vo Hardware und Software',
 				l2: 'Installation und Verwaltig vo Netzwerk',
 				l3: 'Iifüehrig is Webdesign HTML – CSS – JS',
@@ -133,41 +129,34 @@
 			},
             job5: {
 				date: '2005',
-				title: 'Dipl. Webdesigner (EU Norm)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. Döt ha ich mit über 300 Stunde mis Diplom als Webdesigner und Multimedia gholt. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - Spanien.',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. Döt ha ich mit über 300 Stunde mis Diplom als Webdesigner und Multimedia gholt. <a href="https://cambre.es" target="_blank" rel="noopener" class="company-color">Cambre.es</a> A Coruña - Spanien.',
 				l1: 'Webdesign und Multimedia',
 				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
             job6: {
 				date: '08.2008 - 12.2013',
-				title: 'Bipresent.com',
-				text: 'Mini sälbständigi Tätigkeit als Webdesigner und Informatiker. Bi <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> ha ich in aune dene Beriich sehr vil Erfahrig und Kenntnis gsammlet:',
+				text: 'Mini sälbständigi Tätigkeit als Webdesigner und Informatiker. Bi Bipresent.com ha ich in aune dene Beriich sehr vil Erfahrig und Kenntnis gsammlet:',
 				l1: 'Webdesign', l2: 'IT-Beratig', l3: 'Kassesystem', l4: 'eCommerce', l5: 'Branding', l6: 'PC-Support', l7: '...'
 			},
             job7: {
 				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'Bi de <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> ha ich als Produktionsmitarbeiter wider die körperlichi Stärchi und de Seeläfride gfunde, wo ich bruche, zum mini Ufgabe schaffe.'
+				text: 'Bi de <a href="https://hug-engineering.com" target="_blank" rel="noopener" class="company-color">Hug Engineering AG</a> ha ich als Produktionsmitarbeiter wider die körperlichi Stärchi und de Seeläfride gfunde, wo ich bruche, zum mini Ufgabe schaffe.'
 			},
             job8: {
 				date: '07.2014 - 12.2014',
-				title: 'D Schwiizerisch Post',
-				text: 'Bi de <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> bin ich im Paketzentrum Frauefeld zuständig gsi für s Codiere vo de Paket und s Sortiere vo Sperrgut.'
+				text: 'Bi de <a href="https://www.post.ch" target="_blank" rel="noopener" class="company-color">Post</a> bin ich im Paketzentrum Frauefeld zuständig gsi für s Codiere vo de Paket und s Sortiere vo Sperrgut.'
 			},
             job9: {
 				date: '07.2015 - 04.2019',
-				title: 'Schindler Lifte AG',
-				text: 'Bi de <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Ufzüg AG</a> ha ich mich als Servicetechniker Lift usbilde la und die Arbeit in de letschte Jahr au usgübt.'
+				text: 'Bi de <a href="https://www.schindler.ch" target="_blank" rel="noopener" class="company-color">Schindler Ufzüg AG</a> ha ich mich als Servicetechniker Lift usbilde la und die Arbeit in de letschte Jahr au usgübt.'
 			},
             job10: {
 				date: '04.2019 - 09.2020',
-				title: 'Garaventa Lift AG',
-				text: 'Bi de Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) bi ich zuständig für de Unterhalt und Reparature a Homelifte und Hebebühne. E abwechsligsriichi Tätigkeit, wo vil Useforderige mit sich bringt.'
+				text: 'Bi de Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" rel="noopener" class="company-color">Garaventa</a>) bi ich zuständig für de Unterhalt und Reparature a Homelifte und Hebebühne. E abwechsligsriichi Tätigkeit, wo vil Useforderige mit sich bringt.'
 			},
             job11: {
 				date: '09.2020 - Hüt',
-				title: 'AS Lifte AG',
-				text: 'Bei der <a href="https://www.lift.ch" target="_blank" class="company-color">AS Lifte AG</a> ha ich mich als Servicetechniker Lift wiiter gfaltet. Als Feldtrainer cha ich zum Troubleshooter ufstiege und neu Lüt aarbeite.'
+				text: 'Bei der <a href="https://www.lift.ch" target="_blank" rel="noopener" class="company-color">AS Lifte AG</a> ha ich mich als Servicetechniker Lift wiiter gfaltet. Als Feldtrainer cha ich zum Troubleshooter ufstiege und neu Lüt aarbeite.'
 			},
 		},
 		admin: {
@@ -234,13 +223,7 @@
 			item7: 'Auzählig Punkt 7',
 			saveEntry: 'Aitrag speichere',
 			cancel: 'Abbruch',
-			publish: 'Veröffentliche (für alli Besucher)',
-			publishInfo: 'Iede gspeicherti Änderig wird automatisch über <code>save.php</code> in <code>data/projects.js</code> uf em Server gschriibe – alli Besucher sehnd si beim näschte Seitlade. (Voraussetzig: PHP-Hosting, z. B. Apache/XAMPP. Funktioniert nöd uf rein statische Hosts wie GitHub Pages.)',
-			publishFallback: 'Falls d automatisch Speichere fehlschlaat (Meldig im Admin), lad d Datei manuell ab und ersetz <code>2026/data/projects.js</code>.',
 			downloadFile: 'Dateie abelade (index.html + Übersetzige)',
-			exportCode: 'Export-Code (für d Wörterbüech)',
-			generateCode: 'Code erzeuge',
-			exportInfo: 'Alternativ: Kopier den Code in jedes <code>js/i18n.*.js</code> in ds <code>port.items</code>-Array, damit s Projekt dauerhaft für alli Besucher ersichtlich isch (sih Kommentar im Code).',
 			facts: {
 				name: 'Name:',
 				street: 'Strass / Huusnr.:',

@@ -79,12 +79,13 @@ ok(jobs[11].title === 'AS Aufzüge AG', 'job11 intact after removal');
 ok(C.hasRegions(rm.html), 'regions intact after removing a job');
 
 // ---------- dictionary side ----------
-const dictSrc = C.addJobToDict(origEn, 12, { date: '2026', title: 'New Company' });
+const dictSrc = C.addJobToDict(origEn, 12, { date: '2026' });
 ok(dictSrc !== null, 'addJobToDict returned a result');
 let EN = evalDict(dictSrc);
 ok(EN.en.resume.job12 !== undefined, 'job12 added to en dict', JSON.stringify(EN.en.resume.job12));
-ok(EN.en.resume.job12.title === 'New Company', 'job12 title written');
-ok(EN.en.resume.job11.title.indexOf('Garaventa') === -1 && EN.en.resume.job10 !== undefined,
+ok(EN.en.resume.job12.date === '2026', 'job12 date written');
+ok(EN.en.resume.job12.title === undefined, 'job12 has no translated title (titles stay German)');
+ok(EN.en.resume.job11 !== undefined && EN.en.resume.job10 !== undefined,
    'existing en jobs intact');
 ok(Object.keys(EN.en.resume).filter((k) => /^job/.test(k)).length === 12, 'en dict now has 12 jobs',
    Object.keys(EN.en.resume).filter((k) => /^job/.test(k)).length);

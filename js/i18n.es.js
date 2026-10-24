@@ -19,7 +19,7 @@
 			head: 'Quién soy',
 			title: 'Sobre Mí',
 			intro: 'Soy un diseñador web motivado con experiencia en todos los ámbitos posibles de la informática.',
-			introHtml: '<img src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Pude trabajar durante 7 años en España como diseñador web y soporte de PC, y reuní valiosa experiencia en la captación y el asesoramiento de clientes en el entorno B2B/B2C. Gracias a la variedad de clientes y sus requisitos, me familiaricé con casi todos los sistemas y configuraciones. He estudiado a fondo el posicionamiento en buscadores y domino perfectamente la optimización de sitios web. El asesoramiento, la venta y la instalación de software y hardware formaban parte de mi día a día, así como el diseño y la gestión de nuevas estrategias de diseño y comunicación.<br>En mi labor como jefe de grupo en Hug Engineering tuve que dirigir un equipo y motivarlo para lograr el máximo rendimiento. Entre otras cosas, cargar y mantener los reactores formaba parte de mi responsabilidad, así como la gestión de la entrada y salida de mercancías, el manejo de maquinaria y la sujeción del transporte. Garantizar los requisitos de calidad especificados era una parte esencial de mis tareas.',
+			introHtml: '<img loading="lazy" decoding="async" src="images/ipad7.png" class="present-block animaper right" alt="Alberto M. Costa" title="Alberto M. Costa">Pude trabajar durante 7 años en España como diseñador web y soporte de PC, y reuní valiosa experiencia en la captación y el asesoramiento de clientes en el entorno B2B/B2C. Gracias a la variedad de clientes y sus requisitos, me familiaricé con casi todos los sistemas y configuraciones. He estudiado a fondo el posicionamiento en buscadores y domino perfectamente la optimización de sitios web. El asesoramiento, la venta y la instalación de software y hardware formaban parte de mi día a día, así como el diseño y la gestión de nuevas estrategias de diseño y comunicación.<br>En mi labor como jefe de grupo en Hug Engineering tuve que dirigir un equipo y motivarlo para lograr el máximo rendimiento. Entre otras cosas, cargar y mantener los reactores formaba parte de mi responsabilidad, así como la gestión de la entrada y salida de mercancías, el manejo de maquinaria y la sujeción del transporte. Garantizar los requisitos de calidad especificados era una parte esencial de mis tareas.',
 			next: 'siguiente',
 			philTitle: 'Mi Filosofía',
 			philText: 'Sé una buena persona. Esta frase me ha acompañado toda mi vida y ha formado mi forma de actuar.',
@@ -108,24 +108,20 @@
 			},
             job1: {
 				date: '1997 - 1999',
-				title: 'Migros - Suiza (Aprendiz de Almacén)',
-				text: 'En <a href="https://www.migros.ch" target="_blank" class="company-color">Migros</a> comencé mi aprendizaje como almacenero y lo completé con éxito en 2 años.'
+				text: 'En <a href="https://www.migros.ch" target="_blank" rel="noopener" class="company-color">Migros</a> comencé mi aprendizaje como almacenero y lo completé con éxito en 2 años.'
 			},
             job2: {
 				date: '1999-2002',
-				title: 'Coop - Suisse (Vendedor)',
-				text: 'En <a href="https://www.coop.ch" target="_blank" class="company-color">Coop Suiza</a> viví una época muy enriquecedora y aprendí mucho sobre el día a día de la vida laboral.'
+				text: 'En <a href="https://www.coop.ch" target="_blank" rel="noopener" class="company-color">Coop Suiza</a> viví una época muy enriquecedora y aprendí mucho sobre el día a día de la vida laboral.'
 			},
             job3: {
 				date: '06.2002 - 05.2007',
-				title: 'Hug Engineering AG (Jefe de Equipo)',
 				l1: 'Fabricación, reparación y servicio de catalizadores y filtros de partículas.',
 				l2: 'Control de calidad',
 				l3: 'Administración de entrada/salida de mercancías'
 			},
             job4: {
 				date: '2003 - 2005',
-				title: 'BVS Winterthur (PC Master)',
 				l1: 'Instalación y reparación de hardware y software',
 				l2: 'Instalación y administración de redes',
 				l3: 'Introducción al diseño web HTML – CSS – JS',
@@ -133,41 +129,34 @@
 			},
             job5: {
 				date: '2005',
-				title: 'Diseñador Web Certificado (Estándar EU)',
-				text: 'Centro Municipal de Formación, Cambre, A Coruña. Allí obtuve con más de 300 horas mi diploma como diseñador web y multimedia. <a href="https://www.cambre.org" target="_blank" class="company-color">Cambre.org</a> A Coruña - España.',
+				text: 'Centro Municipal de Formación, Cambre, A Coruña. Allí obtuve con más de 300 horas mi diploma como diseñador web y multimedia. <a href="https://cambre.es" target="_blank" rel="noopener" class="company-color">Cambre.es</a> A Coruña - España.',
 				l1: 'Diseño web y multimedia',
 				l2: 'HTML – CSS – JS – PHP - SQL'
 			},
             job6: {
 				date: '08.2008 - 12.2013',
-				title: 'Bipresent.com',
-				text: 'Mi actividad autónoma como diseñador web e informático. En <a href="https://www.bipresent.com" target="_blank" class="company-color">Bipresent.com</a> he acumulado mucha experiencia y conocimientos en todas estas áreas:',
+				text: 'Mi actividad autónoma como diseñador web e informático. En Bipresent.com he acumulado mucha experiencia y conocimientos en todas estas áreas:',
 				l1: 'Diseño web', l2: 'Consultoría IT', l3: 'Sistemas de caja', l4: 'eCommerce', l5: 'Branding', l6: 'Soporte PC', l7: '...'
 			},
             job7: {
 				date: '06.2013 - 06.2014',
-				title: 'Hug Engineering AG',
-				text: 'En <a href="https://www.hug-eng.ch" target="_blank" class="company-color">Hug Engineering AG</a> recuperé como operario de producción la fuerza física y la paz interior que necesito para dominar mis tareas.'
+				text: 'En <a href="https://hug-engineering.com" target="_blank" rel="noopener" class="company-color">Hug Engineering AG</a> recuperé como operario de producción la fuerza física y la paz interior que necesito para dominar mis tareas.'
 			},
             job8: {
 				date: '07.2014 - 12.2014',
-				title: 'Correos Suizos',
-				text: 'En <a href="https://www.post.ch" target="_blank" class="company-color">Post</a> fui responsable de codificar los paquetes y clasificar la mercancía voluminosa en el centro de paquetería de Frauenfeld.'
+				text: 'En <a href="https://www.post.ch" target="_blank" rel="noopener" class="company-color">Post</a> fui responsable de codificar los paquetes y clasificar la mercancía voluminosa en el centro de paquetería de Frauenfeld.'
 			},
             job9: {
 				date: '07.2015 - 04.2019',
-				title: 'Schindler Ascensores AG',
-				text: 'En <a href="https://www.schindler.ch" target="_blank" class="company-color">Schindler Ascensores AG</a> me formé como técnico de servicio de ascensores y he desempeñado este trabajo en los últimos años.'
+				text: 'En <a href="https://www.schindler.ch" target="_blank" rel="noopener" class="company-color">Schindler Ascensores AG</a> me formé como técnico de servicio de ascensores y he desempeñado este trabajo en los últimos años.'
 			},
             job10: {
 				date: '04.2019 - 09.2020',
-				title: 'Garaventa Lift AG',
-				text: 'En Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" class="company-color">Garaventa</a>) soy responsable del mantenimiento y reparación de salvaescaleras y plataformas elevadoras. Un trabajo variado que trae consigo muchos retos.'
+				text: 'En Garaventa Lift AG (<a href="https://www.garaventalift.ch" target="_blank" rel="noopener" class="company-color">Garaventa</a>) soy responsable del mantenimiento y reparación de salvaescaleras y plataformas elevadoras. Un trabajo variado que trae consigo muchos retos.'
 			},
             job11: {
 				date: '09.2020 - Actualidad',
-				title: 'AS Ascensores AG',
-				text: 'En <a href="https://www.lift.ch" target="_blank" class="company-color">AS Ascensores AG</a> me desarrollé más como técnico de ascensores. Como formador de campo pude ascender a solucionador de problemas y formar nuevos empleados.'
+				text: 'En <a href="https://www.lift.ch" target="_blank" rel="noopener" class="company-color">AS Ascensores AG</a> me desarrollé más como técnico de ascensores. Como formador de campo pude ascender a solucionador de problemas y formar nuevos empleados.'
 			},
 		},
 		admin: {
@@ -234,13 +223,7 @@
 			item7: 'Elemento 7',
 			saveEntry: 'Guardar Entrada',
 			cancel: 'Cancelar',
-			publish: 'Publicar (para todos los visitantes)',
-			publishInfo: 'Cada cambio guardado se escribe automáticamente en <code>data/projects.js</code> en el servidor mediante <code>save.php</code> – todos los visitantes lo ven en la próxima carga de página. (Requiere hosting PHP, p.ej. Apache/XAMPP. No funciona en hosts puramente estáticos como GitHub Pages.)',
-			publishFallback: 'Si falla el guardado automático (mensaje en Admin), descarga el archivo manualmente y reemplaza <code>2026/data/projects.js</code>.',
 			downloadFile: 'Descargar archivos (index.html + traducciones)',
-			exportCode: 'Código de Exportación (para diccionarios)',
-			generateCode: 'Generar Código',
-			exportInfo: 'Alternativamente: Copia este código en cada <code>js/i18n.*.js</code> en el array <code>port.items</code> para que el proyecto aparezca permanentemente para todos los visitantes (ver comentario en el código).',
 			facts: {
 				name: 'Nombre:',
 				street: 'Calle / Nº:',

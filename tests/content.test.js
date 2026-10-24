@@ -56,7 +56,7 @@ ok(rp[0].desc === 'Beschreibung <mit> & Ampersand', 'desc round trips', rp[0].de
 ok(rp[0].url === 'https://example.com/?a=1&b=2', 'url with & round trips', rp[0].url);
 ok(rp[0].tags === 'neu / test', 'tags round trip', rp[0].tags);
 ok(rp[0].category === 'category_2', 'category preserved', rp[0].category);
-ok(rp[0].image === 'images/folio/xyt.png', 'image preserved', rp[0].image);
+ok(rp[0].image === 'images/folio/xyt.jpg', 'image preserved', rp[0].image);
 ok(rp[7].name === 'Naturania.es', 'other projects untouched', rp[7].name);
 ok(rj[1].title === 'Titel mit <tag>', 'job title escaped+round trips', rj[1].title);
 ok(rj[1].text === 'Text <b>fett</b>', 'job html text round trips', rj[1].text);
