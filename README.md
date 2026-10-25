@@ -1,5 +1,7 @@
 # AMCF2026js
 
+**Version: 0.8**
+
 Statische Variante der Portfolio-/CV-Seite von **Alberto M. Costa Ferreiro** –
 ohne PHP und ohne Server-Schreibendpunkt.
 
@@ -16,6 +18,25 @@ ohne PHP und ohne Server-Schreibendpunkt.
 4. „Ordner wählen“ und den Projektordner freigeben, dann „Speichern“.
    Ohne File-System-Access-API (z. B. Firefox) stattdessen „Dateien herunterladen“
    und die Dateien manuell ersetzen.
+5. Im Reiter „Hintergründe“ lassen sich die drei Start-Slider-Bilder und das
+   gemeinsame Hintergrundbild der Inhaltsbereiche ändern. Dafür muss oben
+   `index.html (Deutsch)` ausgewählt sein. Uploads landen in `images/bg/`;
+   beim Speichern werden `index.html` und bei Bedarf `css/style.css` aktualisiert.
+   Die Header-Texte der drei Start-Slides lassen sich dort ebenfalls in der
+   jeweils ausgewählten Sprache bearbeiten; eine Vorschau zeigt direkt beim
+   jeweiligen Text das zugehörige Hintergrundbild. Die Haupttitel erlauben HTML.
+6. Der Reiter „Über mich“ bearbeitet die Texte und Kompetenznamen für die
+   ausgewählte Sprache. In der deutschen Quelle lassen sich zusätzlich die
+   sieben gemeinsamen Kompetenz-Niveaus (0–100 %) ändern. Die Einleitung
+   akzeptiert HTML; gespeichert werden die Übersetzungsdatei und bei Deutsch
+   zusätzlich die Fallback-Texte in `index.html`.
+7. Der Reiter „Meine Kenntnisse“ bearbeitet Überschrift, Navigationslabels und
+   Titel, Untertitel sowie Beschreibungen der drei Kenntnis-/Dienstleistungsbereiche
+   für die ausgewählte Sprache. Bei Deutsch werden zusätzlich die Fallback-Texte
+   in `index.html` aktualisiert.
+   Bereiche lassen sich ergänzen oder vom Ende her entfernen (mindestens 1,
+   höchstens 5; standardmäßig 3). Die Navigationsbuttons teilen sich die
+   verfügbare Breite gleichmäßig.
 
 Es gibt bewusst **keinen** PHP-Endpunkt: Die Seite ist rein statisch, und ein
 öffentlich erreichbarer Schreib-Endpunkt wäre eine Sicherheitslücke.

@@ -14,10 +14,17 @@
 	}
 
 	var PW_HASH = '6db70435647eeba1749000dfcb18e0bbe1af1997fd14ef0361e305f34b17ad6e';
-	var LANGS = ['de-ch', 'en', 'es', 'gl', 'pt'];
+	var LANGS = ['de', 'de-ch', 'en', 'es', 'gl', 'pt'];
 	var JOB_FIELDS = ['date', 'title', 'text', 'l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7'];
 	var FACT_VALUE_KEYS = ['name', 'address2', 'web', 'email', 'tel', 'nationV', 'birthV', 'licenseV', 'civilV', 'permitV'];
 	var FACT_LABEL_KEYS = ['name', 'address', 'web', 'email', 'tel', 'nation', 'birth', 'license', 'civil', 'permit'];
+	var ABOUT_KEYS = ['head', 'title', 'introHtml', 'philTitle', 'philText', 'missTitle', 'missText', 'skillsTitle'];
+	var SLIDE_FIELDS = [
+		{ slide: 1, key: 'kicker' }, { slide: 1, key: 'h1' }, { slide: 1, key: 'sub' },
+		{ slide: 2, key: 'kicker' }, { slide: 2, key: 'h1' }, { slide: 2, key: 'sub' },
+		{ slide: 3, key: 'kicker' }, { slide: 3, key: 'title' }, { slide: 3, key: 'sub' }
+	];
+	var SKILL_COUNT = 7;
 	var CATEGORIES = [
 		{ v: 'category_1', key: 'admin.cat.web' },
 		{ v: 'category_2', key: 'admin.cat.ecommerce' },
@@ -28,6 +35,7 @@
 	var state = {
 		target: 'source',
 		indexHtml: '',
+		styleCss: '',
 		dicts: {},
 		model: null,
 		dirty: false
@@ -69,7 +77,10 @@
 	/* ---------- loading ---------- */
 	function loadAll() {
 		$('acMsg').className = 'ac-msg';
-		var jobs = [fetchText('index.html').then(function (txt) { state.indexHtml = txt; })];
+		var jobs = [
+			fetchText('index.html').then(function (txt) { state.indexHtml = txt; }),
+			fetchText('css/style.css').then(function (txt) { state.styleCss = txt; })
+		];
 		LANGS.forEach(function (lang) {
 			jobs.push(fetchText('js/i18n.' + lang + '.js').then(function (txt) { state.dicts[lang] = txt; }));
 		});
@@ -82,7 +93,7 @@
 				if (el) { el.disabled = false; }
 			});
 			$('acMsg').className = 'ac-msg ok';
-			$('acMsg').textContent = 'Geladen: index.html + ' + LANGS.length + ' Übersetzungsdateien.';
+			$('acMsg').textContent = 'Geladen: index.html, css/style.css + ' + LANGS.length + ' Übersetzungsdateien.';
 		}).catch(function (e) {
 			$('acMsg').className = 'ac-msg err';
 			$('acMsg').textContent = t('admin.loadFailed', 'Laden fehlgeschlagen') + ': ' + e.message;
@@ -94,23 +105,35 @@
 		if (state.target === 'source') {
 			state.model = C.parse(state.indexHtml);
 			state.model.isSource = true;
+			state.model.backgrounds = C.parseBackgrounds(state.indexHtml, state.styleCss);
+			var sourceDict = readDictionary(state.dicts.de);
+			state.model.slides = readSlides(sourceDict);
+			state.model.about = readAbout(sourceDict);
+			state.model.skills = sourceDict.skills.slice();
+			state.model.serviceCount = C.parseServiceCount(state.indexHtml);
+			state.model.services = readServices(sourceDict, state.model.serviceCount);
+			state.model.skillLevels = C.parseSkillLevels(state.indexHtml);
 			// entry images live in the markup, so they are only editable in the source
 			state.model.images = C.parseJobImages(state.indexHtml);
 			return;
 		}
 		var lang = state.target;
-		var sandbox = { window: {} };
+		var D;
 		try {
-			// Evaluate a copy so we read real values without touching the loaded page.
-			var fn = new Function('window', state.dicts[lang]);
-			fn(sandbox.window);
+			D = readDictionary(state.dicts[lang]);
 		} catch (e) {
 			state.model = null;
 			return;
 		}
-		var D = (sandbox.window.AMCF_I18N_LANGS && sandbox.window.AMCF_I18N_LANGS[lang]) || {};
 		var base = C.parse(state.indexHtml);
 		var m = { projects: [], jobs: {}, facts: {}, images: {}, jobKeys: {}, isSource: false };
+		m.backgrounds = C.parseBackgrounds(state.indexHtml, state.styleCss);
+		m.slides = readSlides(D);
+		m.about = readAbout(D);
+		m.skills = D.skills.slice();
+		m.serviceCount = C.parseServiceCount(state.indexHtml);
+		m.services = readServices(D, m.serviceCount);
+		m.skillLevels = C.parseSkillLevels(state.indexHtml);
 		var items = (D.port && D.port.items) || [];
 		var tags = (D.port && D.port.tags) || [];
 		base.projects.forEach(function (p, i) {
@@ -146,6 +169,37 @@
 		state.model = m;
 	}
 
+	function readDictionary(source, language) {
+		var sandbox = { window: {} };
+		var fn = new Function('window', source);
+		fn(sandbox.window);
+		var lang = language || (state.target === 'source' ? 'de' : state.target);
+		return (sandbox.window.AMCF_I18N_LANGS && sandbox.window.AMCF_I18N_LANGS[lang]) || {};
+	}
+
+	function readAbout(dictionary) {
+		var values = dictionary.about || {};
+		var about = {};
+		ABOUT_KEYS.forEach(function (key) { about[key] = values[key] || ''; });
+		if (!Array.isArray(dictionary.skills) || dictionary.skills.length !== SKILL_COUNT) {
+			throw new Error('Expected ' + SKILL_COUNT + ' skills in i18n dictionary');
+		}
+		return about;
+	}
+	function readServices(dictionary, count) {
+		var values = dictionary.services || {};
+		var services = {};
+		C.serviceKeys(count).forEach(function (key) {
+			services[key] = values[key] === undefined ? '' : values[key];
+		});
+		return services;
+	}
+	function readSlides(dictionary) {
+		var slides = {};
+		[1, 2, 3].forEach(function (number) { slides[number] = dictionary['slide' + number] || {}; });
+		return slides;
+	}
+
 	/* ---------- rendering ---------- */
 	function label(key, fallback) { return escHtml(t(key, fallback)); }
 
@@ -154,7 +208,7 @@
 			$('acMsg').className = 'ac-msg err';
 			$('acMsg').textContent = t('admin.loadFailed', 'Laden fehlgeschlagen') +
 				': could not read ' + (state.target === 'source' ? 'index.html' : 'js/i18n.' + state.target + '.js');
-			['acPanelProjects', 'acPanelJobs', 'acPanelFacts'].forEach(function (id) {
+			['acPanelProjects', 'acPanelJobs', 'acPanelFacts', 'acPanelBackgrounds', 'acPanelAbout', 'acPanelServices'].forEach(function (id) {
 				var el = $(id);
 				if (el) { el.innerHTML = ''; }
 			});
@@ -163,6 +217,9 @@
 		renderProjects();
 		renderJobs();
 		renderFacts();
+		renderBackgrounds();
+		renderAbout();
+		renderServices();
 		updateHint();
 		bindPanelActions();
 	}
@@ -174,6 +231,32 @@
 		if (addP) { addP.addEventListener('click', addProject); }
 		var addJ = $('acAddJob');
 		if (addJ) { addJ.addEventListener('click', addJob); }
+		var addService = $('acPanelServices').querySelector('[data-service-action="add"]');
+		if (addService) { addService.addEventListener('click', function () { changeServiceCount(1); }); }
+		var removeService = $('acPanelServices').querySelector('[data-service-action="remove"]');
+		if (removeService) { removeService.addEventListener('click', function () { changeServiceCount(-1); }); }
+	}
+
+	function changeServiceCount(delta) {
+		var model = collect();
+		var next = model.serviceCount + delta;
+		if (next < 1 || next > 5) { return; }
+		if (delta > 0) {
+			model.services['box' + next] = '';
+			model.services['s' + next + 'title'] = '';
+			model.services['s' + next + 'sub'] = '';
+			model.services['s' + next + 'text'] = '';
+		} else {
+			delete model.services['box' + model.serviceCount];
+			delete model.services['s' + model.serviceCount + 'title'];
+			delete model.services['s' + model.serviceCount + 'sub'];
+			delete model.services['s' + model.serviceCount + 'text'];
+		}
+		model.serviceCount = next;
+		state.model = model;
+		renderAll();
+		$('acMsg').className = 'ac-msg info';
+		$('acMsg').textContent = 'Änderung noch nicht gespeichert – bitte Speichern.';
 	}
 
 	function bindDelegates() {
@@ -205,6 +288,17 @@
 			pHost2.addEventListener('change', function (e) {
 				if (!e.target.matches('input[type=file][data-upproject]')) { return; }
 				handleProjectUpload(e.target, parseInt(e.target.getAttribute('data-upproject'), 10));
+			});
+		}
+		var bgHost = $('acPanelBackgrounds');
+		if (bgHost) {
+			bgHost.addEventListener('input', function (e) {
+				var match = /^acBgSlide([1-3])$/.exec(e.target.id || '');
+				if (match) { updateSlidePreview(Number(match[1]), e.target.value); }
+			});
+			bgHost.addEventListener('change', function (e) {
+				if (!e.target.matches('input[type=file][data-upbackground]')) { return; }
+				handleBackgroundUpload(e.target, e.target.getAttribute('data-upbackground'));
 			});
 		}
 	}
@@ -313,7 +407,7 @@
 		var isSrc = state.target === 'source';
 		var keys = isSrc ? FACT_VALUE_KEYS : FACT_LABEL_KEYS;
 		var html = '<p class="ac-hint">' + (isSrc
-			? 'Die Werte stehen als data-fv in index.html.'
+			? 'Die Werte stehen als data-fv in index.html und erscheinen auch im Kontaktbereich unten.'
 			: 'Die Beschriftungen stehen als resume.facts.* in der Übersetzung.') + '</p><div class="admin-grid">';
 		keys.forEach(function (k) {
 			// human fallback so a missing dictionary key never shows a raw key name
@@ -321,6 +415,137 @@
 		});
 		html += '</div>';
 		host.innerHTML = html;
+	}
+
+	function backgroundField(key, labelKey, value, isSrc) {
+		var id = 'acBg' + key;
+		var uploadId = id + 'Upload';
+		var disabled = isSrc ? '' : ' disabled';
+		var uploadLabel = label('admin.backgroundUpload', 'Hintergrundbild hochladen');
+		return '<div class="admin-field ac-bg-field"><label for="' + id + '">' +
+			label(labelKey, key) + '</label><input type="text" id="' + id + '" value="' +
+			C.attrEsc(value) + '" placeholder="images/bg/bild.jpg"' + disabled + '>' +
+			'<label for="' + uploadId + '">' + uploadLabel + '</label>' +
+			'<input type="file" id="' + uploadId + '" accept="image/*" data-upbackground="' +
+			key + '" aria-label="' + uploadLabel + '"' + disabled + '></div>';
+	}
+
+	function renderBackgrounds() {
+		var host = $('acPanelBackgrounds');
+		var isSrc = state.target === 'source';
+		var html = '<p class="ac-hint">' +
+			label('admin.backgroundsHelp', 'Änderungen werden in index.html und css/style.css gespeichert.') +
+			'</p>';
+		if (!isSrc) {
+			html += '<p class="ac-hint">' +
+				label('admin.backgroundsSourceOnly', 'Zum Ändern bitte oben index.html (Deutsch) auswählen.') +
+				'</p>';
+		}
+		html += backgroundField('Sections', 'admin.sectionsBackground', state.model.backgrounds.sections, isSrc);
+		html += '<div class="ac-about-form"><h3 class="ac-about-heading">' +
+			label('admin.headerTexts', 'Header-Texte der Start-Slides') + '</h3>';
+		[1, 2, 3].forEach(function (number) {
+			var slide = state.model.slides[number] || {};
+			var imagePath = state.model.backgrounds.slides[number - 1];
+			html += '<h3 class="ac-about-heading">' + label('admin.slideHeader', 'Slide') +
+				' ' + number + '</h3>';
+			html += '<div class="ac-slide-header-editor"><div class="ac-slide-image-column"><img class="ac-slide-preview" id="acSlidePreview' +
+				number + '" src="' + C.attrEsc(imagePath) + '" alt="' +
+				label('admin.slidePreview', 'Hintergrundvorschau Slide') + ' ' + number + '">' +
+				backgroundField('Slide' + number, 'admin.slide' + number + 'Background', imagePath, isSrc) +
+				'</div><div class="ac-about-form">';
+			html += aboutField('admin.slideKicker', 'slide' + number + '_kicker', slide.kicker || '');
+			html += aboutField(number === 3 ? 'admin.slidePlainTitle' : 'admin.slideTitle',
+				'slide' + number + (number === 3 ? '_title' : '_h1'),
+				number === 3 ? (slide.title || '') : (slide.h1 || ''),
+				number === 3 ? {} : { multiline: true, rows: 3 });
+			html += aboutField('admin.slideSubtitle', 'slide' + number + '_sub', slide.sub || '');
+			html += '</div></div>';
+		});
+		html += '</div>';
+		host.innerHTML = html;
+	}
+
+	function updateSlidePreview(number, path) {
+		var preview = $('acSlidePreview' + number);
+		if (!preview) { return; }
+		preview.hidden = !String(path || '').trim();
+		if (path) { preview.setAttribute('src', path); }
+	}
+
+	function renderAbout() {
+		var host = $('acPanelAbout');
+		var isSrc = state.target === 'source';
+		var html = '<p class="ac-hint">' +
+			label('admin.aboutHelp', 'Bearbeite Texte und Kenntnisse der Über-mich-Sektion für die ausgewählte Sprache.') +
+			'</p><div class="ac-about-form">';
+		html += aboutField('admin.aboutHead', 'about_head', state.model.about.head);
+		html += aboutField('admin.aboutTitle', 'about_title', state.model.about.title);
+		html += aboutField('admin.aboutIntro', 'about_introHtml', state.model.about.introHtml,
+			{ multiline: true, rows: 10 });
+		html += aboutField('admin.aboutPhilTitle', 'about_philTitle', state.model.about.philTitle);
+		html += aboutField('admin.aboutPhilText', 'about_philText', state.model.about.philText,
+			{ multiline: true, rows: 4 });
+		html += aboutField('admin.aboutMissTitle', 'about_missTitle', state.model.about.missTitle);
+		html += aboutField('admin.aboutMissText', 'about_missText', state.model.about.missText,
+			{ multiline: true, rows: 4 });
+		html += aboutField('admin.aboutSkillsTitle', 'about_skillsTitle', state.model.about.skillsTitle);
+		html += '<h3 class="ac-about-heading">' + label('admin.skillsHeading', 'Kenntnisse') +
+			'</h3><div class="ac-about-skills">';
+		state.model.skills.forEach(function (skill, i) {
+			html += '<div class="ac-about-row"><label for="about_skill' + i + '">' +
+				label('admin.skillName', 'Kenntnis') + ' ' + (i + 1) + '</label>' +
+				'<div class="ac-about-skill-inputs"><input type="text" id="about_skill' + i +
+				'" value="' + escHtml(skill) + '"><label class="ac-about-level-label" for="about_level' +
+				i + '">' + label('admin.skillLevel', 'Niveau (%)') + '</label><input type="number" id="about_level' +
+				i + '" min="0" max="100" step="1" value="' + escHtml(state.model.skillLevels[i]) +
+				'"' + (isSrc ? '' : ' disabled') + '></div></div>';
+		});
+		html += '</div></div>';
+		host.innerHTML = html;
+	}
+
+	function aboutField(labelKey, id, value, opts) {
+		opts = opts || {};
+		var input = opts.multiline
+			? '<textarea id="' + id + '" rows="' + (opts.rows || 4) + '">' + escHtml(value) + '</textarea>'
+			: '<input type="text" id="' + id + '" value="' + escHtml(value) + '">';
+		return '<div class="ac-about-row"><label for="' + id + '">' +
+			label(labelKey, labelKey) + '</label><div class="ac-about-value">' + input + '</div></div>';
+	}
+
+	function renderServices() {
+		var host = $('acPanelServices');
+		var html = '<p class="ac-hint">' +
+			label('admin.servicesHelp', 'Bearbeite Überschrift und die drei Kenntnis-/Dienstleistungsbereiche für die ausgewählte Sprache.') +
+			'</p><div class="ac-service-actions"><button type="button" class="admin-btn ghost" data-service-action="add"' +
+			(state.model.serviceCount >= 5 ? ' disabled' : '') + '>' +
+			label('admin.serviceAdd', 'Bereich hinzufügen') + '</button> <button type="button" class="admin-btn ghost" data-service-action="remove"' +
+			(state.model.serviceCount <= 1 ? ' disabled' : '') + '>' +
+			label('admin.serviceRemove', 'Letzten Bereich entfernen') + '</button> <span>' +
+			label('admin.serviceCount', 'Bereiche') + ': ' + state.model.serviceCount + ' / 5</span></div><div class="ac-about-form">';
+		html += '<h3 class="ac-about-heading">' + label('admin.servicesHeading', 'Abschnitt') + '</h3>';
+		html += serviceField('admin.servicesTitle', 'services_title', state.model.services.title);
+		for (var i = 1; i <= state.model.serviceCount; i++) {
+			html += '<h3 class="ac-about-heading">' +
+				label('admin.serviceItem', 'Bereich') + ' ' + i + '</h3>';
+			html += serviceField('admin.serviceBox', 'services_box' + i, state.model.services['box' + i]);
+			html += serviceField('admin.serviceTitle', 'services_s' + i + 'title', state.model.services['s' + i + 'title']);
+			html += serviceField('admin.serviceSubtitle', 'services_s' + i + 'sub', state.model.services['s' + i + 'sub']);
+			html += serviceField('admin.serviceText', 'services_s' + i + 'text', state.model.services['s' + i + 'text'],
+				{ multiline: true, rows: 5 });
+		}
+		html += '</div>';
+		host.innerHTML = html;
+	}
+
+	function serviceField(labelKey, id, value, opts) {
+		opts = opts || {};
+		var input = opts.multiline
+			? '<textarea id="' + id + '" rows="' + (opts.rows || 4) + '">' + escHtml(value) + '</textarea>'
+			: '<input type="text" id="' + id + '" value="' + escHtml(value) + '">';
+		return '<div class="ac-about-row"><label for="' + id + '">' +
+			label(labelKey, labelKey) + '</label><div class="ac-about-value">' + input + '</div></div>';
 	}
 
 	/* ---------- creating and deleting ---------- */
@@ -393,14 +618,15 @@
 	}
 
 	// Copy the picked files into the granted project folder, e.g. images/resume/.
-	function uploadFiles(fileList, dir) {
+	function uploadFiles(fileList, dir, uniqueName) {
 		var out = [];
 		return ensureFolder(true).then(function (h) {
 			var chain = Promise.resolve();
 			Array.prototype.forEach.call(fileList, function (f) {
 				chain = chain.then(function () {
-					var safe = String(f.name).replace(/[^A-Za-z0-9._-]+/g, '-').slice(-60);
-					var rel = 'images/' + dir + '/' + (safe || 'bild');
+					var safe = String(f.name).replace(/[^A-Za-z0-9._-]+/g, '-').slice(-60) || 'bild';
+					if (uniqueName) { safe = Date.now() + '-' + safe; }
+					var rel = 'images/' + dir + '/' + safe;
 					return writeIntoFolder(h, rel, f).then(function () { out.push(rel); });
 				});
 			});
@@ -427,6 +653,22 @@
 		uploadFiles(input.files, 'folio').then(function (paths) {
 			var el = $('p' + index + '_image');
 			if (el && paths.length) { el.value = paths[0]; }
+			setMsg('ok', 'Hochgeladen: ' + paths.join(', '));
+		}).catch(function (e) {
+			setMsg('err', 'Hochladen nicht möglich: ' + e.message + ' — bitte Ordner wählen.');
+		});
+	}
+
+	function handleBackgroundUpload(input, key) {
+		if (!input.files || !input.files.length) { return; }
+		setMsg('ok', t('admin.saving', '...') + ' …');
+		uploadFiles(input.files, 'bg', true).then(function (paths) {
+			var el = $('acBg' + key);
+			if (el && paths.length) {
+				el.value = paths[0];
+				var match = /^Slide([1-3])$/.exec(key);
+				if (match) { updateSlidePreview(Number(match[1]), paths[0]); }
+			}
 			setMsg('ok', 'Hochgeladen: ' + paths.join(', '));
 		}).catch(function (e) {
 			setMsg('err', 'Hochladen nicht möglich: ' + e.message + ' — bitte Ordner wählen.');
@@ -474,6 +716,14 @@
 		});
 		(isSrc ? FACT_VALUE_KEYS : FACT_LABEL_KEYS).forEach(function (k) { m.facts[k] = val('f_' + k); });
 		if (isSrc) {
+			m.backgrounds = {
+				slides: [val('acBgSlide1'), val('acBgSlide2'), val('acBgSlide3')],
+				sections: val('acBgSections')
+			};
+			m.skillLevels = [];
+			for (var skillIndex = 0; skillIndex < SKILL_COUNT; skillIndex++) {
+				m.skillLevels.push(val('about_level' + skillIndex));
+			}
 			// entry images, grouped by entry number
 			m.images = {};
 			document.querySelectorAll('[data-imgjob]').forEach(function (el) {
@@ -483,6 +733,24 @@
 				if (v !== '') { m.images[n].push(v); }
 			});
 		}
+		m.about = {};
+		ABOUT_KEYS.forEach(function (key) { m.about[key] = val('about_' + key); });
+		m.skills = [];
+		for (var skillIndex = 0; skillIndex < SKILL_COUNT; skillIndex++) {
+			m.skills.push(val('about_skill' + skillIndex));
+		}
+		m.services = {};
+		m.serviceCount = state.model.serviceCount;
+		C.serviceKeys(m.serviceCount).forEach(function (key) { m.services[key] = val('services_' + key); });
+		m.slides = {};
+		[1, 2, 3].forEach(function (number) {
+			m.slides[number] = {};
+			var fields = number === 3 ? ['kicker', 'title', 'sub'] : ['kicker', 'h1', 'sub'];
+			fields.forEach(function (key) {
+				var idKey = key === 'h1' ? 'h1' : key;
+				m.slides[number][key] = val('slide' + number + '_' + idKey);
+			});
+		});
 		return m;
 	}
 	function val(id) { var el = $(id); return el ? el.value : ''; }
@@ -490,17 +758,72 @@
 	/* ---------- building the files to write ---------- */
 	function buildFiles(model) {
 		var files = {};
+		var existingServiceCount = C.parseServiceCount(state.indexHtml);
+		var serviceStructureChanged = existingServiceCount !== model.serviceCount;
 		if (state.target === 'source') {
 			var out = C.write(state.indexHtml, model);
+			out = C.writeAboutFallbacks(out, model.about, model.skills, model.skillLevels);
+			out = C.writeServicesHtml(out, model.serviceCount);
+			out = C.writeServiceFallbacks(out, model.services, model.serviceCount);
+			out = C.bumpDictionaryVersion(out, 'de');
+			if (serviceStructureChanged) {
+				LANGS.forEach(function (language) {
+					if (language !== 'de') { out = C.bumpDictionaryVersion(out, language); }
+				});
+			}
+			var backgrounds = C.writeBackgrounds(out, state.styleCss, model.backgrounds);
+			out = backgrounds.html;
+			out = C.writeSlideFallbacks(out, model.slides);
+			if (backgrounds.css !== state.styleCss) {
+				out = C.bumpStyleVersion(out);
+				files['css/style.css'] = backgrounds.css;
+			}
 			if (model.images) {
 				var wi = C.writeJobImages(out, model.images);
 				out = wi.html;
 				if (wi.warnings.length) { state.warnings = wi.warnings; }
 			}
+			var de = state.dicts.de;
+			ABOUT_KEYS.forEach(function (key) {
+				de = C.setAboutField(de, key, model.about[key]);
+			});
+			de = C.setSkills(de, model.skills);
+			if (de === null) { throw new Error('about or skills block not found in js/i18n.de.js'); }
+			de = C.setServices(de, model.services, model.serviceCount);
+			if (de === null) { throw new Error('services block not found in js/i18n.de.js'); }
+			SLIDE_FIELDS.forEach(function (field) {
+				de = C.setSlideField(de, field.slide, field.key, model.slides[field.slide][field.key]);
+				if (de === null) { throw new Error('slide' + field.slide + ' block not found in js/i18n.de.js'); }
+			});
 			files['index.html'] = out;
+			files['js/i18n.de.js'] = de;
+			if (serviceStructureChanged) {
+				LANGS.filter(function (language) { return language !== 'de'; }).forEach(function (language) {
+					var dict = state.dicts[language];
+					var values = readServices(readDictionary(dict, language), existingServiceCount);
+					var updated = C.setServices(dict, values, model.serviceCount);
+					if (updated === null) { throw new Error('services block not found in js/i18n.' + language + '.js'); }
+					files['js/i18n.' + language + '.js'] = updated;
+				});
+			}
 		} else {
 			var lang = state.target;
 			var src = state.dicts[lang];
+			var outHtml = C.writeServicesHtml(state.indexHtml, model.serviceCount);
+			var germanServices = readServices(readDictionary(state.dicts.de, 'de'), existingServiceCount);
+			outHtml = C.writeServiceFallbacks(outHtml, germanServices, model.serviceCount);
+			ABOUT_KEYS.forEach(function (key) {
+				src = C.setAboutField(src, key, model.about[key]);
+				if (src === null) { throw new Error('about block not found in js/i18n.' + lang + '.js'); }
+			});
+			src = C.setSkills(src, model.skills);
+			if (src === null) { throw new Error('skills array not found in js/i18n.' + lang + '.js'); }
+			src = C.setServices(src, model.services, model.serviceCount);
+			if (src === null) { throw new Error('services block not found in js/i18n.' + lang + '.js'); }
+			SLIDE_FIELDS.forEach(function (field) {
+				src = C.setSlideField(src, field.slide, field.key, model.slides[field.slide][field.key]);
+				if (src === null) { throw new Error('slide' + field.slide + ' block not found in js/i18n.' + lang + '.js'); }
+			});
 			src = C.setPortTags(src, model.projects.map(function (p) { return p.tags; }));
 			src = C.setPortItems(src, model.projects.map(function (p) {
 				return { desc: p.desc, client: p.client, date: p.date, url: p.url };
@@ -522,6 +845,20 @@
 			FACT_LABEL_KEYS.forEach(function (k) {
 				if (model.facts[k] !== '') { src = C.setFactLabel(src, k, model.facts[k]); }
 			});
+			if (serviceStructureChanged) {
+				LANGS.forEach(function (language) {
+					outHtml = C.bumpDictionaryVersion(outHtml, language);
+					if (language === lang) { return; }
+					var dict = state.dicts[language];
+					var values = readServices(readDictionary(dict, language), existingServiceCount);
+					var updated = C.setServices(dict, values, model.serviceCount);
+					if (updated === null) { throw new Error('services block not found in js/i18n.' + language + '.js'); }
+					files['js/i18n.' + language + '.js'] = updated;
+				});
+			} else {
+				outHtml = C.bumpDictionaryVersion(outHtml, lang);
+			}
+			files['index.html'] = outHtml;
 			files['js/i18n.' + lang + '.js'] = src;
 		}
 		return files;
@@ -659,6 +996,7 @@
 
 		return saveToFolder(files).then(function (written) {
 			if (files['index.html']) { state.indexHtml = files['index.html']; }
+			if (files['css/style.css']) { state.styleCss = files['css/style.css']; }
 			Object.keys(files).forEach(function (f) {
 				if (f.indexOf('js/i18n.') === 0) { state.dicts[f.slice(7, -3)] = files[f]; }
 			});
@@ -714,7 +1052,7 @@
 			tab.addEventListener('click', function () {
 				Array.prototype.forEach.call(tabs, function (x) { x.classList.remove('on'); });
 				tab.classList.add('on');
-				['projects', 'jobs', 'facts'].forEach(function (p) {
+				['projects', 'jobs', 'facts', 'backgrounds', 'about', 'services'].forEach(function (p) {
 					$('acPanel' + p.charAt(0).toUpperCase() + p.slice(1)).classList.toggle('admin-hidden', p !== tab.dataset.panel);
 				});
 			});

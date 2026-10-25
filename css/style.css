@@ -627,19 +627,25 @@ About
 }	
 #service_boxes {
     margin-top:70px;
+	display:flex;
+	gap:20px;
 }
 .service_box {
-    margin:0 20px 10px 20px;
+    margin:0 0 10px;
 	display:inline-block;
-	width: 250px;
+	width:auto;
+	flex:1 1 0;
+	min-width:0;
 	position:relative;
 	opacity:0;
 	top:25%;	        
 }
 .animbox {
 	padding: 17px 35px;
-    width: 250px;
-	float:left;
+    width:100%;
+	box-sizing:border-box;
+	display:block;
+	float:none;
 	margin-top:0px;
     margin-bottom: 30px;
 	border: 1px solid rgba(255, 255, 255, .5);
@@ -1606,6 +1612,11 @@ Footer
 	margin:0 auto;
 	max-width:800px;
 }
+.footer p.site-version {
+	font-size:0.75em;
+	opacity:.7;
+	margin-top:6px;
+}
 /* ====================
 Blog
 --------------------------------------------------------------*/
@@ -2166,6 +2177,7 @@ Tablet
 }
 #service_boxes {
 	margin-top:30px;
+	gap:8px;
 }
 .showform {
 	margin-top:0;
@@ -2246,6 +2258,14 @@ h2, .nobig {
 .service_box , .animbox{
 	width:220px;
     margin:5px  auto;      
+}
+#service_boxes .service_box{
+	width:auto;
+	margin:0;
+}
+#service_boxes .animbox{
+	width:100%;
+	margin:5px 0 30px;
 }
 
 }

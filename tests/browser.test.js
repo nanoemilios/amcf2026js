@@ -161,11 +161,29 @@ const getJSON = (url) => new Promise((res, rej) => {
     ok(!loginMsg, 'login reported no error', loginMsg);
     ok(await step('editor is visible', "!document.getElementById('acApp').classList.contains('admin-hidden')") === true,
        'the editor became visible');
-    ok(await step('three tabs', "document.querySelectorAll('.ac-tab').length") === 3, 'the three tabs are present');
+    ok(await step('six tabs', "document.querySelectorAll('.ac-tab').length") === 6, 'the six tabs are present');
     ok(Number(await step('projects rendered', "document.getElementById('acPanelProjects').innerHTML.length")) > 1000,
        'the projects panel rendered');
     ok(Number(await step('jobs rendered', "document.getElementById('acPanelJobs').innerHTML.length")) > 1000,
        'the jobs panel rendered');
+    ok(Number(await step('backgrounds rendered', "document.getElementById('acPanelBackgrounds').innerHTML.length")) > 100,
+       'the backgrounds panel rendered');
+    ok(await step('slide header fields rendered',
+       "!!document.querySelector('#acPanelBackgrounds #slide1_kicker') && !!document.querySelector('#acPanelBackgrounds #slide3_title')") === true,
+       'the start-slide header text fields rendered');
+    ok(await step('each slide header has its matching image preview',
+       "Array.from({length:3},function(_,i){var n=i+1;var p=document.getElementById('acSlidePreview'+n);var f=document.getElementById('acBgSlide'+n);return !!p && p.getAttribute('src')===f.value;}).every(Boolean)") === true,
+       'each slide header is paired with its current background image');
+    ok(await step('slide preview updates with background path',
+       "(function(){var f=document.getElementById('acBgSlide2');f.value='images/bg/preview-test.jpg';f.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('acSlidePreview2').getAttribute('src');})()") === 'images/bg/preview-test.jpg',
+       'editing a slide image path updates its adjacent preview');
+    ok(Number(await step('about rendered', "document.getElementById('acPanelAbout').innerHTML.length")) > 100,
+       'the about panel rendered');
+    ok(Number(await step('services rendered', "document.getElementById('acPanelServices').innerHTML.length")) > 100,
+       'the services panel rendered');
+    ok(Number(await step('background upload fields',
+       "document.querySelectorAll('#acPanelBackgrounds input[data-upbackground]').length")) === 4,
+       'all four background image fields are available');
     const loaded = await step('load message', "document.getElementById('acMsg').textContent");
     ok(/Geladen/.test(loaded || ''), 'content load reported success', loaded);
     ok(await step('Speichern enabled after load', "document.getElementById('acSave').disabled") === false,

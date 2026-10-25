@@ -58,6 +58,18 @@ for (const lang of ['de-ch', 'en', 'es', 'gl', 'pt']) {
   ok(C.getJobNumList(read()).length === 11, lang + ': 11 jobs listed');
 }
 
+for (const lang of ['de', 'de-ch', 'en', 'es', 'gl', 'pt']) {
+  const read = () => fs.readFileSync(path.join(dir, 'i18n.' + lang + '.js'), 'utf8');
+  let aboutSrc = C.setAboutField(read(), 'head', "About $& O'Brien");
+  aboutSrc = C.setAboutField(aboutSrc, 'introHtml', '<b>First</b>\nSecond line');
+  const skills = ['Skill $&', "It's CMS", 'Marketing', 'Graphic design', 'Responsive', 'eCommerce', 'Hardware'];
+  aboutSrc = C.setSkills(aboutSrc, skills);
+  const L = load(aboutSrc);
+  ok(L[lang].about.head === "About $& O'Brien", lang + ': about text with replacement characters round trips');
+  ok(L[lang].about.introHtml === '<b>First</b>\nSecond line', lang + ': about HTML with newline round trips');
+  ok(JSON.stringify(L[lang].skills) === JSON.stringify(skills), lang + ': skill labels round trip');
+}
+
 // German keeps no content entries: index.html is the German source.
 const deSrc = fs.readFileSync(path.join(dir, 'i18n.de.js'), 'utf8');
 ok(!/port:\s*\{[\s\S]*?tags:\s*\[/.test(deSrc), 'de: no port.tags array');

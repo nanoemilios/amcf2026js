@@ -20,6 +20,9 @@ function initAmcf() {
 	var projectlenght = $('.box a').length;	    
 	
 	
+	// Contact details mirror the resume facts (single source of truth).
+	syncContactFacts();
+
 // show menu ------------------	
 
 	function showmenu(){
@@ -181,7 +184,7 @@ function initAmcf() {
 			slideshow: false,
 			controlNav: false,              
 			directionNav: false,
-			startAt: 1, 
+			startAt: Math.min(1, Math.max(0, $('.serviseslider .slides > li').length - 1)),
 			start: function(slider) {			
 				$('a.animbox').click(function() {
 					var slideTo = $(this).attr("name")
@@ -356,6 +359,26 @@ function getResumeData() {
 		}
 	} catch (e) { /* ignore */ }
 	return out;
+}
+
+// Contact details mirror the resume facts (the facts are the single source).
+function syncContactFacts() {
+	var facts = {};
+	$('[data-fv]').each(function () {
+		var key = $(this).attr('data-fv');
+		if (!key || facts[key] !== undefined) { return; }
+		facts[key] = $(this).text().trim();
+	});
+	$('[data-fact-ref]').each(function () {
+		var key = $(this).attr('data-fact-ref');
+		if (!key || facts[key] === undefined || facts[key] === '') { return; }
+		var $el = $(this);
+		if ($el.is('a')) {
+			if (key === 'email') { $el.attr('href', 'mailto:' + facts[key]); }
+			if (key === 'tel') { $el.attr('href', 'tel:' + facts[key].replace(/[^\d+]/g, '')); }
+		}
+		$el.text(facts[key]);
+	});
 }
 
 var RESUME_JOB_FIELDS_LITE = ['date','title','text','l1','l2','l3','l4','l5','l6','l7'];

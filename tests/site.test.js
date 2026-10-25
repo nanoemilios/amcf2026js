@@ -9,6 +9,7 @@ const http = require('http');
 const { spawn, spawnSync } = require('child_process');
 
 const root = path.join(__dirname, '..');
+const version = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
 const SITE = process.env.AMCF_SITE_URL || 'http://localhost:8000/index.html';
 const PORT = 9601 + (process.pid % 200);
 
@@ -99,6 +100,9 @@ const getJSON = (u) => new Promise((res, rej) => {
     await send('Page.enable');
     await sleep(4500);
 
+    ok((await ev("document.querySelector('.site-version').textContent.trim()")).val ===
+       'AMCF2026js · Version ' + version,
+       'the public footer displays the current project version');
     ok((await ev("document.querySelectorAll('#folio_container li.box').length")).val === 8,
        'the portfolio renders 8 tiles', (await ev("document.querySelectorAll('#folio_container li.box').length")).val);
     ok((await ev("document.querySelectorAll('.resume-holder[data-rvnum]').length")).val === 11,
@@ -110,6 +114,18 @@ const getJSON = (u) => new Promise((res, rej) => {
        'a resume entry title renders from the markup', JSON.stringify(jobTitle));
     const fact = (await ev("(function(){var h=document.querySelector('[data-fv=\"email\"]');return h?h.textContent.trim():'';})()")).val;
     ok(!!fact && fact.indexOf('@') !== -1, 'a fact value renders', JSON.stringify(fact));
+    const contact = (await ev("(function(){var pick=function(k){var e=document.querySelector('[data-fact-ref=\"'+k+'\"]');return e?e.textContent.trim():'';};return {tel:pick('tel'),email:pick('email'),address2:pick('address2')};})()")).val;
+    ok(contact && contact.email === fact && !!contact.tel && !!contact.address2,
+       'contact details come from facts', JSON.stringify(contact));
+    const serviceWidths = (await ev("(function(){return Array.from(document.querySelectorAll('#service_boxes .animbox')).map(function(el){return el.getBoundingClientRect().width;});})()")).val;
+    ok(serviceWidths && serviceWidths.length === 3 &&
+       Math.max.apply(null, serviceWidths) - Math.min.apply(null, serviceWidths) < 1,
+       'service navigation buttons share the available width equally', JSON.stringify(serviceWidths));
+    await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+    const mobileServiceWidths = (await ev("(function(){return Array.from(document.querySelectorAll('#service_boxes .animbox')).map(function(el){return el.getBoundingClientRect().width;});})()")).val;
+    ok(mobileServiceWidths && mobileServiceWidths.length === 3 &&
+       Math.max.apply(null, mobileServiceWidths) - Math.min.apply(null, mobileServiceWidths) < 1,
+       'mobile service buttons also share the available width equally', JSON.stringify(mobileServiceWidths));
     ok((await ev("typeof window.AMCFContent")).val === 'undefined',
        'the editor module is not shipped to the public page');
     ok(errors.length === 0, 'no console errors', errors.slice(0, 3).join(' | '));

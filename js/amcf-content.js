@@ -222,6 +222,132 @@
 		return html.slice(0, reg.start) + body + html.slice(reg.end);
 	}
 
+	/* ---------------- contact block ---------------- */
+	// Contact details are not edited separately: they mirror the resume facts.
+	// Elements carry data-fact-ref="tel|email|address2" and are rewritten
+	// whenever the facts are saved, so index.html stays consistent without JS.
+	var CONTACT_RE = /<(\w+)([^>]*?)\sdata-fact-ref="([A-Za-z0-9_]+)"([^>]*)>([\s\S]*?)<\/\1>/g;
+
+	function writeContacts(html, facts) {
+		return html.replace(CONTACT_RE, function (whole, tag, before, key, after) {
+			if (facts[key] === undefined) { return whole; }
+			var attrs = before + ' data-fact-ref="' + key + '"' + after;
+			if (key === 'email') {
+				attrs = attrs.replace(/\shref="[^"]*"/, ' href="mailto:' + attrEsc(facts[key]) + '"');
+			} else if (key === 'tel') {
+				attrs = attrs.replace(/\shref="[^"]*"/, ' href="tel:' + attrEsc(String(facts[key]).replace(/[^\d+]/g, '')) + '"');
+			}
+			return '<' + tag + attrs + '>' + esc(facts[key]) + '</' + tag + '>';
+		});
+	}
+
+	/* ---------------- background images ---------------- */
+	var SLIDE_BG_RE = /(<div\b[^>]*style="background-image:\s*url\(['"]?)((?:\\.|[^'")\\])+)(['"]?\);"[^>]*class="[^"]*\bslides-big-img\b[^"]*")([^>]*)>/g;
+	var SECTION_BG_SELECTORS = ['#servises', '#subscribe', '#testimonials', '.simple-page-head'];
+
+	function escapeRegExp(value) {
+		return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	}
+	function cssUnescape(value) {
+		return value.replace(/\\(.)/g, '$1');
+	}
+	function cssEscape(value) {
+		return value.replace(/([\\'"()\s])/g, '\\$1');
+	}
+	function normalizeBackgroundPath(value) {
+		var path = String(value === null || value === undefined ? '' : value).trim();
+		if (!path) { throw new Error('Background image path cannot be empty'); }
+		if (/[\r\n]/.test(path)) { throw new Error('Background image path cannot contain a newline'); }
+		return path;
+	}
+	function cssPathFromRoot(path) {
+		return /^(?:[a-z][a-z0-9+.-]*:|\/)/i.test(path) ? path : '../' + path.replace(/^(?:\.\/)+/, '');
+	}
+	function sectionBackground(css, selector) {
+		var ruleRe = new RegExp(escapeRegExp(selector) + '\\s*\\{([^}]*)\\}');
+		var rule = ruleRe.exec(css);
+		if (!rule) { throw new Error('Background CSS rule not found: ' + selector); }
+		var propertyRe = /background-image\s*:\s*url\(\s*(?:"((?:\\.|[^"\\])*)"|'((?:\\.|[^'\\])*)'|((?:\\.|[^)])*?))\s*\)\s*;/g;
+		var property = propertyRe.exec(rule[1]);
+		if (!property) { throw new Error('Background image declaration not found: ' + selector); }
+		return cssUnescape(property[1] !== undefined ? property[1] :
+			(property[2] !== undefined ? property[2] : property[3])).replace(/^\.\.\//, '');
+	}
+	function parseBackgrounds(html, css) {
+		var slides = [], m;
+		SLIDE_BG_RE.lastIndex = 0;
+		while ((m = SLIDE_BG_RE.exec(html)) !== null) { slides.push(cssUnescape(unesc(m[2]))); }
+		if (slides.length !== 3) { throw new Error('Expected 3 start-slider background images, found ' + slides.length); }
+
+		var section = SECTION_BG_SELECTORS.map(function (selector) {
+			return sectionBackground(css, selector);
+		});
+		if (!section.every(function (path) { return path === section[0]; })) {
+			throw new Error('The shared section backgrounds do not all use the same image');
+		}
+		return { slides: slides, sections: section[0] };
+	}
+	function replaceSectionBackground(css, selector, path) {
+		var ruleRe = new RegExp(escapeRegExp(selector) + '\\s*\\{([^}]*)\\}');
+		var rule = ruleRe.exec(css);
+		if (!rule) { throw new Error('Background CSS rule not found: ' + selector); }
+		var propertyRe = /(background-image\s*:\s*url\(\s*)(?:"((?:\\.|[^"\\])*)"|'((?:\\.|[^'\\])*)'|((?:\\.|[^)])*?))(\s*\)\s*;)/g;
+		var count = 0;
+		var body = rule[1].replace(propertyRe, function (whole, before, doubleQuoted, singleQuoted, bare, after) {
+			count++;
+			if (doubleQuoted !== undefined) { return before + '"' + cssEscape(path) + '"' + after; }
+			if (singleQuoted !== undefined) { return before + "'" + cssEscape(path) + "'" + after; }
+			return before + cssEscape(path) + after;
+		});
+		if (count !== 1) { throw new Error('Expected one background image declaration for ' + selector + ', found ' + count); }
+		return css.slice(0, rule.index) + rule[0].replace(rule[1], body) + css.slice(rule.index + rule[0].length);
+	}
+	function writeBackgrounds(html, css, backgrounds) {
+		var current = parseBackgrounds(html, css);
+		var slides = backgrounds && backgrounds.slides;
+		if (!Array.isArray(slides) || slides.length !== 3) {
+			throw new Error('Expected exactly 3 start-slider background image paths');
+		}
+		slides = slides.map(normalizeBackgroundPath);
+		var sectionPath = normalizeBackgroundPath(backgrounds.sections);
+
+		if (slides.some(function (path, i) { return path !== current.slides[i]; })) {
+			var index = 0, count = 0;
+			html = html.replace(SLIDE_BG_RE, function (whole, before, oldPath, after, tail) {
+				count++;
+				return before + attrEsc(cssEscape(slides[index++])) + after + tail + '>';
+			});
+			if (count !== 3) { throw new Error('Expected 3 start-slider background images, found ' + count); }
+		}
+		if (sectionPath !== current.sections) {
+			var cssPath = cssPathFromRoot(sectionPath);
+			SECTION_BG_SELECTORS.forEach(function (selector) {
+				css = replaceSectionBackground(css, selector, cssPath);
+			});
+		}
+		return { html: html, css: css };
+	}
+	function bumpStyleVersion(html) {
+		var count = 0;
+		var out = html.replace(/(<link\b[^>]*\bhref="css\/style\.css\?v=)(\d+)(")/, function (whole, before, version, after) {
+			count++;
+			return before + (parseInt(version, 10) + 1) + after;
+		});
+		if (count !== 1) { throw new Error('Stylesheet version reference not found in index.html'); }
+		return out;
+	}
+	function bumpDictionaryVersion(html, lang) {
+		var count = 0;
+		var re = new RegExp('(<script\\b[^>]*\\bsrc="js/i18n\\.' + escapeRegExp(lang) +
+			'\\.js\\?v=)(\\d+)(")');
+		var out = html.replace(re, function (whole, before, version, after) {
+			count++;
+			return before + (parseInt(version, 10) + 1) + after;
+		});
+		if (count !== 1) { throw new Error('Translation script reference not found in index.html: ' + lang); }
+		return out;
+	}
+
 	/* ---------------- combined ---------------- */
 	function parse(html) {
 		return { projects: parseProjects(html), jobs: parseJobs(html), facts: parseFacts(html) };
@@ -230,7 +356,10 @@
 		var out = html;
 		if (model.projects) { out = writeProjects(out, model.projects); }
 		if (model.jobs) { out = writeJobs(out, model.jobs); }
-		if (model.facts) { out = writeFacts(out, model.facts); }
+		if (model.facts) {
+			out = writeFacts(out, model.facts);
+			out = writeContacts(out, model.facts);
+		}
 		return out;
 	}
 
@@ -238,7 +367,8 @@
 	// These edit the JS dictionary sources textually, preserving formatting.
 	function escapeJs(s) {
 		return String(s === null || s === undefined ? '' : s)
-			.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+			.replace(/\\/g, '\\\\').replace(/\r/g, '\\r').replace(/\n/g, '\\n')
+			.replace(/\t/g, '\\t').replace(/'/g, "\\'");
 	}
 
 	// Returns {start,end} of the balanced block whose header matches headerRe.
@@ -275,7 +405,9 @@
 		var block = src.slice(b.start, b.end);
 		var re = new RegExp('(\\b' + key + "\\s*:\\s*)'(?:\\\\.|[^'\\\\])*'");
 		if (re.test(block)) {
-			block = block.replace(re, "$1'" + escapeJs(value) + "'");
+			block = block.replace(re, function (whole, prefix) {
+				return prefix + "'" + escapeJs(value) + "'";
+			});
 		} else {
 			var nl = block.indexOf('\n');
 			var pad = (block.match(/^\s*/) || [''])[0];
@@ -318,6 +450,215 @@
 	}
 	function setFactLabel(src, key, value) {
 		return setDictString(src, /facts:\s*\{/, key, value);
+	}
+	function setAboutField(src, key, value) {
+		return setDictString(src, /about:\s*\{/, key, value);
+	}
+	function setServiceField(src, key, value) {
+		return setDictString(src, /services:\s*\{/, key, value);
+	}
+	function setSlideField(src, slide, key, value) {
+		return setDictString(src, new RegExp('slide' + slide + '\\s*:\\s*\\{'), key, value);
+	}
+	function setServices(src, services, count) {
+		validateServiceCount(count);
+		var blockRange = findBlock(src, /services:\s*\{/);
+		if (!blockRange) { return null; }
+		var block = src.slice(blockRange.start, blockRange.end);
+		var stale = new RegExp("^\\s*(?:box|s)([1-9]\\d*)(?:title|sub|text)?\\s*:\\s*'(?:\\\\.|[^'\\\\])*',?\\s*$", 'gm');
+		block = block.replace(stale, function (whole, number) {
+			return Number(number) > count ? '' : whole;
+		});
+		src = src.slice(0, blockRange.start) + block + src.slice(blockRange.end);
+		serviceKeys(count).forEach(function (key) {
+			src = setServiceField(src, key, services[key] || '');
+			if (src === null) { throw new Error('Services dictionary block not found'); }
+		});
+		return src;
+	}
+	function serviceKeys(count) {
+		var keys = ['title'];
+		for (var i = 1; i <= count; i++) {
+			keys.push('box' + i, 's' + i + 'title', 's' + i + 'sub', 's' + i + 'text');
+		}
+		return keys;
+	}
+	function validateServiceCount(count) {
+		if (!Number.isInteger(Number(count)) || Number(count) < 1 || Number(count) > 5) {
+			throw new Error('Service count must be a whole number from 1 to 5');
+		}
+	}
+	function setSkills(src, skills) {
+		var body = skills.map(function (skill) { return "'" + escapeJs(skill) + "',"; }).join('\n');
+		return setDictArray(src, /^\s*skills\s*:/m, 'skills', body, '\t\t');
+	}
+	function writeAboutFallbacks(html, about, skills, levels) {
+		var out = html;
+		Object.keys(about).forEach(function (key) {
+			var re = new RegExp('(<(\\w+)([^>]*?)\\sdata-i18n(-html)?="about\\.' +
+				escapeRegExp(key) + '"([^>]*)>)([\\s\\S]*?)(<\\/\\2>)');
+			var count = 0;
+			out = out.replace(re, function (whole, open, tag, before, isHtml, after, content, close) {
+				count++;
+				return open + (isHtml ? about[key] : esc(about[key])) + close;
+			});
+			if (count !== 1) { throw new Error('Expected one about.' + key + ' fallback in index.html, found ' + count); }
+		});
+		if (!Array.isArray(skills) || skills.length !== 7) {
+			throw new Error('Expected exactly 7 about skill labels');
+		}
+		skills.forEach(function (skill, index) {
+			var re = new RegExp('(<span\\b[^>]*\\sdata-i18n="skills\\.' + index + '"[^>]*>)([\\s\\S]*?)(<\\/span>)');
+			var count = 0;
+			out = out.replace(re, function (whole, open, content, close) {
+				count++;
+				return open + esc(skill) + close;
+			});
+			if (count !== 1) { throw new Error('Expected one skills.' + index + ' fallback in index.html, found ' + count); }
+		});
+		return levels ? writeSkillLevels(out, levels) : out;
+	}
+	function writeSlideFallbacks(html, slides) {
+		var out = html;
+		[1, 2, 3].forEach(function (number) {
+			var slide = slides[number];
+			var fields = number === 3 ? ['kicker', 'title', 'sub'] : ['kicker', 'h1', 'sub'];
+			fields.forEach(function (key) {
+				var isHtml = key === 'h1';
+				var attr = isHtml ? 'data-i18n-html' : 'data-i18n';
+				var re = new RegExp('(<(\\w+)([^>]*?)\\s' + attr + '="slide' +
+					number + '\\.' + key + '"([^>]*)>)([\\s\\S]*?)(<\\/\\2>)');
+				var count = 0;
+				out = out.replace(re, function (whole, open, tag, before, after, content, close) {
+					count++;
+					return open + (isHtml ? slide[key] : esc(slide[key])) + close;
+				});
+				if (count !== 1) { throw new Error('Expected one slide' + number + '.' + key + ' fallback in index.html, found ' + count); }
+			});
+		});
+		return out;
+	}
+	function parseServiceCount(html) {
+		var buttonMatches = html.match(/data-i18n="services\.box\d+"/g) || [];
+		var slideMatches = html.match(/data-i18n="services\.s\d+title"/g) || [];
+		if (buttonMatches.length !== slideMatches.length || buttonMatches.length < 1 || buttonMatches.length > 5) {
+			throw new Error('Expected matching service buttons and slides (1 to 5)');
+		}
+		return buttonMatches.length;
+	}
+	function matchingElementEnd(markup, start, tag) {
+		var re = new RegExp('<\\/?' + tag + '\\b[^>]*>', 'gi');
+		re.lastIndex = start;
+		var depth = 0, match;
+		while ((match = re.exec(markup)) !== null) {
+			if (match[0].indexOf('</') === 0) { depth--; }
+			else if (!/\/>$/.test(match[0])) { depth++; }
+			if (depth === 0) { return re.lastIndex; }
+		}
+		return -1;
+	}
+	function writeServicesHtml(html, count) {
+		validateServiceCount(count);
+		if (parseServiceCount(html) === count) { return html; }
+		var sectionStart = html.indexOf('<div id="servises"');
+		var sectionEnd = sectionStart === -1 ? -1 : html.indexOf('<!--=============== section', sectionStart + 1);
+		if (sectionStart === -1) { throw new Error('Services section not found in index.html'); }
+		if (sectionEnd === -1) { sectionEnd = html.length; }
+		var section = html.slice(sectionStart, sectionEnd);
+		var boxStart = section.indexOf('<div class="row" id="service_boxes">');
+		var boxEnd = boxStart === -1 ? -1 : matchingElementEnd(section, boxStart, 'div');
+		var listStart = section.indexOf('<ul class="slides">');
+		var listEnd = listStart === -1 ? -1 : section.indexOf('</ul>', listStart);
+		if (boxStart === -1 || boxEnd === -1 || listStart === -1 || listEnd === -1) {
+			throw new Error('Service button or slide container not found');
+		}
+		listEnd += '</ul>'.length;
+		var boxes = section.slice(boxStart, boxEnd);
+		var slides = section.slice(listStart, listEnd);
+		var boxRe = /<div class="service_box[^"]*"[^>]*>[\s\S]*?<\/div>/g;
+		var slideRe = /<li>[\s\S]*?<\/li>/g;
+		var boxList = boxes.match(boxRe) || [];
+		var slideList = slides.match(slideRe) || [];
+		if (!boxList.length || boxList.length !== slideList.length) {
+			throw new Error('Service button and slide markup is inconsistent');
+		}
+		function resize(list, kind) {
+			while (list.length > count) { list.pop(); }
+			while (list.length < count) {
+				var index = list.length + 1;
+				var template = list[list.length - 1];
+				if (kind === 'box') {
+					template = template.replace(/services\.box\d+/g, 'services.box' + index)
+						.replace(/name="\d+"/, 'name="' + (index - 1) + '"')
+						.replace(/\sactser(?=\s|")/g, '');
+				} else {
+					template = template.replace(/services\.s\d+(?:title|sub|text)/g, function (key) {
+						return key.replace(/s\d+/, 's' + index);
+					});
+				}
+				list.push(template);
+			}
+			return list;
+		}
+		boxList = resize(boxList, 'box');
+		slideList = resize(slideList, 'slide');
+		boxList = boxList.map(function (box, index) {
+			return box.replace(/\sactser(?=\s|")/g, '').replace('class="service_box ', 'class="service_box ' +
+				(index === Math.min(1, count - 1) ? 'actser ' : ''));
+		});
+		var newBoxes = boxes.replace(boxRe, '');
+		var rowClose = newBoxes.lastIndexOf('</div>');
+		if (rowClose === -1) { throw new Error('Service button row closing tag not found'); }
+		newBoxes = newBoxes.slice(0, rowClose) + boxList.join('\n') + '\n\t\t\t\t\t' +
+			newBoxes.slice(rowClose);
+		var newSlides = slides.replace(slideRe, '').replace('</ul>', slideList.join('\n') + '\n\t\t\t\t\t\t\t</ul>');
+		section = section.slice(0, boxStart) + newBoxes + section.slice(boxEnd);
+		listStart = section.indexOf('<ul class="slides">');
+		listEnd = section.indexOf('</ul>', listStart) + '</ul>'.length;
+		section = section.slice(0, listStart) + newSlides + section.slice(listEnd);
+		return html.slice(0, sectionStart) + section + html.slice(sectionEnd);
+	}
+	function writeServiceFallbacks(html, services, count) {
+		validateServiceCount(count);
+		var out = html;
+		serviceKeys(count).forEach(function (key) {
+			var re = new RegExp('(<(\\w+)([^>]*?)\\sdata-i18n="services\\.' +
+				escapeRegExp(key) + '"([^>]*)>)([\\s\\S]*?)(<\\/\\2>)');
+			var count = 0;
+			out = out.replace(re, function (whole, open, tag, before, after, content, close) {
+				count++;
+				return open + esc(services[key] === undefined ? '' : services[key]) + close;
+			});
+			if (count !== 1) { throw new Error('Expected one services.' + key + ' fallback in index.html, found ' + count); }
+		});
+		return out;
+	}
+	function parseSkillLevels(html) {
+		var re = /<div class="skillbar clearfix[^"]*" data-percent="(\d{1,3})%"/g;
+		var levels = [], m;
+		while ((m = re.exec(html)) !== null) { levels.push(parseInt(m[1], 10)); }
+		if (levels.length !== 7) { throw new Error('Expected 7 about skill levels, found ' + levels.length); }
+		return levels;
+	}
+	function writeSkillLevels(html, levels) {
+		if (!Array.isArray(levels) || levels.length !== 7) {
+			throw new Error('Expected exactly 7 about skill levels');
+		}
+		levels = levels.map(function (level) {
+			var value = Number(level);
+			if (!isFinite(value) || Math.floor(value) !== value || value < 0 || value > 100) {
+				throw new Error('Skill levels must be whole numbers from 0 to 100');
+			}
+			return value;
+		});
+		var index = 0;
+		var out = html.replace(/(<div class="skill-bar-percent">\s*<!--)\d{1,3}%-->(<\/div>\s*<div class="skillbar clearfix[^"]*" data-percent=")\d{1,3}(%">)/g,
+			function (whole, before, middle, after) {
+				var value = levels[index++];
+				return before + value + '%-->' + middle + value + after;
+			});
+		if (index !== 7) { throw new Error('Expected 7 about skill level elements, found ' + index); }
+		return out;
 	}
 	function getJobNumList(src) {
 		var re = /\bjob(\d+)\s*:\s*\{/g, out = [], m;
@@ -568,7 +909,9 @@
 		parse: parse, write: write,
 		parseProjects: parseProjects, writeProjects: writeProjects,
 		parseJobs: parseJobs, writeJobs: writeJobs,
-		parseFacts: parseFacts, writeFacts: writeFacts,
+		parseFacts: parseFacts, writeFacts: writeFacts, writeContacts: writeContacts,
+		parseBackgrounds: parseBackgrounds, writeBackgrounds: writeBackgrounds, bumpStyleVersion: bumpStyleVersion,
+		bumpDictionaryVersion: bumpDictionaryVersion,
 		parseJobImages: parseJobImages, writeJobImages: writeJobImages,
 		jobHolderRange: jobHolderRange,
 		hasRegions: hasRegions, regionSlice: regionSlice,
@@ -578,6 +921,12 @@
 		nextJobNum: nextJobNum, freeRvnum: freeRvnum,
 		setPortTags: setPortTags, setPortItems: setPortItems,
 		setJobField: setJobField, setFactLabel: setFactLabel,
+		setAboutField: setAboutField, setServiceField: setServiceField, setSlideField: setSlideField, setSkills: setSkills,
+		setServices: setServices, serviceKeys: serviceKeys, parseServiceCount: parseServiceCount,
+		writeServicesHtml: writeServicesHtml, writeAboutFallbacks: writeAboutFallbacks,
+		writeSlideFallbacks: writeSlideFallbacks,
+		writeServiceFallbacks: writeServiceFallbacks,
+		parseSkillLevels: parseSkillLevels, writeSkillLevels: writeSkillLevels,
 		getJobNumList: getJobNumList, findBlock: findBlock,
 		sliceElement: sliceElement,
 		esc: esc, unesc: unesc, attrEsc: attrEsc, escapeJs: escapeJs
